@@ -4,6 +4,7 @@ import BoiteVerte from '../components/Boite_verte';
 import BoiteBlanche from '../components/Boite_blanche';
 import Bouton from '../components/Bouton';
 import Bandeau from '../components/Bandeau';
+import ChampRedirection from '../components/Champ_redirection';
 
 const MonComponent = () => {
   return (
@@ -15,6 +16,10 @@ const MonComponent = () => {
       <BoiteVerte>
         <Bouton label="Bouton Vert" onClick={() => alert('Bouton dans la boîte verte cliqué!')} />
       </BoiteVerte>
+
+       {/* Ajout de ChampRedirection pour naviguer vers une autre page */}
+       
+      <ChampRedirection label="Recherche" targetScreen="PageRecherche" />
 
       <Bandeau currentPage="Search" onNavigate={(page) => console.log('Naviguer vers', page)} />
     </View>
