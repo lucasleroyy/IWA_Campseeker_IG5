@@ -28,7 +28,7 @@ const Scroll_horizontal = ({ items }) => {
         scrollEventThrottle={16}
       >
         {items.map((item, index) => (
-          <View key={index} style={[styles.itemContainer, { marginHorizontal: 1 }]}>
+          <View key={index} style={[styles.itemContainer, { marginHorizontal: 5 }]}>
             {item}
           </View>
         ))}
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   itemContainer: {
-    width: itemWidth, 
+    width: itemWidth,  // Largeur de l'élément (85% de l'écran pour voir les côtés des éléments adjacents)
     justifyContent: 'center',
     alignItems: 'center',
   },

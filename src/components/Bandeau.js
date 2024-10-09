@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
     width: width,  // Largeur totale de l'écran
     position: 'absolute',
     bottom: 0,  // Toujours en bas de la page
+    position: 'absolute',
   },
   iconContainer: {
     flex: 1,

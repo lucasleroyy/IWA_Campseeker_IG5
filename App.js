@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import Bandeau from './src/components/Bandeau'; 
+import PageTest from './src/pages/Test';
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState('Search');
@@ -11,19 +10,9 @@ const App = () => {
 
 
   return (
-    <View style={styles.container}>
-      <Bandeau currentPage={currentPage} onNavigate={onNavigate} />
-    </View>
+    <PageTest/>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'rgba(166, 116, 55, 0.1)',
-    marginTop: 50,
-  },
-});
 
 
 
