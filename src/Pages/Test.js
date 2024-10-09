@@ -6,6 +6,7 @@ import Champ from '../components/Champ';
 import Scroll_horizontal from '../components/Scroll_horizontal';
 import Bouton from '../components/Bouton';
 import Carte from '../components/Carte';
+import Recherche from '../components/Recherche';
 
 const Test = () => {
   const [currentPage, setCurrentPage] = useState('Search');
@@ -34,9 +35,11 @@ const Test = () => {
         <Scroll_horizontal items={photos} />
         <Champ placeholder="Email" editable={true} />
         <Bouton label="Ceci est un bouton" onClick={() => console.log('Ajouter')} />
+        <Recherche placeholder="Rechercher un lieu" editable={true} />
       </ScrollView>
 
       {/* Bandeau en bas de l'écran, hors de la ScrollView */}
+      
       <Bandeau currentPage={currentPage} onNavigate={onNavigate}/>
     </View>
   );
@@ -47,6 +50,10 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     backgroundColor: 'rgba(166, 116, 55, 0.1)',
     marginTop: 50,
+  },
+  scrollContainer: {
+    flexGrow: 1,  // Permet à ScrollView de s'étendre en fonction du contenu
+    paddingVertical: 70,
   },
   map: {
     width: '90%',  // Assure que la carte est large mais laisse un peu d'espace sur les côtés
