@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { View,Text, StyleSheet, ScrollView } from 'react-native';
 import Bandeau from '../components/Bandeau';
 import Photo from '../components/Photo';
 import Champ from '../components/Champ';
@@ -7,12 +7,27 @@ import Scroll_horizontal from '../components/Scroll_horizontal';
 import Bouton from '../components/Bouton';
 import Carte from '../components/Carte';
 import Recherche from '../components/Recherche';
+import Champ_selection from '../components/Champ_selection';
 
 const Test = () => {
   const [currentPage, setCurrentPage] = useState('Search');
+  const [selectedTags, setSelectedTags] = useState([]);
+  
 
   const onNavigate = (page) => {
     setCurrentPage(page);
+  };
+
+  const handleTagPress = (label) => {
+    setSelectedTags((prevSelectedTags) => {
+      if (prevSelectedTags.includes(label)) {
+        // Si le tag est déjà sélectionné, on le retire de la liste
+        return prevSelectedTags.filter((tag) => tag !== label);
+      } else {
+        // Sinon, on l'ajoute à la liste
+        return [...prevSelectedTags, label];
+      }
+    });
   };
 
   const photos = [
@@ -23,6 +38,29 @@ const Test = () => {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.Equipementcontainer}>
+            <Champ_selection 
+                label="Abrité" 
+                isSelected={selectedTags.includes('Abrité')} 
+                onPress={() => handleTagPress('Abrité')} />
+            <Champ_selection 
+                label="Sanitaire"
+                isSelected={selectedTags.includes('Sanitaire')}
+                onPress={() => handleTagPress('Sanitaire')} />
+            <Champ_selection 
+                label="Wifi" 
+                isSelected={selectedTags.includes('Wifi')}
+                onPress={() => handleTagPress('Wifi')} />
+            <Champ_selection
+                label="Parking"
+                isSelected={selectedTags.includes('Parking')}
+                onPress={() => handleTagPress('Parking')} />
+            <Champ_selection 
+                label="Électricité"
+                isSelected={selectedTags.includes('Électricité')}
+                onPress={() => handleTagPress('Électricité')} />
+            <Text>Tags sélectionnés: {selectedTags.join(', ')}</Text>
+        </View>
         <Carte
           style={styles.map}
           initialRegion={{
@@ -60,6 +98,12 @@ const styles = StyleSheet.create({
     height: 400,  // Ajuste la hauteur selon ce qui convient
     marginBottom: 20,
     alignSelf: 'center',
+  },
+  Equipementcontainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+    padding: 10,
   },
 });
 
