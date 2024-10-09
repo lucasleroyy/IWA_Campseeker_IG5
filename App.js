@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Bandeau from './src/components/Bandeau';
-import Champ from './src/components/Champ';
+import Carte from './src/components/Carte';
 
 
 const App = () => {
@@ -13,7 +13,6 @@ const App = () => {
 
   return (
     <View style={styles.container}>
-      <Champ placeholder="Mot de passe" />
       <Bandeau currentPage={currentPage} onNavigate={onNavigate} />
     </View>
   );
