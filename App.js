@@ -11,14 +11,8 @@ const App = () => {
     setCurrentPage(page);
   };
 
-  const handleDelete = () => {
-    Alert.alert("Test ", "Le bouton test a été cliqué !");
-  };
-
   return (
     <View style={styles.container}>
-      <Champ placeholder="Email" />
-      <Bouton label="Test" onClick={handleDelete} />
       <Bandeau currentPage={currentPage} onNavigate={onNavigate} />
     </View>
   );
