@@ -12,6 +12,7 @@ const App = () => {
 
   return (
     <View style={styles.container}>
+
       <Bandeau currentPage={currentPage} onNavigate={onNavigate} />
     </View>
   );
