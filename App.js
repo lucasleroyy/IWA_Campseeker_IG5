@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Bandeau from './src/components/Bandeau';
-import Carte from './src/components/Carte';
 
 
 const App = () => {
@@ -22,7 +21,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'rgba(166, 116, 55, 0.1)',
-  }
+  },
 });
 
 
