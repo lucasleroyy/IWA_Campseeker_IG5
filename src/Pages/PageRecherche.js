@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View,Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Bandeau from '../components/Bandeau';
 import Carte from '../components/Carte';
 import Recherche from '../components/Recherche';
@@ -8,6 +8,8 @@ import Champ_selection from '../components/Champ_selection';
 const PageRecherche = () => {
     const [currentPage, setCurrentPage] = useState('Search');
     const [selectedTags, setSelectedTags] = useState([]);
+    const [searchCity, setSearchCity] = useState('');
+    const [region, setRegion] = useState(null);
     
     const onNavigate = (page) => {
         setCurrentPage(page);
@@ -16,19 +18,26 @@ const PageRecherche = () => {
     const handleTagPress = (label) => {
         setSelectedTags((prevSelectedTags) => {
           if (prevSelectedTags.includes(label)) {
-            // Si le tag est déjà sélectionné, on le retire de la liste
             return prevSelectedTags.filter((tag) => tag !== label);
           } else {
-            // Sinon, on l'ajoute à la liste
             return [...prevSelectedTags, label];
           }
         });
     };
 
+    const handleSearchChange = (text) => {
+        setSearchCity(text);
+    };
+
     return(
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollContainer}>
-                <Recherche placeholder="Rechercher un lieu" editable={true} />
+                <Recherche 
+                    placeholder="Rechercher un lieu" 
+                    editable={true}
+                    onCitySelect={handleSearchChange}
+                />
+                <Text>Recherche en cours pour: {searchCity}</Text>
                 <View style={styles.Equipementcontainer}>
                     <Champ_selection 
                         label="Abrité" 
@@ -52,21 +61,15 @@ const PageRecherche = () => {
                         onPress={() => handleTagPress('Électricité')} />
                 </View>
                 <Text>Tags sélectionnés: {selectedTags.join(', ')}</Text>
-                <Carte
-                    style={styles.map}
-                    initialRegion={{
-                        latitude: 48.8584, // Latitude pour Paris
-                        longitude: 2.2945, // Longitude pour Paris
-                        latitudeDelta: 0.0922,
-                        longitudeDelta: 0.0421,
-                    }}
-                />
+
+                {/* Affiche la carte en fonction de la ville recherchée */}
+                <Carte ville={searchCity} style={styles.map} />
             </ScrollView>
             <Bandeau currentPage={currentPage} onNavigate={onNavigate}/>
         </View>
-    )
-
+    );
 };
+
 const styles = StyleSheet.create({
     container: {
       flexGrow: 1,
@@ -90,6 +93,5 @@ const styles = StyleSheet.create({
       padding: 10,
     },
 });
-
 
 export default PageRecherche;

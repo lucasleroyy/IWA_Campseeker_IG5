@@ -61,22 +61,22 @@ const Test = () => {
                 onPress={() => handleTagPress('Électricité')} />
             <Text>Tags sélectionnés: {selectedTags.join(', ')}</Text>
         </View>
-        <Carte
-          style={styles.map}
-          initialRegion={{
-            latitude: 48.8584, // Latitude pour Paris
-            longitude: 2.2945, // Longitude pour Paris
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
-        />
+
+
         <Scroll_horizontal items={photos} />
         <Champ placeholder="Email" editable={true} />
         <Bouton label="Ceci est un bouton" onClick={() => console.log('Ajouter')} />
         <Recherche placeholder="Rechercher un lieu" editable={true} />
+        <Carte
+                    style={styles.map}
+                    initialRegion={{
+                        latitude: 48.8584, // Latitude pour Paris
+                        longitude: 2.2945, // Longitude pour Paris
+                        latitudeDelta: 0.0922,
+                        longitudeDelta: 0.0421,
+                    }}
+                />
       </ScrollView>
-
-      {/* Bandeau en bas de l'écran, hors de la ScrollView */}
       
       <Bandeau currentPage={currentPage} onNavigate={onNavigate}/>
     </View>
