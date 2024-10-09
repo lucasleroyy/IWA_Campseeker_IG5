@@ -17,8 +17,8 @@ const Champ = ({ placeholder, editable = true }) => {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    paddingRight: 20,
-    paddingLeft: 20,
+    paddingHorizontal: 20,
+    marginVertical: 10,
   },
   input: {
     backgroundColor: '#FFF',
