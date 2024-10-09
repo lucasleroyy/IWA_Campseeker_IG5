@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import PageTest from './src/pages/Test';
-import PageRecherche from './src/pages/PageRecherche';
+import PageTest from './src/Pages/Test';
+import PageTest_Lucas from './src/Pages/Test_Lucas';
+
+import PageRecherche from './src/Pages/PageRecherche';
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState('Search');
@@ -11,7 +13,7 @@ const App = () => {
 
 
   return (
-    <PageRecherche />
+    <PageTest_Lucas />
   );
 };
 
