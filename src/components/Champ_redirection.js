@@ -13,7 +13,7 @@ const ChampRedirection = ({ label, targetScreen }) => {
   return (
     <TouchableOpacity style={styles.container} onPress={handlePress}>
       <Text style={styles.label}>{label}</Text>
-      <MaterialIcons name="chevron-right" size={24} color="#597962" />
+      <MaterialIcons name="chevron-right" size={30} color="#597962" />
     </TouchableOpacity>
   );
 };

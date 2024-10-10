@@ -32,7 +32,6 @@ const Recherche = ({ placeholder, editable = true, onCitySelect }) => {
       }
   
       const data = await response.json();
-      console.log(data); // Affiche la réponse pour vérifier la structure
       if (data && data.data) {
         // Filtre pour garder uniquement les noms principaux de villes
         const citySuggestions = data.data

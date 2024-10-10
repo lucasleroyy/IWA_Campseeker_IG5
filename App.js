@@ -2,7 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Test from './src/pages/Test';
-import PageRecherche from './src/pages/PageRecherche';
+import PageRecherche from './src/pages/Page_recherche';
 
 const Stack = createStackNavigator();
 

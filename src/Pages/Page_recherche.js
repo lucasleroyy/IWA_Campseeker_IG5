@@ -5,7 +5,7 @@ import Carte from '../components/Carte';
 import Recherche from '../components/Recherche';
 import Champ_selection from '../components/Champ_selection';
 
-const PageRecherche = () => {
+const Page_recherche = () => {
     const [currentPage, setCurrentPage] = useState('Search');
     const [selectedTags, setSelectedTags] = useState([]);
     const [searchCity, setSearchCity] = useState('');
@@ -93,4 +93,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default PageRecherche;
+export default Page_recherche;

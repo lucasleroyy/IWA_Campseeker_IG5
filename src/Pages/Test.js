@@ -61,7 +61,7 @@ const Test = () => {
         <ChampRedirection label="Recherche" targetScreen="PageRecherche" />
         <Favoris />
         {/* Ajout de quelques commentaires pour tester le composant Commentaire */}
-        <Commentaire pseudo="Utilisateur1" note={5} texte="Commentaire 1 wazzaaaa" />
+        <Commentaire pseudo="Utilisateur1" note={5} texte="Commentaire 1 wazzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" />
         <View style={styles.Equipementcontainer}>
             <Champ_selection 
                 label="Abrité" 
@@ -92,7 +92,7 @@ const Test = () => {
         <Champ placeholder="Email" editable={true} />
         <Bouton label="Ceci est un bouton" onClick={() => console.log('Ajouter')} />
         <Recherche placeholder="Rechercher un lieu" editable={true} />
-        <Carte
+        {/*<Carte
                     style={styles.map}
                     initialRegion={{
                         latitude: 48.8584, // Latitude pour Paris
@@ -101,6 +101,7 @@ const Test = () => {
                         longitudeDelta: 0.0421,
                     }}
                 />
+                */}
       </ScrollView>
       
       <Bandeau currentPage={currentPage} onNavigate={onNavigate}/>
