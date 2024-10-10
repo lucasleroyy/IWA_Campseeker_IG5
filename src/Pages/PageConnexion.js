@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   link: {
-    color: '#FF6D00',
+    color: '#FFF',
     textAlign: 'center',
     marginTop: 10,
     textDecorationLine: 'underline',
