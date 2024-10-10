@@ -1,18 +1,18 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import Test_Lucas from './src/Pages/Test_Lucas';
-import PageRecherche from './src/Pages/PageRecherche';
+import Test from './src/pages/Test';
+import PageRecherche from './src/pages/PageRecherche';
 
 const Stack = createStackNavigator();
 
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Test_Lucas">
+      <Stack.Navigator initialRouteName="Test">
         <Stack.Screen 
-          name="Test_Lucas" 
-          component={Test_Lucas} 
+          name="Test" 
+          component={Test} 
           options={{ headerShown: false }} 
         />
         <Stack.Screen 

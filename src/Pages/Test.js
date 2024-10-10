@@ -8,6 +8,11 @@ import Bouton from '../components/Bouton';
 import Carte from '../components/Carte';
 import Recherche from '../components/Recherche';
 import Champ_selection from '../components/Champ_selection';
+import ChampRedirection from '../components/Champ_redirection';
+import Favoris from '../components/Favoris'; 
+import Commentaire from '../components/Commentaire';
+import BoiteVerte from '../components/Boite_verte';
+import BoiteBlanche from '../components/Boite_blanche';
 
 const Test = () => {
   const [currentPage, setCurrentPage] = useState('Search');
@@ -35,9 +40,28 @@ const Test = () => {
     <Photo key={2} imageUrl={require('../../assets/bivouac3.png')} width={300} height={200} />,
   ];
 
+  const commentaires = [
+    <Commentaire key={1} pseudo="Utilisateur1" note={5} texte="Commentaire 1 wazzaaaa" />,
+    <Commentaire key={2} pseudo="Utilisateur2" note={3} texte="Commentaire 2 wazzaaaa" />,
+    <Commentaire key={3} pseudo="Utilisateur3" note={4} texte="Commentaire 3 wazzaaaa" />,
+  ];
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <BoiteBlanche>
+          <Bouton label="Bouton Blanc" onClick={() => alert('Bouton dans la boîte blanche cliqué!')} />
+          <Photo imageUrl={require('../../assets/bivouac3.png')} width={300} height={200} />
+        </BoiteBlanche>
+
+        <BoiteVerte>
+          <Bouton label="Bouton Vert" onClick={() => alert('Bouton dans la boîte verte cliqué!')} />
+        </BoiteVerte>
+        {/* Ajout de ChampRedirection pour naviguer vers une autre page */}
+        <ChampRedirection label="Recherche" targetScreen="PageRecherche" />
+        <Favoris />
+        {/* Ajout de quelques commentaires pour tester le composant Commentaire */}
+        <Commentaire pseudo="Utilisateur1" note={5} texte="Commentaire 1 wazzaaaa" />
         <View style={styles.Equipementcontainer}>
             <Champ_selection 
                 label="Abrité" 
@@ -64,6 +88,7 @@ const Test = () => {
 
 
         <Scroll_horizontal items={photos} />
+        <Scroll_horizontal items={commentaires} />
         <Champ placeholder="Email" editable={true} />
         <Bouton label="Ceci est un bouton" onClick={() => console.log('Ajouter')} />
         <Recherche placeholder="Rechercher un lieu" editable={true} />
@@ -87,7 +112,8 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     backgroundColor: 'rgba(166, 116, 55, 0.1)',
-    marginTop: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   scrollContainer: {
     flexGrow: 1,  // Permet à ScrollView de s'étendre en fonction du contenu

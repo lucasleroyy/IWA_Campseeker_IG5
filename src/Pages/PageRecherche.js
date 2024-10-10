@@ -73,8 +73,7 @@ const PageRecherche = () => {
 const styles = StyleSheet.create({
     container: {
       flexGrow: 1,
-      backgroundColor: 'rgba(166, 116, 55, 0.1)',
-      marginTop: 50,
+      backgroundColor: 'rgba(166, 116, 55, 0.1)'
     },
     scrollContainer: {
       flexGrow: 1,  // Permet à ScrollView de s'étendre en fonction du contenu
