@@ -1,13 +1,21 @@
 import React, { useState } from 'react';
-import { TouchableOpacity, StyleSheet } from 'react-native';
+import { TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 const Favoris = () => {
-  const [isFavorite, setIsFavorite] = useState(false);
-
-  const toggleFavorite = () => {
-    setIsFavorite(!isFavorite);
-  };
+    const [isFavorite, setIsFavorite] = useState(false);
+  
+    const toggleFavorite = () => {
+      const newFavoriteState = !isFavorite;
+      setIsFavorite(newFavoriteState);
+  
+      // Afficher une notification selon l'état du favori
+      if (newFavoriteState) {
+        Alert.alert('Favoris', 'Ajouté aux favoris.');
+      } else {
+        Alert.alert('Favoris', 'Retiré des favoris.');
+      }
+    };
 
   return (
     <TouchableOpacity onPress={toggleFavorite} style={styles.container}>
