@@ -1,22 +1,21 @@
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
 import BoiteVerte from '../components/Boite_verte';
 import Champ from '../components/Champ';
 import Bouton from '../components/Bouton';
+import { useNavigation } from '@react-navigation/native';
 
 const PageInscription = () => {
   const [isChecked, setIsChecked] = useState(false);
+  const navigation = useNavigation();
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* Affichage du logo */}
       <Image source={require('../../assets/Logo.png')} style={styles.logo} />
 
-      {/* Texte de bienvenue */}
       <Text style={styles.title}>Bienvenue chez CampSeeker</Text>
       <Text style={styles.subtitle}>Trouvez l'endroit <Text style={styles.highlight}>parfait</Text> pour bivouaquer</Text>
 
-      {/* Formulaire d'inscription */}
       <BoiteVerte>
         <Champ placeholder="Nom" />
         <Champ placeholder="Prénom" />
@@ -27,20 +26,13 @@ const PageInscription = () => {
         <Champ placeholder="Mot de passe" secureTextEntry={true} />
         <Champ placeholder="Confirmation mot de passe" secureTextEntry={true} />
 
-        {/* Checkbox pour accepter les conditions */}
         <View style={styles.checkboxContainer}>
-          <TouchableOpacity
-            style={[styles.checkbox, isChecked && styles.checkboxChecked]}
-            onPress={() => setIsChecked(!isChecked)}
-          />
           <Text style={styles.checkboxLabel}>Accepter les conditions d'utilisation</Text>
         </View>
 
-        {/* Bouton d'inscription */}
         <Bouton label="Inscription" onClick={() => alert('Inscription réussie !')} />
 
-        {/* Lien pour ceux qui ont déjà un compte */}
-        <Text style={styles.link} onPress={() => alert('Redirection vers la connexion')}>
+        <Text style={styles.link} onPress={() => navigation.navigate('PageConnexion')}>
           J'ai déjà un compte
         </Text>
       </BoiteVerte>
@@ -81,17 +73,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 10,
   },
-  checkbox: {
-    width: 20,
-    height: 20,
-    borderWidth: 2,
-    borderColor: '#FF6D00',
-    marginRight: 8,
-  },
-  checkboxChecked: {
-    backgroundColor: '#FF6D00',
-  },
   checkboxLabel: {
+    marginLeft: 8,
     fontSize: 14,
   },
   link: {
