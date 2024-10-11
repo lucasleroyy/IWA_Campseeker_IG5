@@ -8,35 +8,35 @@ const { width } = Dimensions.get('window');
 const Bandeau = ({ currentPage, onNavigate }) => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => onNavigate('Search')} style={styles.iconContainer}>
+      <TouchableOpacity onPress={() => onNavigate('PageRecherche')} style={styles.iconContainer}>
         <MaterialIcons
           name="search"
-          size={currentPage === 'Search' ? 50 : 30}  // Agrandir l'icône active
-          color={currentPage === 'Search' ? '#597962' : 'white'}  // Vert pour la page active
+          size={currentPage === 'PageRecherche' ? 50 : 30}  // Agrandir l'icône active
+          color={currentPage === 'PageRecherche' ? '#597962' : 'white'}  // Vert pour la page active
         />
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => onNavigate('Add')} style={styles.iconContainer}>
+      <TouchableOpacity onPress={() => onNavigate('AjouterLieu')} style={styles.iconContainer}>
         <MaterialIcons
           name="add-circle-outline"
-          size={currentPage === 'Add' ? 50 : 30}  // Agrandir l'icône active
-          color={currentPage === 'Add' ? '#597962' : 'white'}  // Vert pour la page active
+          size={currentPage === 'AjouterLieu' ? 50 : 30}  // Agrandir l'icône active
+          color={currentPage === 'AjouterLieu' ? '#597962' : 'white'}  // Vert pour la page active
         />
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => onNavigate('Favorites')} style={styles.iconContainer}>
+      <TouchableOpacity onPress={() => onNavigate('PageFavoris')} style={styles.iconContainer}>
         <MaterialIcons
           name="favorite-outline"
-          size={currentPage === 'Favorites' ? 50 : 30}  // Agrandir l'icône active
-          color={currentPage === 'Favorites' ? '#597962' : 'white'}  // Vert pour la page active
+          size={currentPage === 'PageFavoris' ? 50 : 30}  // Agrandir l'icône active
+          color={currentPage === 'PageFavoris' ? '#597962' : 'white'}  // Vert pour la page active
         />
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => onNavigate('Profile')} style={styles.iconContainer}>
+      <TouchableOpacity onPress={() => onNavigate('ProfilUser')} style={styles.iconContainer}>
         <MaterialIcons
           name="person-outline"
-          size={currentPage === 'Profile' ? 50 : 30}  // Agrandir l'icône active
-          color={currentPage === 'Profile' ? '#597962' : 'white'}  // Vert pour la page active
+          size={currentPage === 'ProfilUser' ? 50 : 30}  // Agrandir l'icône active
+          color={currentPage === 'ProfilUser' ? '#597962' : 'white'}  // Vert pour la page active
         />
       </TouchableOpacity>
     </View>

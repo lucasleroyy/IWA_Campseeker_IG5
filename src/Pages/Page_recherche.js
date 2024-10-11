@@ -5,8 +5,8 @@ import Carte from '../components/Carte';
 import Recherche from '../components/Recherche';
 import Champ_selection from '../components/Champ_selection';
 
-const Page_recherche = () => {
-    const [currentPage, setCurrentPage] = useState('Search');
+const Page_recherche = ({ navigation }) => {
+    const [currentPage, setCurrentPage] = useState('PageRecherche');
     const [selectedTags, setSelectedTags] = useState([]);
     const [searchCity, setSearchCity] = useState('');
     const [region, setRegion] = useState(null);
@@ -65,7 +65,7 @@ const Page_recherche = () => {
                 {/* Affiche la carte en fonction de la ville recherchée */}
                 <Carte ville={searchCity} style={styles.map} />
             </ScrollView>
-            <Bandeau currentPage={currentPage} onNavigate={onNavigate}/>
+            <Bandeau currentPage={currentPage} onNavigate={navigation.navigate}/>
         </View>
     );
 };
