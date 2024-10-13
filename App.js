@@ -3,24 +3,33 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import PageInscription from './src/Pages/PageInscription';
 import PageConnexion from './src/Pages/PageConnexion';
-import PageConditions from './src/Pages/PageConditions'; 
-import PageProfil from './src/Pages/PageProfil'; // Import de la page profil
+import PageConditions from './src/Pages/PageConditions'; // Import de la page
 
 const Stack = createStackNavigator();
 
 const App = () => {
   return (
     <NavigationContainer>
-      {/* Change initialRouteName to 'PageProfil' for testing */}
-      <Stack.Navigator initialRouteName="PageProfil">
+      <Stack.Navigator initialRouteName="PageInscription">
         <Stack.Screen 
-          name="PageProfil" 
-          component={PageProfil} 
-          options={{ title: 'Profil utilisateur', headerShown: false }} 
+          name="PageInscription" 
+          component={PageInscription} 
+          options={{ headerShown: false }} 
+        />
+        <Stack.Screen 
+          name="PageConnexion" 
+          component={PageConnexion} 
+          options={{ headerShown: false }} 
+        />
+        <Stack.Screen 
+          name="PageConditions" 
+          component={PageConditions} 
+          options={{ title: 'Conditions d\'utilisation' }} 
         />
       </Stack.Navigator>
     </NavigationContainer>
   );
+  
 };
 
 export default App;
