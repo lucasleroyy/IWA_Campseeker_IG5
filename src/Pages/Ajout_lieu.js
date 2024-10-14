@@ -75,7 +75,7 @@ const Ajout_lieu = ({ navigation }) => {
           </View>
           <Champ label="Coordonnées GPS" placeholder="Coordonnées GPS" />
           <Champ label="Description" placeholder="Description" />
-          <Text> Équipements :</Text>
+          <Text style={styles.sectionTitle}>ÉQUIPEMENTS :</Text>
           <View style={styles.Equipementcontainer}>
             <ChampSelection
                 label="Abrité" 
@@ -139,6 +139,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20,
   },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#000',
+    marginLeft: '5%',
+    marginVertical: 10,
+  },
+
 });
 
 export default Ajout_lieu;
