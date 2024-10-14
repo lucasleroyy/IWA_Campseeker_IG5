@@ -5,6 +5,7 @@ import PageRecherche from './pages/Page_recherche';
 import AjoutLieu from './pages/Ajout_lieu';
 import Favoris from './pages/Page_favoris';
 import ProfilUser from './pages/Profil_user';
+import ConditionsService from './pages/Conditions_service';
 
 
 const Stack = createStackNavigator();
@@ -20,6 +21,7 @@ const AppNavigator = () => {
         <Stack.Screen name="AjouterLieu" component={AjoutLieu} />
         <Stack.Screen name="PageFavoris" component={Favoris} />
         <Stack.Screen name="ProfilUser" component={ProfilUser} />
+        <Stack.Screen name="ConditionsService" component={ConditionsService} />
       </Stack.Navigator>
     </NavigationContainer>
   );

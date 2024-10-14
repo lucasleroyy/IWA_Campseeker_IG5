@@ -28,7 +28,7 @@ const PageProfil = ({ navigation }) => {
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>LÉGAL</Text>
-          <ChampRedirection label="Condition de services" targetScreen="ConditionServices" />
+          <ChampRedirection label="Condition de services" targetScreen="ConditionsService" />
           <ChampRedirection label="Politique de confidentialité" targetScreen="PolitiqueConfidentialite" />
         </View>
 
