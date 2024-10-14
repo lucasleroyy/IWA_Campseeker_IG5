@@ -3,7 +3,9 @@ import AppNavigator from './src/App_navigation';
 
 
 const App = () => {
-  return <AppNavigator />;
+  return (
+   <AppNavigator/>
+  );
 };
 
 export default App;
