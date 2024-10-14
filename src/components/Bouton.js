@@ -11,7 +11,7 @@ const Bouton = ({ label, onClick }) => {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#FF6D00',  // Couleur orange
+    backgroundColor: '#F25C05',  // Couleur orange
     borderRadius: 20,  // Bords arrondis
     paddingVertical: 10,
     paddingHorizontal: 50,  // Ajouter un espace de 20 à gauche et à droite

@@ -52,7 +52,7 @@ const Ajout_lieu = ({ navigation }) => {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Text style={styles.titre}>
-          Proposer votre lieu de <Text style={{ color: '#FF6D00' }}>bivouac</Text> !
+          Proposer votre lieu de <Text style={{ color: '#F25C05' }}>bivouac</Text> !
         </Text>
         <BoiteVerte>
           <View style={styles.photoContainer}>
