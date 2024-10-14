@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-const PageConditions = () => {
+const Conditions_service = () => {
   const navigation = useNavigation();
 
   return (
@@ -51,4 +51,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PageConditions;
+export default Conditions_service;

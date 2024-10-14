@@ -37,7 +37,6 @@ const Page_recherche = ({ navigation }) => {
                     editable={true}
                     onCitySelect={handleSearchChange}
                 />
-                <Text>Recherche en cours pour: {searchCity}</Text>
                 <View style={styles.Equipementcontainer}>
                     <Champ_selection 
                         label="Abrité" 
@@ -60,7 +59,6 @@ const Page_recherche = ({ navigation }) => {
                         isSelected={selectedTags.includes('Électricité')}
                         onPress={() => handleTagPress('Électricité')} />
                 </View>
-                <Text>Tags sélectionnés: {selectedTags.join(', ')}</Text>
 
                 {/* Affiche la carte en fonction de la ville recherchée */}
                 <Carte ville={searchCity} style={styles.map} />
