@@ -59,6 +59,7 @@ const Test = () => {
         </BoiteVerte>
         {/* Ajout de ChampRedirection pour naviguer vers une autre page */}
         <ChampRedirection label="Recherche" targetScreen="PageRecherche" />
+        <ChampRedirection label="Lieu" targetScreen="FicheLieu" />
         <Favoris />
         {/* Ajout de quelques commentaires pour tester le composant Commentaire */}
         <Commentaire pseudo="Utilisateur1" note={5} texte="Commentaire 1 wazzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" />
@@ -83,7 +84,6 @@ const Test = () => {
                 label="Électricité"
                 isSelected={selectedTags.includes('Électricité')}
                 onPress={() => handleTagPress('Électricité')} />
-            <Text>Tags sélectionnés: {selectedTags.join(', ')}</Text>
         </View>
 
 

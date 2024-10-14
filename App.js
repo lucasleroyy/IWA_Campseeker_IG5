@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Test from './src/pages/Test';
 import PageRecherche from './src/pages/Page_recherche';
+import FicheLieu from './src/components/Fiche_lieu';
 
 const Stack = createStackNavigator();
 
@@ -19,6 +20,11 @@ const App = () => {
           name="PageRecherche" 
           component={PageRecherche} 
           options={{ title: 'Recherche' }} 
+        />
+        <Stack.Screen 
+          name="FicheLieu" 
+          component={FicheLieu} 
+          options={{ title: 'Nom du Lieu' }} 
         />
       </Stack.Navigator>
     </NavigationContainer>
