@@ -31,34 +31,34 @@ const Page_recherche = ({ navigation }) => {
 
     return(
         <View style={styles.container}>
-          <Recherche
-            placeholder="Rechercher un lieu" 
-            editable={true}
-            onCitySelect={handleSearchChange}
-          />
-          <ScrollView contentContainerStyle={styles.scrollContainer}>
-            <View style={styles.Equipementcontainer}>
-              <Champ_selection 
-                label="Abrité" 
-                isSelected={selectedTags.includes('Abrité')} 
-                 onPress={() => handleTagPress('Abrité')} />
-              <Champ_selection 
-                label="Sanitaire"
-                isSelected={selectedTags.includes('Sanitaire')}
-                onPress={() => handleTagPress('Sanitaire')} />
-              <Champ_selection 
-                label="Wifi" 
-                isSelected={selectedTags.includes('Wifi')}
-                onPress={() => handleTagPress('Wifi')} />
-              <Champ_selection
-                label="Parking"
-                isSelected={selectedTags.includes('Parking')}
-                onPress={() => handleTagPress('Parking')} />
-              <Champ_selection 
-                label="Électricité"
-                isSelected={selectedTags.includes('Électricité')}
-                onPress={() => handleTagPress('Électricité')} />
-            </View>
+            <ScrollView contentContainerStyle={styles.scrollContainer}>
+                <Recherche 
+                    placeholder="Rechercher un lieu" 
+                    editable={true}
+                    onCitySelect={handleSearchChange}
+                />
+                <View style={styles.Equipementcontainer}>
+                    <Champ_selection 
+                        label="Abrité" 
+                        isSelected={selectedTags.includes('Abrité')} 
+                        onPress={() => handleTagPress('Abrité')} />
+                    <Champ_selection 
+                        label="Sanitaire"
+                        isSelected={selectedTags.includes('Sanitaire')}
+                        onPress={() => handleTagPress('Sanitaire')} />
+                    <Champ_selection 
+                        label="Wifi" 
+                        isSelected={selectedTags.includes('Wifi')}
+                        onPress={() => handleTagPress('Wifi')} />
+                    <Champ_selection
+                        label="Parking"
+                        isSelected={selectedTags.includes('Parking')}
+                        onPress={() => handleTagPress('Parking')} />
+                    <Champ_selection 
+                        label="Électricité"
+                        isSelected={selectedTags.includes('Électricité')}
+                        onPress={() => handleTagPress('Électricité')} />
+                </View>
 
             {/* Affiche la carte en fonction de la ville recherchée */}
             <Carte ville={searchCity} style={styles.map} />
