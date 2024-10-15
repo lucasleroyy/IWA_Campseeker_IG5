@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   selectedTag: {
-    backgroundColor: '#F2A25C',
+    backgroundColor: '#F25C05',
   },
   defaultText: {
     color: '#000',
