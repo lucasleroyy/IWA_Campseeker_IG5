@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Alert, TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Bandeau from '../components/Bandeau';
 import BoiteVerte from '../components/Boite_verte';
@@ -48,21 +48,44 @@ const Ajout_lieu = ({ navigation }) => {
     }
   };
 
+  const deleteImage = (uri) => {
+    Alert.alert(
+      "Supprimer la photo",
+      "Voulez-vous vraiment supprimer cette photo ?",
+      [
+        { text: "Annuler", style: "cancel" },
+        {
+          text: "Supprimer",
+          style: "destructive",
+          onPress: () => {
+            setPhotos((prevPhotos) => prevPhotos.filter((photo) => photo !== uri));
+          },
+        },
+      ]
+    );
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Text style={styles.titre}>
           Proposer votre lieu de <Text style={{ color: '#F25C05' }}>bivouac</Text> !
         </Text>
-        <BoiteVerte>
+          <BoiteVerte>
           <View style={styles.photoContainer}>
-            {/* Utilisation de Scroll_horizontal */}
-            <ScrollHorizontal items={photos.map((uri, index) => (
-              <Photo key={index} imageUrl={{ uri }} width={300} height={200} />
-            ))} />
+            <ScrollHorizontal 
+              items={photos.map((uri, index) => (
+                <TouchableOpacity key={index} onLongPress={() => deleteImage(uri)}>
+                  <Photo
+                    imageUrl={{ uri }}
+                    width={300}
+                    height={200}
+                  />
+                </TouchableOpacity>
+              ))} 
+            />
             <Bouton label="+" onClick={pickImage} />
           </View>
-
           <Champ label="Nom du lieu" placeholder="Nom du lieu" />
           <Champ label="Adresse" placeholder="Adresse" />
           <View style={styles.rowContainer}>
@@ -146,7 +169,6 @@ const styles = StyleSheet.create({
     marginLeft: '5%',
     marginVertical: 10,
   },
-
 });
 
 export default Ajout_lieu;
