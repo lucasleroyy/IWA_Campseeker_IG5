@@ -37,7 +37,7 @@ const PageProfil = ({ navigation }) => {
         </View>
       </ScrollView>
 
-      <Bandeau currentPage="Profile" onNavigate={handleNavigate} />
+      <Bandeau currentPage="ProfilUser" onNavigate={navigation.navigate} />
     </View>
   );
 };
