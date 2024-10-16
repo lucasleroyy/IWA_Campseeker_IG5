@@ -4,9 +4,6 @@ import ChampRedirection from '../components/Champ_redirection';
 import Bandeau from '../components/Bandeau';
 
 const PageProfil = ({ navigation }) => {
-  const handleNavigate = (screen) => {
-    navigation.navigate(screen);
-  };
 
   return (
     <View style={styles.container}>
