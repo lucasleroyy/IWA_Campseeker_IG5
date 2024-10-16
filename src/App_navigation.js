@@ -7,6 +7,8 @@ import PageFavoris from './pages/Page_favoris';
 import PageInfoLieu from './pages/Page_infos_lieu';
 import ProfilUser from './pages/Profil_user';
 import ConditionsService from './pages/Conditions_service';
+import PolitiqueConfidentialite from './pages/Politique_confidentialite';
+
 
 const Stack = createStackNavigator();
 
@@ -48,6 +50,13 @@ const AppNavigator = () => {
           component={ConditionsService} 
           options={{ headerShown: true }}
         />
+
+<Stack.Screen 
+  name="PolitiqueConfidentialite" 
+  component={PolitiqueConfidentialite} 
+  options={{ headerShown: true }} 
+/>
+
       </Stack.Navigator>
     </NavigationContainer>
   );
