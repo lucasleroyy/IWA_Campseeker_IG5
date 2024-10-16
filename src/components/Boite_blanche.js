@@ -11,15 +11,20 @@ const BoiteBlanche = ({ children }) => {
 
 const styles = StyleSheet.create({
   box: {
-    backgroundColor: '#FFFFFF', // Blanc
-    padding: 10,
+    backgroundColor: '#FFFFFF',
+    padding: 15,
     borderRadius: 10,
-    width: '90%', // Largeur fixe à 90% de l'écran pour éviter les chevauchements
-    alignSelf: 'center', // Centre horizontalement la boîte
-    marginVertical: 10, // Espace en haut et en bas
-    borderWidth: 1, // Taille du contour
-    borderColor: '#FF6D00', // Couleur orange pour le contour
-    flex: 0, 
+    width: '97%', 
+    alignSelf: 'center', 
+    marginVertical: 10, 
+    borderWidth: 1, 
+    borderColor: '#FF6D00', 
+    flex: 0,
+    shadowColor: '#000', 
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 2, 
   },
 });
 
