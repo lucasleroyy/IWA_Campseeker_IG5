@@ -2,8 +2,9 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/FontAwesome'; // Importer l'icône de FontAwesome
 
-const ChampRedirection = ({ label, targetScreen }) => {
+const ChampRedirection = ({ label, targetScreen, icon }) => {
   const navigation = useNavigation();
 
   const handlePress = () => {
@@ -12,7 +13,11 @@ const ChampRedirection = ({ label, targetScreen }) => {
 
   return (
     <TouchableOpacity style={styles.container} onPress={handlePress}>
-      <Text style={styles.label}>{label}</Text>
+      <View style={styles.labelContainer}>
+        {/* Si une icône est passée, l'afficher avant le label */}
+        {icon && <Icon name={icon} size={20} color="#000" style={styles.icon} />}
+        <Text style={styles.label}>{label}</Text>
+      </View>
       <MaterialIcons name="chevron-right" size={30} color="#597962" />
     </TouchableOpacity>
   );
@@ -35,6 +40,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 2,
     elevation: 2, // Ombre pour Android
+  },
+  labelContainer: {
+    flexDirection: 'row',
+    alignItems: 'center', // Pour aligner l'icône et le texte
+  },
+  icon: {
+    marginRight: 10, // Espace entre l'icône et le texte
   },
   label: {
     fontSize: 16,
