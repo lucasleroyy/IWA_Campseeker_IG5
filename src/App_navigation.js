@@ -43,12 +43,12 @@ const AppNavigator = () => {
         <Stack.Screen 
           name="PageInfoLieu" 
           component={PageInfoLieu} 
-          options={{ headerShown: true }}
+          options={{ headerShown: true, headerBackTitle: 'Retour' }}
         />
         <Stack.Screen 
           name="ConditionsService" 
           component={ConditionsService} 
-          options={{ headerShown: true }}
+          options={{ headerShown: true, headerBackTitle: 'Retour' }}
         />
 
 <Stack.Screen 
