@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     flexGrow: 1,
-    paddingVertical: 100,
+    marginVertical: 70,
   },
   Equipementcontainer: {
     flexDirection: 'row',
