@@ -162,7 +162,6 @@ const styles = StyleSheet.create({
   },
   photoContainer: {
     alignItems: 'center',
-    marginTop: 20,
   },
   sectionTitle: {
     fontSize: 18,

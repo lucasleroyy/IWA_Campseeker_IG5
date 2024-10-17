@@ -15,6 +15,7 @@ const styles = StyleSheet.create({
     borderRadius: 10, // Bords arrondis pour un effet plus doux
     width: '90%', // Largeur fixe à 90% de l'écran pour éviter les chevauchements
     alignSelf: 'center', // Centre horizontalement la boîte
+    paddingVertical: 20, // Ajoute de l'espace autour du contenu
   },
 });
 
