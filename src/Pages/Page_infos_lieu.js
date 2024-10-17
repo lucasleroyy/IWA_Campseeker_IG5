@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, ScrollView, StyleSheet, Text } from 'react-native';
 import FicheLieu from '../components/Fiche_lieu';
 
 const Page_info_lieu = ({ route }) => {
@@ -7,8 +7,10 @@ const Page_info_lieu = ({ route }) => {
 
   return (
     <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
       <Text style={styles.titre}>Nom du Lieu </Text>
       <FicheLieu id={id} />
+      </ScrollView>
     </View>
   );
 };
@@ -17,7 +19,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'rgba(166, 116, 55, 0.1)',
-    paddingVertical: 30,
+    paddingBottom: 50,
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    alignItems: 'center',
+    paddingVertical: '15%',
   },
   titre: {
     fontSize: 32,

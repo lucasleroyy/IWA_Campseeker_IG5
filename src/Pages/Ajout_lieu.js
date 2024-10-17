@@ -138,6 +138,7 @@ const styles = StyleSheet.create({
   scrollContainer: {
     flexGrow: 1,
     paddingVertical: '15%',
+    alignItems: 'center',
   },
   Equipementcontainer: {
     flexDirection: 'row',

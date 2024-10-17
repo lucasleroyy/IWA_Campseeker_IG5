@@ -72,12 +72,13 @@ const styles = StyleSheet.create({
     container: {
       flexGrow: 1,
       backgroundColor: 'rgba(166, 116, 55, 0.1)',
-      paddingTop: 40,
+      paddingBottom: 50,
     },
 
     scrollContainer: {
-      flexGrow: 1,  // Permet à ScrollView de s'étendre en fonction du contenu
-      paddingBottom: 70,
+      flexGrow: 1,
+      alignItems: 'center',
+      paddingVertical: '15%',
     },
     map: {
       width: '90%',  // Assure que la carte est large mais laisse un peu d'espace sur les côtés
