@@ -7,8 +7,10 @@ const Page_info_lieu = ({ route }) => {
 
   return (
     <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
       <Text style={styles.titre}>Nom du Lieu </Text>
       <FicheLieu id={id} />
+      </ScrollView>
     </View>
   );
 };
@@ -18,6 +20,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(166, 116, 55, 0.1)',
     paddingBottom: 50,
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    alignItems: 'center',
+    paddingVertical: '15%',
   },
   titre: {
     fontSize: 32,

@@ -3,35 +3,38 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-nati
 import Bandeau from '../components/Bandeau';
 import Photo from '../components/Photo';
 import ChampRedirection from '../components/Champ_redirection';
+import Scroll_horizontal from '../components/Scroll_horizontal';
 
 const Page_accueil = ({ navigation }) => {
-    const photo = [
-        { id: 1, imageUrl: require('../../assets/bivouac3.png') },
-        { id: 2, imageUrl: require('../../assets/bivouac.png') },
-        { id: 3, imageUrl: require('../../assets/bivouac4.png') },
+    const photos1 = [
+        { id: 1, imageUrl: require('../../assets/bivouac.png') },
+        { id: 2, imageUrl: require('../../assets/bivouac3.png') },
     ];
+    const photos2 = [
+        { id: 3, imageUrl: require('../../assets/bivouac3.png') },
+        { id: 4, imageUrl: require('../../assets/bivouac.png') },
+    ];
+
     return(
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 <ChampRedirection label="Rechercher" targetScreen="PageRecherche" navigation={navigation} />
                 <Text style={styles.titre}>
-                    Découvrez nos <Text style={{ color: '#F25C05' }}>lieux</Text> :
+                    Découvrez nos <Text style={{ color: '#F25C05' }}>lieux</Text> les mieux notés:
                 </Text>
-                <View style={styles.favorisContainer}>
-                    <TouchableOpacity onPress={() => navigation.navigate('PageInfoLieu', { id: photo.id })}>
-                        <Photo imageUrl={require('../../assets/bivouac3.png')} width={300} height={200} />
+                <Scroll_horizontal items={photos1.map((photo) => (
+                    <TouchableOpacity key={photo.id} onPress={() => navigation.navigate('PageInfoLieu', { id: photo.id })}>
+                        <Photo imageUrl={photo.imageUrl} width={300} height={200} />
                     </TouchableOpacity>
-                </View>
-                <View style={styles.favorisContainer}>
-                    <TouchableOpacity onPress={() => navigation.navigate('PageInfoLieu', { id: photo.id })}>
-                        <Photo imageUrl={require('../../assets/bivouac.png')} width={300} height={200} />
+                ))} />
+                <Text style={styles.titre}>
+                    Découvrez les derniers <Text style={{ color: '#F25C05' }}>lieux</Text> postés:
+                </Text>
+                <Scroll_horizontal items={photos2.map((photo) => (
+                    <TouchableOpacity key={photo.id} onPress={() => navigation.navigate('PageInfoLieu', { id: photo.id })}>
+                        <Photo imageUrl={photo.imageUrl} width={300} height={200} />
                     </TouchableOpacity>
-                </View>
-                <View style={styles.favorisContainer}>
-                    <TouchableOpacity onPress={() => navigation.navigate('PageInfoLieu', { id: photo.id })}>
-                        <Photo imageUrl={require('../../assets/bivouac4.png')} width={300} height={200} />
-                    </TouchableOpacity>
-                </View>
+                ))} />
             </ScrollView>
             <Bandeau currentPage="PageAccueil" onNavigate={navigation.navigate} />
         </View>
@@ -45,26 +48,15 @@ const Page_accueil = ({ navigation }) => {
         },
         scrollContainer: {
           flexGrow: 1,
-          alignItems: 'center',
           paddingVertical: '15%',
         },
-        favorisContainer: {
-          position: 'relative',
-          width: 300,
-          height: 200,
-          marginVertical: 10,
-        },
-        favoriteIcon: {
-          position: 'absolute',
-          top: 10,
-          right: 10,
-          zIndex: 1,
-        },
         titre: {
-          fontSize: 32,
+          fontSize: 18,
+          marginTop: 20,
           fontWeight: 'bold',
-          textAlign: 'center',
+          textAlign: 'left',
           marginBottom: 20,
+          marginLeft: '5%',
           color: '#000',
         },
     });

@@ -38,7 +38,7 @@ const Scroll_horizontal = ({ items }) => {
         snapToInterval={itemWidth}  // Se fixe à chaque élément
         decelerationRate="fast"
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: sideMargin }}
+        contentContainerStyle={{ paddingHorizontal: sideMargin, paddingVertical: 10}}
         onMomentumScrollEnd={handleMomentumScrollEnd}  // Capture la fin du scroll
         onScroll={handleScroll}
         scrollEventThrottle={16}
