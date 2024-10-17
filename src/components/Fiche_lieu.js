@@ -31,15 +31,7 @@ const Fiche_lieu = () => {
         <Champ placeholder="Pseudo" editable={false} />
         <Champ placeholder="Adresse" editable={false} />
         <Champ placeholder="Coordonnées GPS" editable={false} />
-        <Carte
-          style={styles.map}
-          initialRegion={{
-            latitude: 48.8584,
-            longitude: 2.2945,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
-        />
+        <Carte ville='Montpellier' style={styles.map} />
         <Text style={styles.texte}>Commentaires : </Text>
         <ScrollHorizontal items={commentaires} containerWidth={width * 0.9} />
         <Bouton label="Ajouter un commentaire" onClick={() => console.log('Ajouter')} />
@@ -49,7 +41,12 @@ const Fiche_lieu = () => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'rgba(166, 116, 55, 0.1)',
+  },
   map: {
+    flex: 1,
     width: '90%',  
     height: 400,
     alignSelf: 'center',
