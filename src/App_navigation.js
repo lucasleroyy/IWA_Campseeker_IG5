@@ -8,6 +8,8 @@ import PageInfoLieu from './pages/Page_infos_lieu';
 import ProfilUser from './pages/Profil_user';
 import PageAccueil from './pages/Page_accueil';
 import ConditionsService from './pages/Conditions_service';
+import MesLieux from './pages/Mes_lieux_user';
+import DetailMesLieux from './pages/Detail_mes_lieux';
 import PolitiqueConfidentialite from './pages/Politique_confidentialite';
 
 
@@ -51,6 +53,17 @@ const AppNavigator = () => {
           component={ConditionsService} 
           options={{ headerShown: true, headerBackTitle: 'Retour' }}
         />
+
+        <Stack.Screen 
+          name="MesLieux" 
+          component={MesLieux} 
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen 
+          name="DetailMesLieux" 
+          component={DetailMesLieux} 
+          options={{ headerShown: true }}
+        />
         
         <Stack.Screen 
           name="PageRecherche" 
@@ -63,6 +76,7 @@ const AppNavigator = () => {
           component={PolitiqueConfidentialite} 
           options={{ headerShown: true, headerBackTitle: 'Retour' }} 
         />
+
 
       </Stack.Navigator>
     </NavigationContainer>
