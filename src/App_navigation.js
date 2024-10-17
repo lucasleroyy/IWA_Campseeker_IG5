@@ -7,6 +7,8 @@ import PageFavoris from './pages/Page_favoris';
 import PageInfoLieu from './pages/Page_infos_lieu';
 import ProfilUser from './pages/Profil_user';
 import ConditionsService from './pages/Conditions_service';
+import MesLieux from './pages/Mes_lieux_user';
+import DetailMesLieux from './pages/Detail_mes_lieux';
 
 const Stack = createStackNavigator();
 
@@ -46,6 +48,16 @@ const AppNavigator = () => {
         <Stack.Screen 
           name="ConditionsService" 
           component={ConditionsService} 
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen 
+          name="MesLieux" 
+          component={MesLieux} 
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen 
+          name="DetailMesLieux" 
+          component={DetailMesLieux} 
           options={{ headerShown: true }}
         />
       </Stack.Navigator>
