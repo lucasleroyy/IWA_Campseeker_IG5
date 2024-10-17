@@ -133,10 +133,12 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     backgroundColor: 'rgba(166, 116, 55, 0.1)',
+    paddingBottom: 50,
   },
   scrollContainer: {
     flexGrow: 1,
-    marginVertical: 70,
+    paddingVertical: '15%',
+    alignItems: 'center',
   },
   Equipementcontainer: {
     flexDirection: 'row',

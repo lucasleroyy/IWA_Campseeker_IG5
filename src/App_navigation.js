@@ -6,6 +6,7 @@ import AjoutLieu from './pages/Ajout_lieu';
 import PageFavoris from './pages/Page_favoris';
 import PageInfoLieu from './pages/Page_infos_lieu';
 import ProfilUser from './pages/Profil_user';
+import PageAccueil from './pages/Page_accueil';
 import ConditionsService from './pages/Conditions_service';
 import PolitiqueConfidentialite from './pages/Politique_confidentialite';
 
@@ -15,12 +16,12 @@ const Stack = createStackNavigator();
 const AppNavigator = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="PageRecherche" screenOptions={{
+      <Stack.Navigator initialRouteName="PageAccueil" screenOptions={{
         animationEnabled: false
       }}>
-         <Stack.Screen 
-          name="PageRecherche" 
-          component={PageRecherche} 
+        <Stack.Screen
+          name="PageAccueil"
+          component={PageAccueil}
           options={{ headerShown: false }}
         />
         <Stack.Screen 
@@ -50,12 +51,18 @@ const AppNavigator = () => {
           component={ConditionsService} 
           options={{ headerShown: true, headerBackTitle: 'Retour' }}
         />
+        
+        <Stack.Screen 
+          name="PageRecherche" 
+          component={PageRecherche} 
+          options={{ headerShown: true, headerBackTitle: 'Retour' }}
+        />
 
-<Stack.Screen 
-  name="PolitiqueConfidentialite" 
-  component={PolitiqueConfidentialite} 
-  options={{ headerShown: true }} 
-/>
+        <Stack.Screen 
+          name="PolitiqueConfidentialite" 
+          component={PolitiqueConfidentialite} 
+          options={{ headerShown: true, headerBackTitle: 'Retour' }} 
+        />
 
       </Stack.Navigator>
     </NavigationContainer>

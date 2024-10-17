@@ -8,11 +8,11 @@ const { width } = Dimensions.get('window');
 const Bandeau = ({ currentPage, onNavigate }) => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => onNavigate('PageRecherche')} style={styles.iconContainer}>
+      <TouchableOpacity onPress={() => onNavigate('PageAccueil')} style={styles.iconContainer}>
         <MaterialIcons
           name="search"
-          size={currentPage === 'PageRecherche' ? 50 : 30}  // Agrandir l'icône active
-          color={currentPage === 'PageRecherche' ? '#597962' : 'white'}  // Vert pour la page active
+          size={currentPage === 'PageAccueil' ? 50 : 30}  // Agrandir l'icône active
+          color={currentPage === 'PageAccueil' ? '#597962' : 'white'}  // Vert pour la page active
         />
       </TouchableOpacity>
 

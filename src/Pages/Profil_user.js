@@ -50,10 +50,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F6F6F6',
-    paddingTop: 50, 
+    paddingBottom: 50, 
   },
   scrollContent: {
-    paddingBottom: 80, 
+    flexGrow: 1,
+    paddingVertical: '15%',
+    alignItems: 'center',
   },
   title: {
     fontSize: 24,

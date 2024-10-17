@@ -13,8 +13,8 @@ const styles = StyleSheet.create({
   box: {
     backgroundColor: '#FFFFFF',
     padding: 15,
-    borderRadius: 10,
-    width: '97%', 
+    borderRadius: 10, 
+    width: '90%',
     alignSelf: 'center', 
     marginVertical: 10, 
     borderWidth: 1, 
