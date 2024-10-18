@@ -12,6 +12,7 @@ import MesLieux from './pages/Mes_lieux_user';
 import DetailMesLieux from './pages/Detail_mes_lieux';
 import PolitiqueConfidentialite from './pages/Politique_confidentialite';
 import AccueilAdmin from './pages/Admin/Accueil_admin';
+import ListeLieuxAdmin from './pages/Admin/Liste_lieux_admin';
 
 
 const Stack = createStackNavigator();
@@ -81,6 +82,12 @@ const AppNavigator = () => {
           name="AccueilAdmin" 
           component={AccueilAdmin} 
           options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Accueil Admin',}} 
+        />
+
+        <Stack.Screen 
+          name="ListeLieuxAdmin" 
+          component={ListeLieuxAdmin} 
+          options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Les Lieux',}} 
         />
 
 

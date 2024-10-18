@@ -15,13 +15,7 @@ const PageProfil = ({ navigation }) => {
           <ChampRedirection label="Mon compte" targetScreen="MonCompte" navigation={navigation} />
           <ChampRedirection label="Mes lieux" targetScreen="MesLieux" navigation={navigation} />
           <ChampRedirection label="Paramètres" targetScreen="Parametres" navigation={navigation} />
-          {/* Ajouter une nouvelle option Notifications avec une icône */}
-          <ChampRedirection 
-            label="Notifications" 
-            targetScreen="Notifications" 
-            navigation={navigation} 
-            icon="bell"  // Icône de cloche
-          />
+          <ChampRedirection label="Notifications" targetScreen="Notifications" navigation={navigation} icon="bell" />
         </View>
 
         <View style={styles.section}>
