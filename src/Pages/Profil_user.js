@@ -8,11 +8,10 @@ const PageProfil = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
-       
         <Text style={styles.title}>Profil</Text>
-
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>GÉNÉRAL</Text>
+          <ChampRedirection label="Admin" targetScreen="AccueilAdmin" navigation={navigation} />
           <ChampRedirection label="Mon compte" targetScreen="MonCompte" navigation={navigation} />
           <ChampRedirection label="Mes lieux" targetScreen="MesLieux" navigation={navigation} />
           <ChampRedirection label="Paramètres" targetScreen="Parametres" navigation={navigation} />

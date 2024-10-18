@@ -11,6 +11,7 @@ import ConditionsService from './pages/Conditions_service';
 import MesLieux from './pages/Mes_lieux_user';
 import DetailMesLieux from './pages/Detail_mes_lieux';
 import PolitiqueConfidentialite from './pages/Politique_confidentialite';
+import AccueilAdmin from './pages/Admin/Accueil_admin';
 
 
 const Stack = createStackNavigator();
@@ -76,6 +77,12 @@ const AppNavigator = () => {
           component={PolitiqueConfidentialite} 
           options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Politique de Confidentialité',}} 
         />
+        <Stack.Screen 
+          name="AccueilAdmin" 
+          component={AccueilAdmin} 
+          options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Accueil Admin',}} 
+        />
+
 
 
       </Stack.Navigator>
