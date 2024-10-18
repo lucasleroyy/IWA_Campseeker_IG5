@@ -46,35 +46,35 @@ const AppNavigator = () => {
         <Stack.Screen 
           name="PageInfoLieu" 
           component={PageInfoLieu} 
-          options={{ headerShown: true, headerBackTitle: 'Retour' }}
+          options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Détail du lieu', }}
         />
         <Stack.Screen 
           name="ConditionsService" 
           component={ConditionsService} 
-          options={{ headerShown: true, headerBackTitle: 'Retour' }}
+          options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Conditions de Service', }}
         />
 
         <Stack.Screen 
           name="MesLieux" 
           component={MesLieux} 
-          options={{ headerShown: true }}
+          options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Mes lieux', }}
         />
         <Stack.Screen 
           name="DetailMesLieux" 
           component={DetailMesLieux} 
-          options={{ headerShown: true }}
+          options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Détail du lieu', }}
         />
         
         <Stack.Screen 
           name="PageRecherche" 
           component={PageRecherche} 
-          options={{ headerShown: true, headerBackTitle: 'Retour' }}
+          options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Recherche',}}
         />
 
         <Stack.Screen 
           name="PolitiqueConfidentialite" 
           component={PolitiqueConfidentialite} 
-          options={{ headerShown: true, headerBackTitle: 'Retour' }} 
+          options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Politique de Confidentialité',}} 
         />
 
 

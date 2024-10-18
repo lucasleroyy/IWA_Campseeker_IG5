@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState }  from 'react';
 import { View, ScrollView, StyleSheet, Dimensions, Text } from 'react-native';
 import BoiteVerte from '../components/Boite_verte';
 import Photo from '../components/Photo';
@@ -8,6 +8,7 @@ import Carte from '../components/Carte';
 import Bouton from '../components/Bouton';
 import Commentaire from '../components/Commentaire';
 import ScrollHorizontal from '../components/Scroll_horizontal';
+import Champ_selection from '../components/Champ_selection';
 
 const Page_info_lieu = ({ route }) => {
   const { width } = Dimensions.get('window');
@@ -34,7 +35,19 @@ const Page_info_lieu = ({ route }) => {
         <Champ placeholder="Adresse" editable={false} />
         <Champ placeholder="Coordonnées GPS" editable={false} />
         <Carte ville='Montpellier' style={styles.map} />
-        <Text style={styles.texte}>Commentaires : </Text>
+        <Text style={styles.sectionTitle}>ÉQUIPEMENTS :</Text>
+        <View style={styles.Equipementcontainer}>
+          <Champ_selection 
+            label="Abrité" 
+            isSelected={true} />
+          <Champ_selection 
+            label="Sanitaire"
+            isSelected={true} />
+          <Champ_selection 
+            label="Wifi" 
+            isSelected={true} />
+        </View>
+        <Text style={styles.sectionTitle}>COMMENTAIRES :</Text>
         <ScrollHorizontal items={commentaires} containerWidth={width * 0.9} />
         <Bouton label="Ajouter un commentaire" onClick={() => console.log('Ajouter')} />
       </BoiteVerte>
@@ -53,6 +66,25 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     alignItems: 'center',
     paddingVertical: '15%',
+  },
+  map: {
+    width: '90%',  // Assure que la carte est large mais laisse un peu d'espace sur les côtés
+    height: 200,  // Ajuste la hauteur selon ce qui convient
+    marginBottom: 20,
+    alignSelf: 'center',
+  },
+  Equipementcontainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+    padding: 10,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#000',
+    marginLeft: '5%',
+    marginVertical: 10,
   },
   titre: {
     fontSize: 32,

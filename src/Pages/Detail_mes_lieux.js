@@ -6,6 +6,7 @@ import Bouton from '../components/Bouton';
 import ScrollHorizontal from '../components/Scroll_horizontal';
 import Commentaire from '../components/Commentaire';
 import Photo from '../components/Photo';
+import Champ_selection from '../components/Champ_selection';
 import Carte from '../components/Carte';
 import { useNavigation } from '@react-navigation/native';
 
@@ -52,8 +53,17 @@ const DetailMesLieux = ({ route }) => {
             }}
           />
           <Text style={styles.sectionTitle}>ÉQUIPEMENTS :</Text>
-          <Champ placeholder="Wifi" editable={false} />
-          <Champ placeholder="Sanitaire" editable={false} />
+          <View style={styles.Equipementcontainer}>
+            <Champ_selection 
+              label="Abrité" 
+              isSelected={true} />
+            <Champ_selection 
+              label="Sanitaire"
+              isSelected={true} />
+            <Champ_selection 
+              label="Wifi" 
+              isSelected={true} />
+          </View>
           <Text style={styles.sectionTitle}>COMMENTAIRES :</Text>
           <ScrollHorizontal items={commentaires} containerWidth={width * 0.9} />
           <Bouton label="Supprimer le lieu" onClick={handleDelete} />
@@ -86,6 +96,18 @@ const styles = StyleSheet.create({
     color: '#000',
     marginLeft: '5%',
     marginVertical: 10,
+  },
+  Equipementcontainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+    padding: 10,
+  },
+  map: {
+    width: '90%',  // Assure que la carte est large mais laisse un peu d'espace sur les côtés
+    height: 200,  // Ajuste la hauteur selon ce qui convient
+    marginBottom: 20,
+    alignSelf: 'center',
   },
 });
 
