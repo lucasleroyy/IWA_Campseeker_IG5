@@ -9,8 +9,8 @@ const AccueilAdmin = ({ navigation }) => {
             <ScrollView contentContainerStyle={styles.scrollContent}>
                 <Image source={require('../../../assets/Logo.png')} style={styles.logo} />
                 <Text style={styles.title}>Bienvenue cher <Text style={{ color: '#F25C05' }}>Admin</Text> !</Text>
-                <ChampRedirection label="Gérer les commentaire" targetScreen="ListeLieuxAdmin" navigation={navigation} />
-                <ChampRedirection label="Gérer les lieux" targetScreen="ListeLieuxAdmin" navigation={navigation} />
+                <ChampRedirection label="Gérer les commentaire" targetScreen="ListeLieuxCommentaireAdmin" navigation={navigation} />
+                <ChampRedirection label="Gérer les lieux" targetScreen="ListeLieuxInfoAdmin" navigation={navigation} />
                 <ChampRedirection label="Gérer les équipement" targetScreen="GestionEquipement" navigation={navigation} />
                 <ChampRedirection label="Gérer le support" targetScreen="GestionSupport" navigation={navigation} />
             </ScrollView>

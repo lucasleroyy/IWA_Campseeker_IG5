@@ -12,8 +12,10 @@ import MesLieux from './pages/Mes_lieux_user';
 import DetailMesLieux from './pages/Detail_mes_lieux';
 import PolitiqueConfidentialite from './pages/Politique_confidentialite';
 import AccueilAdmin from './pages/Admin/Accueil_admin';
-import ListeLieuxAdmin from './pages/Admin/Liste_lieux_admin';
+import ListeLieuxCommentaireAdmin from './pages/Admin/Liste_lieux_commentaire_admin';
 import CommentaireAdmin from './pages/Admin/Commentaire_admin';
+import ListeLieuxAdminInfo from './pages/Admin/Liste_lieux_info_admin';
+import LieuAdmin from './pages/Admin/Lieu_admin';
 
 
 const Stack = createStackNavigator();
@@ -86,8 +88,8 @@ const AppNavigator = () => {
         />
 
         <Stack.Screen 
-          name="ListeLieuxAdmin" 
-          component={ListeLieuxAdmin} 
+          name="ListeLieuxCommentaireAdmin" 
+          component={ListeLieuxCommentaireAdmin} 
           options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Les Lieux',}} 
         />
 
@@ -97,6 +99,16 @@ const AppNavigator = () => {
           options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Commentaire du lieu', }}
         />
 
+        <Stack.Screen 
+          name="ListeLieuxInfoAdmin" 
+          component={ListeLieuxAdminInfo} 
+          options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Les Lieux', }}
+        />
+        <Stack.Screen 
+          name="LieuAdmin" 
+          component={LieuAdmin} 
+          options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Commentaire du lieu', }}
+        />
 
 
       </Stack.Navigator>

@@ -2,7 +2,7 @@ import React from 'react';
 import { ScrollView, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Photo from '../../components/Photo';
 
-const ListeLieuxAdmin = ({ navigation }) => {
+const ListeLieuxAdminInfo = ({ navigation }) => {
     const photos = [
         { imageUrl: require('../../../assets/bivouac3.png'), id: 1 },
         { imageUrl: require('../../../assets/bivouac.png'), id: 2 },
@@ -15,7 +15,7 @@ const ListeLieuxAdmin = ({ navigation }) => {
                 <Text style={styles.titre}>Liste des lieux</Text>
                 {photos.map((photo) => (
                     <View key={photo.id} style={styles.photoContainer}>
-                        <TouchableOpacity onPress={() => navigation.navigate('CommentaireAdmin', { id: photo.id })}>
+                        <TouchableOpacity onPress={() => navigation.navigate('LieuAdmin', { id: photo.id })}>
                             <Photo imageUrl={photo.imageUrl} width={300} height={200}  />
                         </TouchableOpacity>
                     </View>
@@ -53,5 +53,5 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ListeLieuxAdmin;
+export default ListeLieuxAdminInfo;
 
