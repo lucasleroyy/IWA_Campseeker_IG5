@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, TextInput, Animated } from 'react-native';
-import { Swipeable } from 'react-native-gesture-handler';  // Import du Swipeable
+import { View, Text, StyleSheet, TouchableOpacity, Modal, TextInput, Animated, Keyboard } from 'react-native';
+import { ScrollView, Swipeable } from 'react-native-gesture-handler';  // Import du Swipeable
 import { MaterialIcons } from '@expo/vector-icons';
 import Boite from '../../components/Boite_blanche';
 import Bouton from '../../components/Bouton';
@@ -25,10 +25,12 @@ const SupportAdmin = ({ route }) => {
     const handleCloseModal = () => {
         setModalVisible(false);
         setResponse('');
+        Keyboard.dismiss();
     };
 
     const handleSubmitResponse = () => {
         console.log(`Réponse à la question "${selectedQuestion.text}": ${response}`);
+        setQuestions(questions.filter(question => question !== selectedQuestion));
         handleCloseModal();
     };
 
@@ -82,6 +84,7 @@ const SupportAdmin = ({ route }) => {
                 visible={isModalVisible}
                 onRequestClose={handleCloseModal}
             >
+                <ScrollView contentContainerStyle={styles.scrollContent}>
                 <View style={styles.modalContainer}>
                     <View style={styles.modalView}>
                         <TouchableOpacity style={styles.closeButton} onPress={handleCloseModal}>
@@ -104,6 +107,7 @@ const SupportAdmin = ({ route }) => {
                         </View>
                     </View>
                 </View>
+                </ScrollView>
             </Modal>
         </View>
     );
@@ -139,6 +143,10 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#DDD',
         backgroundColor: '#FFF',
+    },
+    scrollContent: {
+        flexGrow: 1,
+        justifyContent: 'center',
     },
     question: {
         flex: 1,
