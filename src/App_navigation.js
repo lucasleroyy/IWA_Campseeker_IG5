@@ -16,6 +16,7 @@ import ListeLieuxCommentaireAdmin from './pages/Admin/Liste_lieux_commentaire_ad
 import CommentaireAdmin from './pages/Admin/Commentaire_admin';
 import ListeLieuxAdminInfo from './pages/Admin/Liste_lieux_info_admin';
 import LieuAdmin from './pages/Admin/Lieu_admin';
+import SupportAdmin from './pages/Admin/Support_admin';
 
 
 const Stack = createStackNavigator();
@@ -109,7 +110,11 @@ const AppNavigator = () => {
           component={LieuAdmin} 
           options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Commentaire du lieu', }}
         />
-
+        <Stack.Screen 
+          name="SupportAdmin" 
+          component={SupportAdmin} 
+          options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Support', }}
+        />
 
       </Stack.Navigator>
     </NavigationContainer>

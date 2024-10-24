@@ -12,7 +12,7 @@ const AccueilAdmin = ({ navigation }) => {
                 <ChampRedirection label="Gérer les commentaire" targetScreen="ListeLieuxCommentaireAdmin" navigation={navigation} />
                 <ChampRedirection label="Gérer les lieux" targetScreen="ListeLieuxInfoAdmin" navigation={navigation} />
                 <ChampRedirection label="Gérer les équipement" targetScreen="GestionEquipement" navigation={navigation} />
-                <ChampRedirection label="Gérer le support" targetScreen="GestionSupport" navigation={navigation} />
+                <ChampRedirection label="Gérer le support" targetScreen="SupportAdmin" navigation={navigation} />
             </ScrollView>
         </View>
 
