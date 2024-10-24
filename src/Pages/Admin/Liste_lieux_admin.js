@@ -15,7 +15,7 @@ const ListeLieuxAdmin = ({ navigation }) => {
                 <Text style={styles.titre}>Liste des lieux</Text>
                 {photos.map((photo) => (
                     <View key={photo.id} style={styles.photoContainer}>
-                        <TouchableOpacity onPress={() => navigation.navigate('PageInfoLieu', { id: photo.id })}>
+                        <TouchableOpacity onPress={() => navigation.navigate('CommentaireAdmin', { id: photo.id })}>
                             <Photo imageUrl={photo.imageUrl} width={300} height={200}  />
                         </TouchableOpacity>
                     </View>

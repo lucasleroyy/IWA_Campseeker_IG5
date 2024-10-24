@@ -13,6 +13,7 @@ import DetailMesLieux from './pages/Detail_mes_lieux';
 import PolitiqueConfidentialite from './pages/Politique_confidentialite';
 import AccueilAdmin from './pages/Admin/Accueil_admin';
 import ListeLieuxAdmin from './pages/Admin/Liste_lieux_admin';
+import CommentaireAdmin from './pages/Admin/Commentaire_admin';
 
 
 const Stack = createStackNavigator();
@@ -88,6 +89,12 @@ const AppNavigator = () => {
           name="ListeLieuxAdmin" 
           component={ListeLieuxAdmin} 
           options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Les Lieux',}} 
+        />
+
+        <Stack.Screen 
+          name="CommentaireAdmin" 
+          component={CommentaireAdmin} 
+          options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Commentaire du lieu', }}
         />
 
 
