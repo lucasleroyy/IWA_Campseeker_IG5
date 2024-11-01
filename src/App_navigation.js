@@ -51,11 +51,11 @@ const AppNavigator = () => {
           options={{ headerShown: true, headerBackTitle: 'Retour' }}
         />
 
-<Stack.Screen 
-  name="PolitiqueConfidentialite" 
-  component={PolitiqueConfidentialite} 
-  options={{ headerShown: true }} 
-/>
+        <Stack.Screen 
+          name="PolitiqueConfidentialite" 
+          component={PolitiqueConfidentialite} 
+          options={{ headerShown: true , headerBackTitle: 'Retour' }} 
+        />
 
       </Stack.Navigator>
     </NavigationContainer>
