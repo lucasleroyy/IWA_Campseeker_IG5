@@ -19,6 +19,7 @@ import LieuAdmin from './pages/Admin/Lieu_admin';
 import SupportAdmin from './pages/Admin/Support_admin';
 import Parametres from './pages/Parametres';
 import FAQUser from './pages/faq_user'; // Import correct pour faq_user
+import MonCompteUser from './pages/Mon_compte_user';
 
 const Stack = createStackNavigator();
 
@@ -87,6 +88,11 @@ const AppNavigator = () => {
           name="AccueilAdmin" 
           component={AccueilAdmin} 
           options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Accueil Admin', }}
+        />
+        <Stack.Screen
+        name="MonCompte"
+        component={MonCompteUser}
+        options={{ headerShown: true, title: 'Mon Compte' }}
         />
         <Stack.Screen 
           name="ListeLieuxCommentaireAdmin" 
