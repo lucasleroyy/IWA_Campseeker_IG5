@@ -17,7 +17,7 @@ import CommentaireAdmin from './pages/Admin/Commentaire_admin';
 import ListeLieuxAdminInfo from './pages/Admin/Liste_lieux_info_admin';
 import LieuAdmin from './pages/Admin/Lieu_admin';
 import SupportAdmin from './pages/Admin/Support_admin';
-
+import Parametres from './pages/Parametres';
 
 const Stack = createStackNavigator();
 
@@ -59,13 +59,13 @@ const AppNavigator = () => {
           component={ConditionsService} 
           options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Conditions de Service', }}
         />
+        <Stack.Screen 
+          name="Parametres" 
+          component={Parametres} 
+           options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Paramètres' }}
+          />
 
         <Stack.Screen 
-<<<<<<< HEAD
-          name="PolitiqueConfidentialite" 
-          component={PolitiqueConfidentialite} 
-          options={{ headerShown: true , headerBackTitle: 'Retour' }} 
-=======
           name="MesLieux" 
           component={MesLieux} 
           options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Mes lieux', }}
@@ -119,7 +119,6 @@ const AppNavigator = () => {
           name="SupportAdmin" 
           component={SupportAdmin} 
           options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Support', }}
->>>>>>> ef88d58939a90bfac24c7e020ec27c748f9839b0
         />
 
       </Stack.Navigator>
