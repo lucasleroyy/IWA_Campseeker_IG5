@@ -43,10 +43,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'rgba(166, 116, 55, 0.1)',
+    paddingBottom: 50,
   },
   scrollContainer: {
     flexGrow: 1,
-    paddingVertical: 100,
+    paddingVertical: '15%',
     alignItems: 'center',
   },
   favorisContainer: {

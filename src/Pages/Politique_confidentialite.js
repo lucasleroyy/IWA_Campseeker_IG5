@@ -1,14 +1,14 @@
 import React from 'react';
-import { ScrollView, Text, StyleSheet } from 'react-native';
+import { ScrollView, View, Text, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import BoiteBlanche from '../components/Boite_blanche'; 
 
 
 const PolitiqueConfidentialite = () => {
-  const navigation = useNavigation();
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
        
       <Text style={styles.title}>Politique de Confidentialité</Text>
 
@@ -82,15 +82,20 @@ const PolitiqueConfidentialite = () => {
       </BoiteBlanche>
      
     </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    backgroundColor: 'rgba(166, 116, 55, 0.1)',
+    paddingBottom: 50,
+  },
+  scrollContainer: {
     flexGrow: 1,
-    backgroundColor: '#F5F5F5',
-    padding: 20,
-    paddingTop: 50, // Abaisse le contenu
+    alignItems: 'center',
+    paddingVertical: '15%',
   },
   title: {
     fontSize: 26,

@@ -6,14 +6,8 @@ import Recherche from '../components/Recherche';
 import Champ_selection from '../components/Champ_selection';
 
 const Page_recherche = ({ navigation }) => {
-    const [currentPage, setCurrentPage] = useState('PageRecherche');
     const [selectedTags, setSelectedTags] = useState([]);
     const [searchCity, setSearchCity] = useState('');
-    const [region, setRegion] = useState(null);
-    
-    const onNavigate = (page) => {
-        setCurrentPage(page);
-    }; 
     
     const handleTagPress = (label) => {
         setSelectedTags((prevSelectedTags) => {
@@ -59,11 +53,9 @@ const Page_recherche = ({ navigation }) => {
                         isSelected={selectedTags.includes('Électricité')}
                         onPress={() => handleTagPress('Électricité')} />
                 </View>
-
-            {/* Affiche la carte en fonction de la ville recherchée */}
             <Carte ville={searchCity} style={styles.map} />
           </ScrollView>
-          <Bandeau currentPage={currentPage} onNavigate={navigation.navigate}/>
+          <Bandeau currentPage='PageRecherche' onNavigate={navigation.navigate}/>
         </View>
     );
 };
@@ -72,12 +64,13 @@ const styles = StyleSheet.create({
     container: {
       flexGrow: 1,
       backgroundColor: 'rgba(166, 116, 55, 0.1)',
-      paddingTop: 40,
+      paddingBottom: 50,
     },
 
     scrollContainer: {
-      flexGrow: 1,  // Permet à ScrollView de s'étendre en fonction du contenu
-      paddingBottom: 70,
+      flexGrow: 1,
+      alignItems: 'center',
+      paddingVertical: '15%',
     },
     map: {
       width: '90%',  // Assure que la carte est large mais laisse un peu d'espace sur les côtés

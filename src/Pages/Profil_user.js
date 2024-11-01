@@ -8,21 +8,14 @@ const PageProfil = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
-       
         <Text style={styles.title}>Profil</Text>
-
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>GÉNÉRAL</Text>
+          <ChampRedirection label="Admin" targetScreen="AccueilAdmin" navigation={navigation} />
           <ChampRedirection label="Mon compte" targetScreen="MonCompte" navigation={navigation} />
           <ChampRedirection label="Mes lieux" targetScreen="MesLieux" navigation={navigation} />
           <ChampRedirection label="Paramètres" targetScreen="Parametres" navigation={navigation} />
-          {/* Ajouter une nouvelle option Notifications avec une icône */}
-          <ChampRedirection 
-            label="Notifications" 
-            targetScreen="Notifications" 
-            navigation={navigation} 
-            icon="bell"  // Icône de cloche
-          />
+          <ChampRedirection label="Notifications" targetScreen="Notifications" navigation={navigation} icon="bell" />
         </View>
 
         <View style={styles.section}>
@@ -50,10 +43,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F6F6F6',
-    paddingTop: 50, 
+    paddingBottom: 50, 
   },
   scrollContent: {
-    paddingBottom: 80, 
+    flexGrow: 1,
+    paddingVertical: '15%',
+    alignItems: 'center',
   },
   title: {
     fontSize: 24,
