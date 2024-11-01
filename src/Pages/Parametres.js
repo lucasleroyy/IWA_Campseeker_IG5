@@ -1,72 +1,139 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import ChampSelection from '../components/Champ_selection';
+import { useTranslation } from 'react-i18next';
+import { useTheme } from '../ThemeContext';
 
 const Parametres = () => {
-  const [language, setLanguage] = useState('Français');
-  const [theme, setTheme] = useState('Mode Clair');
+  const { t, i18n } = useTranslation();
+  const { isDarkMode, toggleTheme } = useTheme();
+
+  // States for language and notifications
+  const [language, setLanguage] = useState('fr');
   const [newsNotification, setNewsNotification] = useState(true);
   const [reviewNotification, setReviewNotification] = useState(true);
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Paramètres</Text>
+  // Load and set language from AsyncStorage when the component mounts
+  useEffect(() => {
+    const loadLanguage = async () => {
+      const savedLanguage = await AsyncStorage.getItem('language');
+      if (savedLanguage) {
+        setLanguage(savedLanguage);
+        i18n.changeLanguage(savedLanguage);
+      }
+    };
+    loadLanguage();
+  }, []);
 
-      {/* Section Langue */}
+  // Handle language change and save to AsyncStorage
+  const changeLanguage = async (lang) => {
+    setLanguage(lang);
+    i18n.changeLanguage(lang);
+    await AsyncStorage.setItem('language', lang);
+  };
+
+  // Display alert for notification toggle
+  const handleNotificationToggle = (notificationType, isEnabled) => {
+    const message = isEnabled
+      ? `Vous avez activé les notifications pour "${notificationType}".`
+      : `Vous avez désactivé les notifications pour "${notificationType}".`;
+    Alert.alert('Notification', message);
+  };
+
+  return (
+    <View style={[styles.container, isDarkMode ? styles.darkContainer : styles.lightContainer]}>
+      <Text style={[styles.title, isDarkMode ? styles.darkText : styles.lightText]}>
+        {t('settings')}
+      </Text>
+
+      {/* Language Section */}
       <View style={styles.section}>
+        <Text style={[styles.sectionTitle, isDarkMode ? styles.darkText : styles.lightText]}>
+          {t('language')}
+        </Text>
         <View style={styles.languageContainer}>
           <ChampSelection
             label="Français"
-            isSelected={language === 'Français'}
-            onPress={() => setLanguage('Français')}
+            isSelected={language === 'fr'}
+            onPress={() => changeLanguage('fr')}
           />
           <ChampSelection
             label="English"
-            isSelected={language === 'English'}
-            onPress={() => setLanguage('English')}
-          />
-        </View>
-        <View style={styles.themeContainer}>
-          <ChampSelection
-            label="Mode Sombre"
-            isSelected={theme === 'Mode Sombre'}
-            onPress={() => setTheme('Mode Sombre')}
-          />
-          <ChampSelection
-            label="Mode Clair"
-            isSelected={theme === 'Mode Clair'}
-            onPress={() => setTheme('Mode Clair')}
+            isSelected={language === 'en'}
+            onPress={() => changeLanguage('en')}
           />
         </View>
       </View>
 
-      {/* Section Notifications */}
-      <View style={styles.notificationSection}>
-        <Text style={styles.notificationTitle}>Notification</Text>
-        <View style={styles.notificationRow}>
-          <Text style={styles.notificationLabel}>Actualités</Text>
+      {/* Theme Section */}
+      <View style={styles.section}>
+        <Text style={[styles.sectionTitle, isDarkMode ? styles.darkText : styles.lightText]}>
+          {t('Theme')}
+        </Text>
+        <View style={styles.themeContainer}>
           <ChampSelection
-            label="Oui"
-            isSelected={newsNotification}
-            onPress={() => setNewsNotification(true)}
+            label={t('darkMode')}
+            isSelected={isDarkMode}
+            onPress={toggleTheme}
           />
           <ChampSelection
-            label="Non"
-            isSelected={!newsNotification}
-            onPress={() => setNewsNotification(false)}
+            label={t('lightMode')}
+            isSelected={!isDarkMode}
+            onPress={toggleTheme}
           />
         </View>
+      </View>
+
+      {/* Notification Section */}
+      <View style={styles.notificationSection}>
+        <Text style={[styles.notificationTitle, isDarkMode ? styles.darkText : styles.lightText]}>
+          {t('notifications')}
+        </Text>
+
+        {/* News Notification */}
         <View style={styles.notificationRow}>
-          <Text style={styles.notificationLabel}>Nouvel avis sur votre lieu</Text>
+          <Text style={[styles.notificationLabel, isDarkMode ? styles.darkText : styles.lightText]}>
+            {t('news')}
+          </Text>
           <ChampSelection
-            label="Oui"
-            isSelected={reviewNotification}
-            onPress={() => setReviewNotification(true)}
+            label={t('yes')}
+            isSelected={newsNotification}
+            onPress={() => {
+              setNewsNotification(true);
+              handleNotificationToggle(t('news'), true);
+            }}
           />
           <ChampSelection
-            label="Non"
+            label={t('no')}
+            isSelected={!newsNotification}
+            onPress={() => {
+              setNewsNotification(false);
+              handleNotificationToggle(t('news'), false);
+            }}
+          />
+        </View>
+
+        {/* Review Notification */}
+        <View style={styles.notificationRow}>
+          <Text style={[styles.notificationLabel, isDarkMode ? styles.darkText : styles.lightText]}>
+            {t('reviewAlert')}
+          </Text>
+          <ChampSelection
+            label={t('yes')}
+            isSelected={reviewNotification}
+            onPress={() => {
+              setReviewNotification(true);
+              handleNotificationToggle(t('reviewAlert'), true);
+            }}
+          />
+          <ChampSelection
+            label={t('no')}
             isSelected={!reviewNotification}
-            onPress={() => setReviewNotification(false)}
+            onPress={() => {
+              setReviewNotification(false);
+              handleNotificationToggle(t('reviewAlert'), false);
+            }}
           />
         </View>
       </View>
@@ -78,14 +145,24 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+  },
+  lightContainer: {
     backgroundColor: '#F2EDE5',
+  },
+  darkContainer: {
+    backgroundColor: '#333333',
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#D2691E',
     textAlign: 'center',
     marginVertical: 20,
+  },
+  lightText: {
+    color: '#D2691E',
+  },
+  darkText: {
+    color: '#FFFFFF',
   },
   section: {
     marginBottom: 30,
@@ -93,16 +170,19 @@ const styles = StyleSheet.create({
     borderColor: '#D2691E',
     borderWidth: 1,
     borderRadius: 15,
-    backgroundColor: '#FFFFFF',
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 15,
   },
   languageContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 15,
+    justifyContent: 'space-around',
   },
   themeContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
   },
   notificationSection: {
     paddingHorizontal: 20,
@@ -110,12 +190,10 @@ const styles = StyleSheet.create({
     borderColor: '#D2691E',
     borderWidth: 1,
     borderRadius: 15,
-    backgroundColor: '#FFFFFF',
   },
   notificationTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#000',
     marginBottom: 15,
   },
   notificationRow: {
@@ -126,7 +204,6 @@ const styles = StyleSheet.create({
   },
   notificationLabel: {
     fontSize: 16,
-    color: '#000',
     flex: 1,
   },
 });
