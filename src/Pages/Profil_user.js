@@ -20,7 +20,7 @@ const PageProfil = ({ navigation }) => {
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>AIDE</Text>
-          <ChampRedirection label="F.A.Q" targetScreen="FAQ" navigation={navigation} />
+          <ChampRedirection label="F.A.Q" targetScreen="faq_user" navigation={navigation} />
         </View>
 
         <View style={styles.section}>
