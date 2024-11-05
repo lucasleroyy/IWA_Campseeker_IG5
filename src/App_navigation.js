@@ -21,6 +21,7 @@ import Parametres from './pages/Parametres';
 import FAQUser from './pages/faq_user'; // Import correct pour faq_user
 import MonCompteUser from './pages/Mon_compte_user';
 import GestionEquipement from './pages/Admin/Equipements_admin';
+import Notification from './pages/Notifications';
 
 const Stack = createStackNavigator();
 
@@ -99,6 +100,11 @@ const AppNavigator = () => {
           name="ListeLieuxCommentaireAdmin" 
           component={ListeLieuxCommentaireAdmin} 
           options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Les Lieux', }}
+        />
+        <Stack.Screen
+        name="Notifications"
+        component={Notification}
+        options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Notifications' }}
         />
         <Stack.Screen 
           name="CommentaireAdmin" 

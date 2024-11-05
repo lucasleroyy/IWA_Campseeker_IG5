@@ -7,7 +7,7 @@ const Photo = ({ imageUrl, width, height }) => {
       <Image 
         source={typeof imageUrl === 'string' ? { uri: imageUrl } : imageUrl} 
         style={{ width, height }}
-        resizeMode="contain"
+        resizeMode="cover"
       />
     </View>
   );
