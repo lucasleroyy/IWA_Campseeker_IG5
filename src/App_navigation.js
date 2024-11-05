@@ -20,6 +20,7 @@ import SupportAdmin from './pages/Admin/Support_admin';
 import Parametres from './pages/Parametres';
 import FAQUser from './pages/faq_user'; // Import correct pour faq_user
 import MonCompteUser from './pages/Mon_compte_user';
+import GestionEquipement from './pages/Admin/Equipements_admin';
 
 const Stack = createStackNavigator();
 
@@ -92,7 +93,7 @@ const AppNavigator = () => {
         <Stack.Screen
         name="MonCompte"
         component={MonCompteUser}
-        options={{ headerShown: true, title: 'Mon Compte' }}
+        options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Mon Compte' }}
         />
         <Stack.Screen 
           name="ListeLieuxCommentaireAdmin" 
@@ -118,6 +119,11 @@ const AppNavigator = () => {
           name="SupportAdmin" 
           component={SupportAdmin} 
           options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Support', }}
+        />
+        <Stack.Screen 
+          name="GestionEquipement" 
+          component={GestionEquipement} 
+          options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Équipements', }}
         />
 
         {/* Ajout de l'écran FAQUser */}

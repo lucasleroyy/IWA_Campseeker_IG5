@@ -51,11 +51,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    fontSize: 24,
+    fontSize: 32,
     fontWeight: 'bold',
-    color: '#F2994A',
     textAlign: 'center',
-    marginVertical: 10, 
+    marginBottom: 20,
+    color: '#F25C05',
   },
   section: {
     marginVertical: 10,

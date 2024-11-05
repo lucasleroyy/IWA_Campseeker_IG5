@@ -22,12 +22,10 @@ const MonCompteUser = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.greeting}>
-          Salut <Text style={styles.username}>Lucas Leroy</Text> !
+      <Text style={styles.titre}>
+          Salut <Text style={{ color: '#F25C05' }}>Lucas Leroy</Text> !
         </Text>
         <Text style={styles.memberSince}>Membre depuis XX/XX/XXXX</Text>
-      </View>
 
       <BoiteVerte style={styles.box}>
         <View style={styles.fieldContainer}>
@@ -100,18 +98,13 @@ const styles = StyleSheet.create({
     paddingVertical: 40,
     paddingHorizontal: 20,
   },
-  header: {
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  greeting: {
-    fontSize: 24,
+
+  titre: {
+    fontSize: 32,
     fontWeight: 'bold',
-    color: '#333333',
     textAlign: 'center',
-  },
-  username: {
-    color: '#D2691E',
+    marginBottom: 20,
+    color: '#000',
   },
 
   spacing: {
@@ -122,9 +115,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#4F4F4F',
     textAlign: 'center',
-    marginTop: 10, // Ajout d'un espace entre les deux textes
     marginBottom: 25, 
   },
+  
   box: {
     width: '100%',
     padding: 20,
