@@ -20,6 +20,9 @@ import SupportAdmin from './pages/Admin/Support_admin';
 import Parametres from './pages/Parametres';
 import FAQUser from './pages/faq_user'; // Import correct pour faq_user
 import MonCompteUser from './pages/Mon_compte_user';
+import GestionEquipement from './pages/Admin/Equipements_admin';
+import Notification from './pages/Notifications';
+import ModifierMonLieu from './pages/Modifier_mon_lieu';
 
 const Stack = createStackNavigator();
 
@@ -92,12 +95,17 @@ const AppNavigator = () => {
         <Stack.Screen
         name="MonCompte"
         component={MonCompteUser}
-        options={{ headerShown: true, title: 'Mon Compte' }}
+        options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Mon Compte' }}
         />
         <Stack.Screen 
           name="ListeLieuxCommentaireAdmin" 
           component={ListeLieuxCommentaireAdmin} 
           options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Les Lieux', }}
+        />
+        <Stack.Screen
+        name="Notifications"
+        component={Notification}
+        options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Notifications' }}
         />
         <Stack.Screen 
           name="CommentaireAdmin" 
@@ -118,6 +126,17 @@ const AppNavigator = () => {
           name="SupportAdmin" 
           component={SupportAdmin} 
           options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Support', }}
+        />
+        <Stack.Screen 
+          name="GestionEquipement" 
+          component={GestionEquipement} 
+          options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Équipements', }}
+        />
+
+        <Stack.Screen 
+          name="ModifierMonLieu" 
+          component={ModifierMonLieu} 
+          options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Modifier le lieu', }}
         />
 
         {/* Ajout de l'écran FAQUser */}

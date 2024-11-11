@@ -12,7 +12,7 @@ const BoiteBlanche = ({ children }) => {
 const styles = StyleSheet.create({
   box: {
     backgroundColor: '#FFFFFF',
-    padding: 15,
+    padding: 10,
     borderRadius: 10, 
     width: '90%',
     alignSelf: 'center', 

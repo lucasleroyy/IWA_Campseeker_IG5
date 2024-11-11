@@ -25,7 +25,6 @@ const MonCompteUser = () => {
           Salut <Text style={styles.username}>{firstName} {name}</Text> !
         </Text>
         <Text style={styles.memberSince}>Membre depuis XX/XX/XXXX</Text>
-      </View>
 
       <BoiteVerte>
         <View style={styles.fieldContainer}>
@@ -97,25 +96,27 @@ const styles = StyleSheet.create({
     paddingVertical: 40,
     paddingHorizontal: 20,
   },
-  header: {
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  greeting: {
-    fontSize: 24,
+
+  titre: {
+    fontSize: 32,
     fontWeight: 'bold',
-    color: '#333333',
     textAlign: 'center',
-  },
-  username: {
-    color: '#D2691E',
+    marginBottom: 20,
+    color: '#000',
   },
   memberSince: {
     fontSize: 16,
     color: '#4F4F4F',
     textAlign: 'center',
-    marginTop: 10,
-    marginBottom: 25,
+    marginBottom: 25, 
+  },
+  
+  box: {
+    width: '100%',
+    padding: 20,
+    borderRadius: 15,
+    backgroundColor: '#3E6D61',
+    marginBottom: 20,
   },
   fieldContainer: {
     marginBottom: 15,
