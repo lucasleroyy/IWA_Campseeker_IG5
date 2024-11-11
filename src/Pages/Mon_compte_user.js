@@ -1,36 +1,35 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import BoiteVerte from '../components/Boite_verte';
 import Bouton from '../components/Bouton';
-import { useNavigation } from '@react-navigation/native';
+import Champ from '../components/Champ';
 
 const MonCompteUser = () => {
-  const navigation = useNavigation();
-
   // États pour les données utilisateur pré-remplies
-  const [name, setName] = useState("Leroy");
-  const [firstName, setFirstName] = useState("Lucas");
-  const [address, setAddress] = useState("123 Camping Street");
-  const [email, setEmail] = useState("lucas.leroy@example.com");
-  const [password, setPassword] = useState("");
+  const [name, setName] = useState('Leroy');
+  const [firstName, setFirstName] = useState('Lucas');
+  const [address, setAddress] = useState('123 Camping Street');
+  const [email, setEmail] = useState('lucas.leroy@example.com');
+  const [password, setPassword] = useState('');
 
   // Fonction pour gérer la sauvegarde du profil
   const handleSaveProfile = () => {
-    console.log("Profil modifié :", { name, firstName, address, email, password });
-    alert("Profil modifié !");
+    console.log('Profil modifié :', { name, firstName, address, email, password });
+    alert('Profil modifié !');
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.titre}>
-          Salut <Text style={{ color: '#F25C05' }}>Lucas Leroy</Text> !
+      <View style={styles.header}>
+        <Text style={styles.greeting}>
+          Salut <Text style={styles.username}>{firstName} {name}</Text> !
         </Text>
         <Text style={styles.memberSince}>Membre depuis XX/XX/XXXX</Text>
 
-      <BoiteVerte style={styles.box}>
+      <BoiteVerte>
         <View style={styles.fieldContainer}>
           <Text style={styles.label}>Nom</Text>
-          <TextInput
+          <Champ
             style={styles.input}
             value={name}
             onChangeText={setName}
@@ -40,7 +39,7 @@ const MonCompteUser = () => {
 
         <View style={styles.fieldContainer}>
           <Text style={styles.label}>Prénom</Text>
-          <TextInput
+          <Champ
             style={styles.input}
             value={firstName}
             onChangeText={setFirstName}
@@ -50,7 +49,7 @@ const MonCompteUser = () => {
 
         <View style={styles.fieldContainer}>
           <Text style={styles.label}>Adresse</Text>
-          <TextInput
+          <Champ
             style={styles.input}
             value={address}
             onChangeText={setAddress}
@@ -60,7 +59,7 @@ const MonCompteUser = () => {
 
         <View style={styles.fieldContainer}>
           <Text style={styles.label}>Email</Text>
-          <TextInput
+          <Champ
             style={styles.input}
             value={email}
             onChangeText={setEmail}
@@ -71,7 +70,7 @@ const MonCompteUser = () => {
 
         <View style={styles.fieldContainer}>
           <Text style={styles.label}>Modifier le mot de passe</Text>
-          <TextInput
+          <Champ
             style={styles.input}
             placeholder="Entrez votre nouveau mot de passe"
             value={password}
@@ -81,11 +80,10 @@ const MonCompteUser = () => {
         </View>
       </BoiteVerte>
 
-      <TouchableOpacity
-        onPress={handleSaveProfile}
-        style={styles.button}>
-        <Text style={styles.buttonText}>Modifier le profil</Text>
-      </TouchableOpacity>
+      <Bouton
+        onClick={handleSaveProfile}
+        label="Modifier le profil"
+      />
     </ScrollView>
   );
 };
@@ -106,11 +104,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     color: '#000',
   },
-
-  spacing: {
-    height: 145,
-  },
-
   memberSince: {
     fontSize: 16,
     color: '#4F4F4F',
@@ -132,10 +125,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#FFFFFF',
     marginBottom: 5,
-    paddingLeft: 10, // Décalage du label vers la droite
+    paddingLeft: 20,
   },
   input: {
-    width: '91%', // Réduction de la largeur pour décaler le champ légèrement à droite
+    width: '90%',
     backgroundColor: '#FFFFFF',
     borderRadius: 15,
     paddingHorizontal: 15,
@@ -144,22 +137,7 @@ const styles = StyleSheet.create({
     color: '#333333',
     borderWidth: 1,
     borderColor: '#3E6D61',
-    marginLeft: 15, // Ajustement du décalage pour un meilleur alignement
-  },
-  button: {
-    marginTop: 30,
-    backgroundColor: '#F25C05',
-    paddingVertical: 15,
-    paddingHorizontal: 40,
-    borderRadius: 25,
-    alignItems: 'center',
-    marginVertical: 20,
-    width: '60%',
-  },
-  buttonText: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: 'bold',
+    alignSelf: 'center',
   },
 });
 
