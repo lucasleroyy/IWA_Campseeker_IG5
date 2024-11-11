@@ -22,6 +22,7 @@ import FAQUser from './pages/faq_user'; // Import correct pour faq_user
 import MonCompteUser from './pages/Mon_compte_user';
 import GestionEquipement from './pages/Admin/Equipements_admin';
 import Notification from './pages/Notifications';
+import ModifierMonLieu from './pages/Modifier_mon_lieu';
 
 const Stack = createStackNavigator();
 
@@ -130,6 +131,12 @@ const AppNavigator = () => {
           name="GestionEquipement" 
           component={GestionEquipement} 
           options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Équipements', }}
+        />
+
+        <Stack.Screen 
+          name="ModifierMonLieu" 
+          component={ModifierMonLieu} 
+          options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Modifier le lieu', }}
         />
 
         {/* Ajout de l'écran FAQUser */}
