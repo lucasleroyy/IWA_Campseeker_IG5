@@ -27,7 +27,12 @@ const userReducer = createReducer(initialState, (builder) => {
       state.userInfo = null;
       state.isAdmin = false;
       state.isLoggedIn = false;
+    })
+    .addCase('LOGOUT', (state) => {
+      return initialState;
     });
 });
+
+
 
 export default userReducer;

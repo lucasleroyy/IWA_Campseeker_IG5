@@ -2,8 +2,16 @@ import React from 'react';
 import { ScrollView, View, Text, StyleSheet } from 'react-native';
 import ChampRedirection from '../components/Champ_redirection';
 import Bandeau from '../components/Bandeau';
+import { useDispatch } from 'react-redux';
+import { logout } from '../redux/actions/authActions';
 
 const PageProfil = ({ navigation }) => {
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigation.navigate('Connexion');
+  };
 
   return (
     <View style={styles.container}>
@@ -30,7 +38,11 @@ const PageProfil = ({ navigation }) => {
         </View>
 
         <View style={styles.section}>
-          <ChampRedirection label="Déconnexion" targetScreen="Deconnexion" navigation={navigation} style={styles.deconnexion} />
+        <ChampRedirection 
+          label="Déconnexion" 
+          onPress={handleLogout}
+          style={styles.deconnexion}
+        />
         </View>
       </ScrollView>
 

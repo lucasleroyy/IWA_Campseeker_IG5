@@ -2,9 +2,9 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 
 export const authenticateUser = createAsyncThunk('user/authenticate', async ({ email, password }, thunkAPI) => {
-  console.log('Logging in with:', email, password);
+  const apiUrl = thunkAPI.getState().config.apiUrl;
   try {
-    const response = await fetch('http://162.38.35.249:8080/auth/login', { 
+    const response = await fetch(`${apiUrl}:8080/auth/login`, { 
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -26,3 +26,6 @@ export const authenticateUser = createAsyncThunk('user/authenticate', async ({ e
   }
 });
 
+export const logout = () => ({
+  type: 'LOGOUT'
+});

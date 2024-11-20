@@ -4,17 +4,16 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome'; // Importer l'icône de FontAwesome
 
-const ChampRedirection = ({ label, targetScreen, icon }) => {
+const ChampRedirection = ({ label, targetScreen, icon, onPress }) => {
   const navigation = useNavigation();
 
-  const handlePress = () => {
+  const defaultHandlePress = () => {
     navigation.navigate(targetScreen);
   };
 
   return (
-    <TouchableOpacity style={styles.container} onPress={handlePress}>
+    <TouchableOpacity style={styles.container} onPress={onPress || defaultHandlePress}>
       <View style={styles.labelContainer}>
-        {/* Si une icône est passée, l'afficher avant le label */}
         {icon && <Icon name={icon} size={20} color="#000" style={styles.icon} />}
         <Text style={styles.label}>{label}</Text>
       </View>
