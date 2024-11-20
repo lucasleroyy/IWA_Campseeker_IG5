@@ -80,7 +80,7 @@ const Page_info_lieu = ({ route }) => {
               onPress={handleReportLieu}
               style={styles.reportIcon}
             >
-              <MaterialIcons name="report" size={28} color="#F25C05" />
+              <MaterialIcons name="report" size={30} color="#F25C05" />
             </TouchableOpacity>
           </View>
           <ScrollHorizontal items={photos} />
