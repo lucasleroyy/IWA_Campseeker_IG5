@@ -1,14 +1,16 @@
 import React from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
 
-const Champ = ({ placeholder, editable = true }) => {
+const Champ = ({ placeholder, value, onChangeText, editable = true }) => {
   return (
     <View style={styles.container}>
       <TextInput
         style={styles.input}
         placeholder={placeholder}
+        value={value}  // Utiliser la prop value
+        onChangeText={onChangeText}  // Utiliser la prop onChangeText
         placeholderTextColor="#000"
-        editable={editable}  // Permet de rendre le champ modifiable ou non
+        editable={editable}
       />
     </View>
   );

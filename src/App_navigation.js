@@ -23,13 +23,15 @@ import MonCompteUser from './pages/Mon_compte_user';
 import GestionEquipement from './pages/Admin/Equipements_admin';
 import Notification from './pages/Notifications';
 import ModifierMonLieu from './pages/Modifier_mon_lieu';
+import Connexion from './pages/Connexion';
+import Inscription from './pages/Inscription';
 
 const Stack = createStackNavigator();
 
 const AppNavigator = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="PageAccueil" screenOptions={{ animationEnabled: false }}>
+      <Stack.Navigator initialRouteName="Connexion" screenOptions={{ animationEnabled: false }}>
         <Stack.Screen
           name="PageAccueil"
           component={PageAccueil}
@@ -50,8 +52,20 @@ const AppNavigator = () => {
           component={ProfilUser} 
           options={{ headerShown: false }}
         />
+
+        <Stack.Screen 
+          name="Connexion" 
+          component={Connexion} 
+          options={{ headerShown: false }}
+        />
         
         {/* Pages avec le header affiché */}
+        <Stack.Screen 
+          name="Inscription" 
+          component={Inscription} 
+          options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Connexion', }}
+        />
+
         <Stack.Screen 
           name="PageInfoLieu" 
           component={PageInfoLieu} 

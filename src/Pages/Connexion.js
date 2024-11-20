@@ -1,14 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
 import BoiteVerte from '../components/Boite_verte';
 import Champ from '../components/Champ';
 import Bouton from '../components/Bouton';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { authenticateUser } from '../redux/actions/authActions'; 
 
 const PageConnexion = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector(state => state.user.isLoggedIn);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigation.navigate('PageAccueil');  // Naviguez vers la page d'accueil si l'utilisateur est connecté
+    }
+  }, [isLoggedIn, navigation]);
+
+  const handleLogin = () => {
+    dispatch(authenticateUser({ email, password }));
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -17,13 +32,21 @@ const PageConnexion = () => {
       <Text style={styles.subtitle}>Trouvez l'endroit <Text style={styles.highlight}>parfait</Text> pour bivouaquer</Text>
 
       <BoiteVerte>
-        <Champ placeholder="Email" value={email} onChangeText={setEmail} />
-        <Champ placeholder="Mot de passe" secureTextEntry={true} value={password} onChangeText={setPassword} />
-
-        <Bouton label="Connexion" onClick={() => alert('Connexion réussie !')} />
+      <Champ 
+        placeholder="Email" 
+        value={email} 
+        onChangeText={setEmail}  
+      />
+      <Champ 
+        placeholder="Mot de passe" 
+        secureTextEntry={true} 
+        value={password} 
+        onChangeText={setPassword}  
+      />
+        <Bouton label="Connexion" onClick={handleLogin} /> 
 
         {/* Lien vers la page d'inscription */}
-        <Text style={styles.link} onPress={() => navigation.navigate('PageInscription')}>
+        <Text style={styles.link} onPress={() => navigation.navigate('Inscription')}>
           Je n'ai pas de compte
         </Text>
 
