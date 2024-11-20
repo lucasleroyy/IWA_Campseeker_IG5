@@ -84,6 +84,7 @@ const MonCompteUser = () => {
         onClick={handleSaveProfile}
         label="Modifier le profil"
       />
+    </View>
     </ScrollView>
   );
 };
