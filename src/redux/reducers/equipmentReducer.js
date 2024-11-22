@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchEquipments } from '../actions/equipmentActions';
+import { fetchEquipments, addEquipment, removeEquipment } from '../actions/equipmentActions';
 
 const equipmentSlice = createSlice({
   name: 'equipments',
@@ -20,6 +20,14 @@ const equipmentSlice = createSlice({
       .addCase(fetchEquipments.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(addEquipment.fulfilled, (state, action) => {
+        state.equipments.push(action.payload);  // Add the new equipment to the state
+      })
+      .addCase(removeEquipment.fulfilled, (state, action) => {
+        state.equipments = state.equipments.filter(
+          (equipment) => equipment.equipmentId !== action.payload
+        );
       });
   }
 });
