@@ -22,6 +22,7 @@ const PageConnexion = () => {
   }, [isLoggedIn, navigation]);
 
   const handleLogin = () => {
+    console.log('Email:', email, 'Password', password);
     dispatch(authenticateUser({ email, password }));
   };
 
@@ -60,11 +61,11 @@ const PageConnexion = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
-    backgroundColor: '#F5F5F5',
+    flex: 1, // Permet au conteneur de prendre tout l'espace disponible
+    backgroundColor: 'rgba(166, 116, 55, 0.1)',
     alignItems: 'center',
-    paddingVertical: 20,
-    paddingTop: 40,
+    justifyContent: 'center', // Centrage vertical
+    paddingHorizontal: 20, // Ajout d'un espace autour du contenu
   },
   logo: {
     width: 100,

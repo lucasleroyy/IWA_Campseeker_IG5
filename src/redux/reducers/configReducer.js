@@ -1,5 +1,3 @@
-
-
 const initialState = {
     //commande: ifconfig ou ipconfig
     //le port est celui de la Gateway, il faut lancer la Gateway et les MS

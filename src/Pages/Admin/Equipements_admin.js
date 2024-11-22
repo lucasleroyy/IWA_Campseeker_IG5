@@ -1,67 +1,92 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  TextInput,
-  Modal,
-} from "react-native";
-import {
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-} from "react-native-gesture-handler";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from 'react-redux';
+import { View, Text, StyleSheet, FlatList, TextInput, Modal } from "react-native";
+import { TouchableOpacity, TouchableWithoutFeedback } from "react-native-gesture-handler";
 import BoiteBlanche from "../../components/Boite_blanche";
 import Bouton from "../../components/Bouton";
+import { fetchEquipments, addEquipment, removeEquipment } from '../../redux/actions/equipmentActions';
+import { Alert } from "react-native";
 
 const GestionEquipement = () => {
-  const [equipements, setEquipements] = useState([
-    "Électricité",
-    "Sanitaires",
-    "Wifi",
-    "Abrité",
-    "Parking",
-  ]);
+  const { equipments, loading, error } = useSelector(state => state.equipments);
   const [modalVisible, setModalVisible] = useState(false);
   const [newEquipement, setNewEquipement] = useState("");
+  const dispatch = useDispatch();
+
+  // Récupération des équipements à l'initialisation
+  useEffect(() => {
+    dispatch(fetchEquipments());
+  }, [dispatch]);
 
   const handleDeleteEquipement = (item) => {
-    setEquipements((prevEquipements) =>
-      prevEquipements.filter((equip) => equip !== item)
+    dispatch(removeEquipment(item.equipmentId))
+      .unwrap()
+      .then(() => {
+        console.log("Equipment deleted successfully");
+      })
+      .catch((error) => {
+        console.error("Error deleting equipment:", error);
+      });
+  };
+
+  const handleDeleteConfirmation = (item) => {
+    Alert.alert(
+      "Supprimer cet équipement",
+      `Êtes-vous sûr de vouloir supprimer "${item.name}" ?`,
+      [
+        { text: "Annuler", style: "cancel" },
+        {
+          text: "Oui",
+          onPress: () => handleDeleteEquipement(item), // Appelle la fonction réelle de suppression
+        },
+      ]
     );
   };
 
+  
+  
+
+  // Gestion de l'ajout d'un équipement
   const handleAddEquipement = () => {
     if (newEquipement.trim()) {
-      setEquipements((prevEquipements) => [...prevEquipements, newEquipement]);
+      dispatch(addEquipment({ name: newEquipement })); // Utilise Redux pour ajouter
       setNewEquipement("");
       setModalVisible(false);
     }
   };
 
+  // Affichage des équipements
   const renderEquipement = ({ item }) => (
     <TouchableWithoutFeedback onLongPress={() => handleDeleteEquipement(item)}>
       <View style={styles.equipementRow}>
-        <Text style={styles.equipementText}>{item}</Text>
-        <TouchableOpacity onPress={() => handleDeleteEquipement(item)}>
+        <Text style={styles.equipementText}>{item.name}</Text>
+        <TouchableOpacity onPress={() => handleDeleteConfirmation(item)}>
           <Text style={styles.deleteText}>Supprimer</Text>
         </TouchableOpacity>
       </View>
     </TouchableWithoutFeedback>
   );
+
   return (
     <View style={styles.container}>
       <Text style={styles.titre}>
         Gérer les <Text style={{ color: "#F25C05" }}>équipements</Text>
       </Text>
 
-      <BoiteBlanche>
-        <FlatList
-          data={equipements}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={renderEquipement}
-        />
-      </BoiteBlanche>
+      {/* Affichage des équipements avec gestion des erreurs et du chargement */}
+      {loading ? (
+        <Text style={styles.loadingText}>Chargement des équipements...</Text>
+      ) : error ? (
+        <Text style={styles.errorText}>Erreur : {error}</Text>
+      ) : (
+        <BoiteBlanche>
+          <FlatList
+            data={equipments} // Correctement récupéré depuis Redux
+            keyExtractor={(item, index) => (item.id ? item.id.toString() : index.toString())} // Gère les clés uniques
+            renderItem={renderEquipement}
+          />
+        </BoiteBlanche>
+      )}
 
       <Bouton
         label="Ajouter un équipement"
@@ -108,12 +133,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     color: "#000",
   },
-  subtitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#000",
-    marginBottom: 10,
-  },
   equipementRow: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -129,6 +148,18 @@ const styles = StyleSheet.create({
   deleteText: {
     color: "#FF6D00",
     fontWeight: "bold",
+  },
+  loadingText: {
+    textAlign: "center",
+    marginVertical: 20,
+    fontSize: 16,
+    color: "#555",
+  },
+  errorText: {
+    textAlign: "center",
+    marginVertical: 20,
+    fontSize: 16,
+    color: "red",
   },
   modalContainer: {
     flex: 1,

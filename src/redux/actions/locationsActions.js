@@ -20,3 +20,23 @@ export const fetchRecentLocations = createAsyncThunk(
     }
   }
 );
+
+
+export const fetchAllLocations = createAsyncThunk(
+  'locations/fetchAll',
+  async (_, thunkAPI) => {
+    const apiUrl = thunkAPI.getState().config.apiUrl;
+    try {
+      const response = await fetch(`${apiUrl}/locations`);
+      const data = await response.json();
+      if (response.ok) {
+        return data; // Retourne tous les lieux
+      } else {
+        return thunkAPI.rejectWithValue(data); // Retourne une erreur
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message); // Gestion des erreurs réseau
+    }
+  }
+);
+

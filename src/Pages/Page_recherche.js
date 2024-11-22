@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchEquipments } from '../redux/actions/equipmentActions';
+import { fetchAllLocations } from '../redux/actions/locationsActions';
 import Bandeau from '../components/Bandeau';
 import Carte from '../components/Carte';
 import Recherche from '../components/Recherche';
@@ -8,7 +11,15 @@ import Champ_selection from '../components/Champ_selection';
 const Page_recherche = ({ navigation }) => {
     const [selectedTags, setSelectedTags] = useState([]);
     const [searchCity, setSearchCity] = useState('');
-    
+    const dispatch = useDispatch();
+    const { equipments, loading, error } = useSelector(state => state.equipments);
+    const { locations, loading: locationsLoading, error: locationsError } = useSelector(state => state.locations);
+
+    useEffect(() => {
+        dispatch(fetchEquipments());
+        dispatch(fetchAllLocations());
+    }, [dispatch]);
+
     const handleTagPress = (label) => {
         setSelectedTags((prevSelectedTags) => {
           if (prevSelectedTags.includes(label)) {
@@ -31,31 +42,21 @@ const Page_recherche = ({ navigation }) => {
                     editable={true}
                     onCitySelect={handleSearchChange}
                 />
-                <View style={styles.Equipementcontainer}>
-                    <Champ_selection 
-                        label="Abrité" 
-                        isSelected={selectedTags.includes('Abrité')} 
-                        onPress={() => handleTagPress('Abrité')} />
-                    <Champ_selection 
-                        label="Sanitaire"
-                        isSelected={selectedTags.includes('Sanitaire')}
-                        onPress={() => handleTagPress('Sanitaire')} />
-                    <Champ_selection 
-                        label="Wifi" 
-                        isSelected={selectedTags.includes('Wifi')}
-                        onPress={() => handleTagPress('Wifi')} />
-                    <Champ_selection
-                        label="Parking"
-                        isSelected={selectedTags.includes('Parking')}
-                        onPress={() => handleTagPress('Parking')} />
-                    <Champ_selection 
-                        label="Électricité"
-                        isSelected={selectedTags.includes('Électricité')}
-                        onPress={() => handleTagPress('Électricité')} />
-                </View>
-            <Carte ville={searchCity} style={styles.map} />
-          </ScrollView>
-          <Bandeau currentPage='PageRecherche' onNavigate={navigation.navigate}/>
+                {loading ? <Text>Chargement des équipements...</Text> : error ? <Text>Erreur : {error}</Text> : (
+                    <View style={styles.Equipementcontainer}>
+                        {equipments.map((equipment) => (
+                            <Champ_selection 
+                                key={equipment.equipmentId}
+                                label={equipment.name}
+                                isSelected={selectedTags.includes(equipment.name)}
+                                onPress={() => handleTagPress(equipment.name)}
+                            />
+                        ))}
+                    </View>
+                )}
+                <Carte ville={searchCity} locations={locations} style={styles.map} />
+            </ScrollView>
+            <Bandeau currentPage='PageRecherche' onNavigate={navigation.navigate}/>
         </View>
     );
 };
@@ -70,11 +71,10 @@ const styles = StyleSheet.create({
     scrollContainer: {
       flexGrow: 1,
       alignItems: 'center',
-      paddingVertical: '15%',
+      paddingBottom: '15%',
     },
     map: {
-      width: '90%',  // Assure que la carte est large mais laisse un peu d'espace sur les côtés
-      height: 400,  // Ajuste la hauteur selon ce qui convient
+      width: '90%',
       marginBottom: 20,
       alignSelf: 'center',
     },
