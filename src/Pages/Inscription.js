@@ -1,11 +1,23 @@
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 import BoiteVerte from '../components/Boite_verte';
 import Champ from '../components/Champ';
 import Bouton from '../components/Bouton';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import { registerUser } from '../redux/actions/authActions';
+import { Ionicons } from '@expo/vector-icons';
 
 const PageInscription = () => {
   const [firstName, setFirstName] = useState('');
@@ -16,6 +28,8 @@ const PageInscription = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isChecked, setIsChecked] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -29,31 +43,32 @@ const PageInscription = () => {
       alert("Veuillez accepter les conditions d'utilisation pour continuer.");
       return;
     }
-
+  
     if (email !== confirmEmail) {
       alert("Les emails ne correspondent pas.");
       return;
     }
-
+  
     if (password !== confirmPassword) {
       alert("Les mots de passe ne correspondent pas.");
       return;
     }
-
-    if (!/^\+\d+$/.test(phoneNumber)) {
-      alert("Le numéro de téléphone doit être au format international, ex: +123456789.");
+  
+    // Validation mise à jour : vérifier si le numéro contient uniquement des chiffres (minimum 10 chiffres)
+    if (!/^\d{10,}$/.test(phoneNumber)) {
+      alert("Le numéro de téléphone doit contenir uniquement des chiffres (minimum 10 caractères).");
       return;
     }
-
+  
     console.log("Données envoyées :", {
       firstName,
       lastName,
       email,
       password,
       phoneNumber,
-      role: 'user', // Ajout d'un rôle par défaut
+      role: 'user',
     });
-
+  
     dispatch(
       registerUser({
         firstName,
@@ -61,7 +76,7 @@ const PageInscription = () => {
         email,
         password,
         phoneNumber,
-        role: 'user', // Rôle par défaut
+        role: 'user',
       })
     )
       .unwrap()
@@ -74,43 +89,72 @@ const PageInscription = () => {
         const errorMessage = error?.message || 'Une erreur est survenue lors de l\'inscription.';
         alert(`Erreur lors de l'inscription : ${errorMessage}`);
       });
-  };
+  };  
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Image source={require('../../assets/Logo.png')} style={styles.logo} />
-      <Text style={styles.title}>Bienvenue chez CampSeeker</Text>
-      <Text style={styles.subtitle}>
-        Trouvez l'endroit <Text style={styles.highlight}>parfait</Text> pour bivouaquer
-      </Text>
-
-      <BoiteVerte>
-        <Champ placeholder="Nom" value={lastName} onChangeText={setLastName} />
-        <Champ placeholder="Prénom" value={firstName} onChangeText={setFirstName} />
-        <Champ placeholder="Email" value={email} onChangeText={setEmail} />
-        <Champ placeholder="Confirmation email" value={confirmEmail} onChangeText={setConfirmEmail} />
-        <Champ placeholder="Mot de passe" secureTextEntry={true} value={password} onChangeText={setPassword} />
-        <Champ placeholder="Confirmation mot de passe" secureTextEntry={true} value={confirmPassword} onChangeText={setConfirmPassword} />
-        <Champ placeholder="Numéro de téléphone" value={phoneNumber} onChangeText={setPhoneNumber} />
-      </BoiteVerte>
-
-      <View style={styles.checkboxContainer}>
-        <TouchableOpacity onPress={toggleCheckbox} style={styles.checkbox}>
-          <View style={[styles.checkboxSquare, isChecked && styles.checkboxChecked]} />
-        </TouchableOpacity>
-        <Text style={styles.checkboxLabel}>
-          Accepter les{' '}
-          <Text style={styles.underlineText} onPress={() => navigation.navigate('PageConditions')}>
-            conditions d'utilisation
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView contentContainerStyle={styles.container}>
+          <Image source={require('../../assets/Logo.png')} style={styles.logo} />
+          <Text style={styles.title}>Bienvenue chez CampSeeker</Text>
+          <Text style={styles.subtitle}>
+            Trouvez l'endroit <Text style={styles.highlight}>parfait</Text> pour bivouaquer
           </Text>
-        </Text>
-      </View>
 
-      <Bouton label="Inscription" onClick={handleRegister} />
-      <Text style={styles.link} onPress={() => navigation.navigate('Connexion')}>
-        J'ai déjà un compte
-      </Text>
-    </ScrollView>
+          <BoiteVerte>
+            <Champ placeholder="Nom" value={lastName} onChangeText={setLastName} />
+            <Champ placeholder="Prénom" value={firstName} onChangeText={setFirstName} />
+            <Champ placeholder="Email" value={email} onChangeText={setEmail} />
+            <Champ placeholder="Confirmation email" value={confirmEmail} onChangeText={setConfirmEmail} />
+            <View style={styles.passwordContainer}>
+              <Champ
+                placeholder="Mot de passe"
+                secureTextEntry={!showPassword}
+                value={password}
+                onChangeText={setPassword}
+              />
+              <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.icon}>
+                <Ionicons name={showPassword ? 'eye-off' : 'eye'} size={20} color="gray" />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.passwordContainer}>
+              <Champ
+                placeholder="Confirmation mot de passe"
+                secureTextEntry={!showConfirmPassword}
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+              />
+              <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)} style={styles.icon}>
+                <Ionicons name={showConfirmPassword ? 'eye-off' : 'eye'} size={20} color="gray" />
+              </TouchableOpacity>
+            </View>
+            <Champ placeholder="Numéro de téléphone" value={phoneNumber} onChangeText={setPhoneNumber} keyboardType="phone-pad" // Clavier optimisé pour les numéros de téléphone 
+            />
+
+          </BoiteVerte>
+
+          <View style={styles.checkboxContainer}>
+            <TouchableOpacity onPress={toggleCheckbox} style={styles.checkbox}>
+              <View style={[styles.checkboxSquare, isChecked && styles.checkboxChecked]} />
+            </TouchableOpacity>
+            <Text style={styles.checkboxLabel}>
+              Accepter les{' '}
+              <Text style={styles.underlineText} onPress={() => navigation.navigate('PageConditions')}>
+                conditions d'utilisation
+              </Text>
+            </Text>
+          </View>
+
+          <Bouton label="Inscription" onClick={handleRegister} />
+          <Text style={styles.link} onPress={() => navigation.navigate('Connexion')}>
+            J'ai déjà un compte
+          </Text>
+        </ScrollView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -121,6 +165,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 20,
     paddingTop: 40,
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  icon: {
+    position: 'absolute',
+    right: 10,
+    padding: 10,
   },
   logo: {
     width: 100,

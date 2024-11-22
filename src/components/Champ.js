@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
 
-const Champ = ({ placeholder, value, onChangeText, editable = true }) => {
+const Champ = ({ placeholder, value, onChangeText, editable = true, secureTextEntry = false, keyboardType = 'default'}) => {
   return (
     <View style={styles.container}>
       <TextInput
@@ -11,6 +11,8 @@ const Champ = ({ placeholder, value, onChangeText, editable = true }) => {
         onChangeText={onChangeText}  // Utiliser la prop onChangeText
         placeholderTextColor="#000"
         editable={editable}
+        secureTextEntry={secureTextEntry}  // Ajout de la prop secureTextEntry
+        keyboardType={keyboardType} // Ajout de la gestion du type de clavier
       />
     </View>
   );
