@@ -1,11 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
+import {View,Text,StyleSheet,ScrollView,TouchableOpacity,} from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchRecentLocations } from "../redux/actions/locationsActions";
 import { fetchUserById } from "../redux/actions/userActions";

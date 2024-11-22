@@ -31,7 +31,7 @@ const Stack = createStackNavigator();
 const AppNavigator = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Connexion" screenOptions={{ animationEnabled: false }}>
+      <Stack.Navigator initialRouteName="Connexion" screenOptions={{ animationEnabled: false, gestureEnabled: true }}>
         <Stack.Screen
           name="PageAccueil"
           component={PageAccueil}
@@ -101,15 +101,33 @@ const AppNavigator = () => {
           component={PolitiqueConfidentialite} 
           options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Politique de Confidentialité', }}
         />
-        <Stack.Screen 
-          name="AccueilAdmin" 
-          component={AccueilAdmin} 
-          options={{ headerShown: false }}
-        />
+
         <Stack.Screen
         name="MonCompte"
         component={MonCompteUser}
         options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Mon Compte' }}
+        />
+
+        <Stack.Screen 
+          name="ModifierMonLieu" 
+          component={ModifierMonLieu} 
+          options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Modifier le lieu', }}
+        />
+
+        {/* Ajout de l'écran FAQUser */}
+        <Stack.Screen 
+          name="faq_user" 
+          component={FAQUser} 
+          options={{ headerShown: true, headerBackTitle: 'Retour', title: 'F.A.Q' }}
+        />
+
+
+
+
+        <Stack.Screen 
+          name="AccueilAdmin" 
+          component={AccueilAdmin} 
+          options={{ headerShown: false }}
         />
         <Stack.Screen 
           name="ListeLieuxCommentaireAdmin" 
@@ -147,18 +165,7 @@ const AppNavigator = () => {
           options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Équipements', }}
         />
 
-        <Stack.Screen 
-          name="ModifierMonLieu" 
-          component={ModifierMonLieu} 
-          options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Modifier le lieu', }}
-        />
 
-        {/* Ajout de l'écran FAQUser */}
-        <Stack.Screen 
-          name="faq_user" 
-          component={FAQUser} 
-          options={{ headerShown: true, headerBackTitle: 'Retour', title: 'F.A.Q' }}
-        />
       </Stack.Navigator>
     </NavigationContainer>
   );
