@@ -2,12 +2,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { persistReducer, persistStore } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import rootReducer from './reducers/indexReducer';  // Importez le rootReducer combiné
+import rootReducer from './reducers/indexReducer'; // RootReducer combiné
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['user', 'config']  // Assurez-vous de persister aussi le configReducer si nécessaire
+  whitelist: ['user', 'config', 'locations'], // Persistez également le réducteur `locations`
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -17,8 +17,8 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: ['persist/PERSIST']
-      }
+        ignoredActions: ['persist/PERSIST'], // Ignore les vérifications de sérialisation pour redux-persist
+      },
     }),
 });
 
