@@ -19,13 +19,10 @@ const PageConnexion = () => {
   const isAdmin = useSelector(state => state.user.isAdmin);
 
   useEffect(() => {
-    console.log('User ID:', userId);
     if (isLoggedIn && userId) {
-      console.log('User ID:', userId);
       dispatch(fetchUserById(userId))
         .unwrap()
         .then((userData) => {
-          console.log('User data:', userData);
           if (userData.role === 'admin') {
             dispatch({ type: 'user/setAdmin', payload: true });
             navigation.navigate('AccueilAdmin'); 
@@ -37,18 +34,6 @@ const PageConnexion = () => {
         .catch((error) => console.error("Error fetching user role:", error));
     }
   }, [isLoggedIn, userId, dispatch]);
-
-
-useEffect(() => {
-  if (isLoggedIn) {
-    if (isAdmin) {
-      navigation.navigate('AccueilAdmin'); 
-    } else {
-      navigation.navigate('PageAccueil'); 
-    }
-  }
-}, [isLoggedIn, isAdmin, navigation]);
-
 
   const handleLogin = () => {
     console.log('Email:', email, 'Password', password);

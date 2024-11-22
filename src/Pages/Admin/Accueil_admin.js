@@ -1,8 +1,21 @@
 import React from 'react';
 import { ScrollView, View,Image, Text, StyleSheet } from 'react-native';
 import ChampRedirection from '../../components/Champ_redirection';
+import { useDispatch } from 'react-redux';
+import { logout } from '../../redux/actions/authActions';
 
 const AccueilAdmin = ({ navigation }) => {
+  const dispatch = useDispatch();
+  
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Connexion' }], // Réinitialise la navigation
+    });
+  };
+
 
     return(
         <View style={styles.container}>
@@ -13,6 +26,7 @@ const AccueilAdmin = ({ navigation }) => {
                 <ChampRedirection label="Gérer les lieux" targetScreen="ListeLieuxInfoAdmin" navigation={navigation} />
                 <ChampRedirection label="Gérer les équipement" targetScreen="GestionEquipement" navigation={navigation} />
                 <ChampRedirection label="Gérer le support" targetScreen="SupportAdmin" navigation={navigation} />
+                <ChampRedirection label="Déconnexion" onPress={handleLogout} style={styles.deconnexion} />
             </ScrollView>
         </View>
 
@@ -49,6 +63,9 @@ const styles = StyleSheet.create({
       fontSize: 18,
       fontWeight: 'bold',
       marginBottom: 10,
+    },
+    deconnexion: {
+      color: '#F2994A',
     },
 });
 

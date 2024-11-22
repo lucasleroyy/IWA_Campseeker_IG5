@@ -104,7 +104,7 @@ const AppNavigator = () => {
         <Stack.Screen 
           name="AccueilAdmin" 
           component={AccueilAdmin} 
-          options={{ headerShown: true, headerBackTitle: 'Retour', title: 'Accueil Admin', }}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
         name="MonCompte"

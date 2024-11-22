@@ -4,7 +4,6 @@ import ChampRedirection from '../components/Champ_redirection';
 import Bandeau from '../components/Bandeau';
 import { useDispatch } from 'react-redux';
 import { logout } from '../redux/actions/authActions';
-import store from '../redux/store';
 
 const PageProfil = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -25,7 +24,6 @@ const PageProfil = ({ navigation }) => {
         <Text style={styles.title}>Profil</Text>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>GÉNÉRAL</Text>
-          <ChampRedirection label="Admin" targetScreen="AccueilAdmin" navigation={navigation} />
           <ChampRedirection label="Mon compte" targetScreen="MonCompte" navigation={navigation} />
           <ChampRedirection label="Mes lieux" targetScreen="MesLieux" navigation={navigation} />
           <ChampRedirection label="Paramètres" targetScreen="Parametres" navigation={navigation} />
