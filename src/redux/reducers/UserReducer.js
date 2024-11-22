@@ -6,7 +6,7 @@ const initialState = {
   isLoggedIn: false,
   isAdmin: false,
   userInfo: null,
-  userDetails: {}, // Nouveau champ pour stocker les informations des utilisateurs
+  userDetails: {},
   loading: false,
   error: null,
 };
@@ -19,7 +19,7 @@ const userReducer = createReducer(initialState, (builder) => {
     })
     .addCase(authenticateUser.fulfilled, (state, action) => {
       state.isLoggedIn = true;
-      state.isAdmin = action.payload.xisAdmin;
+      state.isAdmin = action.payload.isAdmin;
       state.userInfo = action.payload.userInfo;
       state.loading = false;
       state.error = null;
@@ -32,7 +32,10 @@ const userReducer = createReducer(initialState, (builder) => {
       state.isLoggedIn = false;
     })
     .addCase('LOGOUT', (state) => {
-      return initialState;
+      return {
+      ...initialState,
+    userDetails: {},
+      };
     })
 
     // Récupération des détails d'un utilisateur
@@ -41,14 +44,15 @@ const userReducer = createReducer(initialState, (builder) => {
       state.loading = true;
     })
     .addCase(fetchUserById.fulfilled, (state, action) => {
-      console.log("Storing userDetails:", action.payload.userId, action.payload);
-      state.userDetails = {
-        ...state.userDetails,
-        [action.payload.userId]: action.payload, // Utilise userId comme clé
+      if (!state.userDetails[action.payload.userId]) {
+        console.log("Storing userDetails:", action.payload.userId, action.payload);
+        state.userDetails = {
+          ...state.userDetails,
+          [action.payload.userId]: action.payload, // Stocke uniquement si l'utilisateur n'est pas déjà chargé
+        };
       }
-    })
-       
-
+      state.loading = false;
+    })    
     .addCase(fetchUserById.rejected, (state, action) => {
       console.error("Error fetching user:", action.payload); // Log des erreurs
       state.loading = false;

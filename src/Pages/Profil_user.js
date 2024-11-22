@@ -4,14 +4,20 @@ import ChampRedirection from '../components/Champ_redirection';
 import Bandeau from '../components/Bandeau';
 import { useDispatch } from 'react-redux';
 import { logout } from '../redux/actions/authActions';
+import store from '../redux/store';
 
 const PageProfil = ({ navigation }) => {
   const dispatch = useDispatch();
+  
 
   const handleLogout = () => {
     dispatch(logout());
-    navigation.navigate('Connexion');
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Connexion' }], // Réinitialise la navigation
+    });
   };
+  
 
   return (
     <View style={styles.container}>

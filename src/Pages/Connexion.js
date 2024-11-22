@@ -7,6 +7,7 @@ import Bouton from '../components/Bouton';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import { authenticateUser } from '../redux/actions/authActions'; 
+import { fetchUserById } from '../redux/actions/userActions';
 
 const PageConnexion = () => {
   const [email, setEmail] = useState('');
@@ -14,12 +15,40 @@ const PageConnexion = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const isLoggedIn = useSelector(state => state.user.isLoggedIn);
+  const userId = useSelector(state => state.user.userInfo?.userId);
+  const isAdmin = useSelector(state => state.user.isAdmin);
 
   useEffect(() => {
-    if (isLoggedIn) {
-      navigation.navigate('PageAccueil');  // Naviguez vers la page d'accueil si l'utilisateur est connecté
+    console.log('User ID:', userId);
+    if (isLoggedIn && userId) {
+      console.log('User ID:', userId);
+      dispatch(fetchUserById(userId))
+        .unwrap()
+        .then((userData) => {
+          console.log('User data:', userData);
+          if (userData.role === 'admin') {
+            dispatch({ type: 'user/setAdmin', payload: true });
+            navigation.navigate('AccueilAdmin'); 
+          } else {
+            navigation.navigate('PageAccueil'); 
+            dispatch({ type: 'user/setAdmin', payload: false });
+          }
+        })
+        .catch((error) => console.error("Error fetching user role:", error));
     }
-  }, [isLoggedIn, navigation]);
+  }, [isLoggedIn, userId, dispatch]);
+
+
+useEffect(() => {
+  if (isLoggedIn) {
+    if (isAdmin) {
+      navigation.navigate('AccueilAdmin'); 
+    } else {
+      navigation.navigate('PageAccueil'); 
+    }
+  }
+}, [isLoggedIn, isAdmin, navigation]);
+
 
   const handleLogin = () => {
     console.log('Email:', email, 'Password', password);
