@@ -2,6 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 
 export const authenticateUser = createAsyncThunk('user/authenticate', async ({ email, password }, thunkAPI) => {
+  console.log('Authenticating user with:', email);
   const apiUrl = thunkAPI.getState().config.apiUrl;
   try {
     const response = await fetch(`${apiUrl}/auth/login`, { 

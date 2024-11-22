@@ -22,6 +22,7 @@ const PageConnexion = () => {
   }, [isLoggedIn, navigation]);
 
   const handleLogin = () => {
+    console.log('Email:', email, 'Password', password);
     dispatch(authenticateUser({ email, password }));
   };
 
