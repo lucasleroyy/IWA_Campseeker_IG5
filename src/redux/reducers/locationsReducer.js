@@ -1,5 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { fetchRecentLocations } from '../actions/locationsActions';
+import { fetchRecentLocations, fetchAllLocations, fetchLocationById } from '../actions/locationsActions';
+
 
 const initialState = {
   locations: [], // Liste des lieux récents
