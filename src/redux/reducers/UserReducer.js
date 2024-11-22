@@ -19,8 +19,7 @@ const userReducer = createReducer(initialState, (builder) => {
     })
     .addCase(authenticateUser.fulfilled, (state, action) => {
       state.isLoggedIn = true;
-      state.isAdmin = action.payload.xisAdmin;
-      state.userInfo = action.payload.userInfo;
+      state.userInfo = action.payload.userInfo; // Stocke userId et token
       state.loading = false;
       state.error = null;
     })
@@ -28,10 +27,9 @@ const userReducer = createReducer(initialState, (builder) => {
       state.loading = false;
       state.error = action.payload;
       state.userInfo = null;
-      state.isAdmin = false;
       state.isLoggedIn = false;
     })
-    .addCase('LOGOUT', (state) => {
+    .addCase('LOGOUT', () => {
       return initialState;
     })
 
