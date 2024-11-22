@@ -82,11 +82,7 @@ const ListeLieuxAdminInfo = ({ navigation }) => {
                   <View>
                     <Text style={styles.nomLieu}>{location.name}</Text>
                     <Text style={styles.proprietaire}>
-                      {userDetails[location.userId]?.firstName
-                        ? `${userDetails[location.userId].firstName} ${
-                            userDetails[location.userId].lastName
-                          }`
-                        : "Chargement..."}
+                       {location.adresse} | {location.ville}
                     </Text>
                   </View>
                   <Icon name="chevron-right" size={24} color="#555" />
