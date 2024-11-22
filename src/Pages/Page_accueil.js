@@ -11,6 +11,8 @@ import { fetchRecentLocations } from "../redux/actions/locationsActions";
 import { fetchUserById } from "../redux/actions/userActions";
 import Bandeau from "../components/Bandeau";
 import ChampRedirection from "../components/Champ_redirection";
+import Photo from "../components/Photo";
+import Icon from "react-native-vector-icons/MaterialIcons";
 
 const Page_accueil = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -20,30 +22,22 @@ const Page_accueil = ({ navigation }) => {
     error: locationsError,
   } = useSelector((state) => state.locations);
   const { userDetails = {} } = useSelector((state) => state.user || {});
+  const apiUrl = useSelector((state) => state.config.apiUrl); // Récupère l'URL de l'API
 
   useEffect(() => {
     dispatch(fetchRecentLocations());
   }, [dispatch]);
 
   useEffect(() => {
-    console.log("Updated userDetails in component:", userDetails);
-  }, [userDetails]);
-
-  useEffect(() => {
-    console.log("Locations: ", locations);
-    console.log("UserDetails: ", userDetails);
-
     if (!locations || !Array.isArray(locations)) return;
     if (!userDetails) return;
 
     const userIds = [
       ...new Set(locations.map((location) => location.userId).filter(Boolean)),
     ];
-    console.log("UserIds to fetch:", userIds);
 
     userIds.forEach((userId) => {
       if (!userDetails[userId]) {
-        console.log(`Dispatching fetch for userId: ${userId}`);
         dispatch(fetchUserById(userId));
       }
     });
@@ -58,9 +52,14 @@ const Page_accueil = ({ navigation }) => {
   }
 
   if (locationsError) {
+    const errorMessage =
+      typeof locationsError === "string"
+        ? locationsError
+        : locationsError.error || "Une erreur est survenue"; // Fallback si c'est un objet
+
     return (
       <View style={styles.container}>
-        <Text>Erreur : {locationsError}</Text>
+        <Text>Erreur : {errorMessage}</Text>
       </View>
     );
   }
@@ -78,29 +77,40 @@ const Page_accueil = ({ navigation }) => {
           postés :
         </Text>
         {locations.map((location) => {
-  console.log("Rendering location:", location.name);
-  console.log("User details for userId:", location.userId, userDetails[location.userId]);
-  return (
-    <TouchableOpacity
-      key={location.locationId}
-      style={styles.locationContainer}
-      onPress={() =>
-        navigation.navigate("PageInfoLieu", { id: location.locationId })
-      }
-    >
-      <View style={styles.bandeau}>
-        <Text style={styles.nomLieu}>{location.name}</Text>
-        <Text style={styles.proprietaire}>
-          Propriétaire :{" "}
-          {userDetails[location.userId]?.firstName
-            ? `${userDetails[location.userId].firstName} ${userDetails[location.userId].lastName}`
-            : "Chargement..."}
-        </Text>
-      </View>
-    </TouchableOpacity>
-  );
-})}
+          const imageUrl = location.photo?.photoId
+            ? `${apiUrl}/photos/get/${location.photo.photoId}` // Construit une URL valide
+            : null;
 
+          return (
+            <TouchableOpacity
+              key={location.locationId}
+              style={styles.locationContainer}
+              onPress={() =>
+                navigation.navigate("PageInfoLieu", { id: location.locationId })
+              }
+            >
+              <View style={styles.bandeau}>
+                {imageUrl && typeof imageUrl === "string" && (
+                  <Photo imageUrl={imageUrl} width="100%" height={230} />
+                )}
+                {/* Conteneur pour le nom avec le chevron */}
+                <View style={styles.row}>
+                  <View>
+                    <Text style={styles.nomLieu}>{location.name}</Text>
+                    <Text style={styles.proprietaire}>
+                      {userDetails[location.userId]?.firstName
+                        ? `${userDetails[location.userId].firstName} ${
+                            userDetails[location.userId].lastName
+                          }`
+                        : "Chargement..."}
+                    </Text>
+                  </View>
+                  <Icon name="chevron-right" size={24} color="#555" />
+                </View>
+              </View>
+            </TouchableOpacity>
+          );
+        })}
       </ScrollView>
       <Bandeau currentPage="PageAccueil" onNavigate={navigation.navigate} />
     </View>
@@ -145,10 +155,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: "#000",
+    paddingTop: 10,
   },
   proprietaire: {
     fontSize: 14,
     color: "#555",
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 5, // Ajuste l'espacement entre les éléments
   },
 });
 
