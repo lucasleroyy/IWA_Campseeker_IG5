@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchEquipments } from '../redux/actions/equipmentActions';
+import { fetchAllLocations } from '../redux/actions/locationsActions';
 import Bandeau from '../components/Bandeau';
 import Carte from '../components/Carte';
 import Recherche from '../components/Recherche';
@@ -12,9 +13,11 @@ const Page_recherche = ({ navigation }) => {
     const [searchCity, setSearchCity] = useState('');
     const dispatch = useDispatch();
     const { equipments, loading, error } = useSelector(state => state.equipments);
+    const { locations, loading: locationsLoading, error: locationsError } = useSelector(state => state.locations);
 
     useEffect(() => {
         dispatch(fetchEquipments());
+        dispatch(fetchAllLocations());
     }, [dispatch]);
 
     const handleTagPress = (label) => {
@@ -51,7 +54,7 @@ const Page_recherche = ({ navigation }) => {
                         ))}
                     </View>
                 )}
-                <Carte ville={searchCity} style={styles.map} />
+                <Carte ville={searchCity} locations={locations} style={styles.map} />
             </ScrollView>
             <Bandeau currentPage='PageRecherche' onNavigate={navigation.navigate}/>
         </View>
@@ -68,11 +71,10 @@ const styles = StyleSheet.create({
     scrollContainer: {
       flexGrow: 1,
       alignItems: 'center',
-      paddingVertical: '15%',
+      paddingBottom: '15%',
     },
     map: {
       width: '90%',
-      height: 150,
       marginBottom: 20,
       alignSelf: 'center',
     },
