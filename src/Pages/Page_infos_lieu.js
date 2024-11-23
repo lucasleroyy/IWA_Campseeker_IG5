@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {View,ScrollView,StyleSheet,Dimensions,Text,Alert,TouchableOpacity,TextInput,Modal,} from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchLocationById } from "../redux/actions/locationsActions";
