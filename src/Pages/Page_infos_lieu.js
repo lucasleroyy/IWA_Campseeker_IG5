@@ -23,6 +23,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import Scroll_horizontal from "../components/Scroll_horizontal";
 import Commentaire from "../components/Commentaire";
 import { fetchCommentsByLocationId } from "../redux/actions/commentsActions";
+import { fetchUserById } from "../redux/actions/userActions";
 import Bouton from "../components/Bouton";
 
 const Page_info_lieu = ({ route }) => {
@@ -38,32 +39,36 @@ const Page_info_lieu = ({ route }) => {
   const { comments, loading: commentsLoading } = useSelector(
     (state) => state.comments
   );
-
-  const [modalVisible, setModalVisible] = useState(false); // État pour le modal
-  const [reason, setReason] = useState(""); // État pour la raison
   const users = useSelector((state) => state.user.userDetails);
+
+  const [ownerName, setOwnerName] = useState(""); // État pour stocker le nom complet du propriétaire
 
   useEffect(() => {
     if (id) {
-      console.log("API URL:", apiUrl); // Debug
-      console.log("Fetching comments for location:", id); // Debug
-
       dispatch(fetchLocationById(id));
       dispatch(fetchCommentsByLocationId(id));
     }
-  }, [id, dispatch, apiUrl]);
+  }, [id, dispatch]);
 
   useEffect(() => {
-    if (comments.length > 0) {
-      // Liste unique des userId à partir des commentaires
-      const userIds = [...new Set(comments.map((comment) => comment.userId))];
-      userIds.forEach((id) => {
-        if (!users[id]) {
-          dispatch(fetchUserById(id)); // Charge les données utilisateur manquantes
-        }
-      });
+    if (locationDetails?.userId) {
+      const locationOwnerId = locationDetails.userId;
+
+      // Vérifier si les informations sont déjà disponibles dans le store
+      if (users[locationOwnerId]) {
+        const { firstName, lastName } = users[locationOwnerId];
+        setOwnerName(`${firstName} ${lastName}`);
+      } else {
+        // Sinon, récupérer les informations de l'utilisateur
+        dispatch(fetchUserById(locationOwnerId)).then((response) => {
+          if (response.payload) {
+            const { firstName, lastName } = response.payload;
+            setOwnerName(`${firstName} ${lastName}`);
+          }
+        });
+      }
     }
-  }, [comments, users, dispatch]);
+  }, [locationDetails, users, dispatch]);
 
   const handleReportLieu = () => {
     if (!userId) {
@@ -149,12 +154,17 @@ const Page_info_lieu = ({ route }) => {
               <Photo imageUrl={imageUrl} width="100%" height={200} />
             )}
           </View>
-          {/* Champ multiligne pour l'adresse */}
-          <Champ
-            placeholder={`${adresse}, ${locationDetails.ville}, ${locationDetails.codePostal}`}
-            editable={false}
-            multiline={true} // Permet plusieurs lignes
-          />
+
+
+          {/* Affichage du nom complet du propriétaire */}
+          {ownerName && (
+            <Text style={styles.ownerText}>Propriétaire : {ownerName}</Text>
+          )}
+
+          {(adresse && locationDetails.ville && locationDetails.codePostal) && (
+            <Text style={styles.ownerText}>Adresse : {`${adresse}, ${locationDetails.ville}, ${locationDetails.codePostal}`}</Text>
+          )}
+
 
           <Carte
             ville={`${adresse}, ${locationDetails.ville}`}
@@ -175,19 +185,12 @@ const Page_info_lieu = ({ route }) => {
             <Text>Chargement des commentaires...</Text>
           ) : (
             <>
-              {console.log("Comments to render:", comments)} {/* Debug */}
               <Scroll_horizontal
                 items={comments.map((comment) => {
                   const user = users?.[comment.userId];
                   const userName = user
                     ? `${user.firstName} ${user.lastName}`.trim()
                     : "Utilisateur inconnu";
-
-                  console.log("Rendu commentaire :", {
-                    pseudo: userName,
-                    note: comment.rating,
-                    texte: comment.commentText,
-                  });
 
                   return (
                     <Commentaire
@@ -201,41 +204,9 @@ const Page_info_lieu = ({ route }) => {
               />
             </>
           )}
-          <Bouton label="Ajouter un commentaire" onClick={alert}/>
+          <Bouton label="Ajouter un commentaire"  onClick={alert}/>
         </BoiteVerte>
       </ScrollView>
-
-      {/* Modal pour signaler un lieu */}
-      <Modal visible={modalVisible} animationType="slide" transparent={true}>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Signaler ce lieu</Text>
-            <TextInput
-              style={styles.textInput}
-              placeholder="Raison du signalement"
-              value={reason}
-              onChangeText={setReason}
-            />
-            <View style={styles.modalButtons}>
-              <TouchableOpacity
-                style={[styles.modalButton, styles.cancelButton]}
-                onPress={() => {
-                  setModalVisible(false);
-                  setReason("");
-                }}
-              >
-                <Text style={styles.cancelButtonText}>Annuler</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.modalButton, styles.submitButton]}
-                onPress={submitFlag}
-              >
-                <Text style={styles.submitButtonText}>Envoyer</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
     </View>
   );
 };
@@ -270,7 +241,7 @@ const styles = StyleSheet.create({
   },
   map: {
     width: "90%",
-    height: 200,
+    height: 400,
     marginVertical: 10,
     alignSelf: "center",
   },
@@ -294,58 +265,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     color: "#000",
   },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.5)",
-  },
-  modalContent: {
-    width: "80%",
-    padding: 20,
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    alignItems: "center",
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  textInput: {
-    width: "100%",
-    height: 40,
-    borderColor: "#ccc",
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 20,
-  },
-  modalButtons: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
-  },
-  modalButton: {
-    flex: 1,
-    marginHorizontal: 5,
-    padding: 10,
-    borderRadius: 5,
-    alignItems: "center",
-  },
-  cancelButton: {
-    backgroundColor: "#ccc",
-  },
-  submitButton: {
-    backgroundColor: "#F25C05",
-  },
-  cancelButtonText: {
-    color: "#000",
-    fontWeight: "bold",
-  },
-  submitButtonText: {
-    color: "#fff",
-    fontWeight: "bold",
+  ownerText: {
+    fontSize: 18,
+    marginHorizontal: "5%",
+    marginTop: 10,
   },
 });
 
