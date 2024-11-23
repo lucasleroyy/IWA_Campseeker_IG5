@@ -60,3 +60,26 @@ export const fetchLocationById = createAsyncThunk(
     }
   }
 );
+
+
+// Action pour supprimer un lieu par ID
+export const deleteLocation = createAsyncThunk(
+  'locations/delete',
+  async (id, thunkAPI) => {
+    const apiUrl = thunkAPI.getState().config.apiUrl; // URL de l'API
+    try {
+      const response = await fetch(`${apiUrl}/locations/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Erreur lors de la suppression du lieu.');
+      }
+
+      return id; // Retourne l'ID du lieu supprimé
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message); // Retourne une erreur au reducer
+    }
+  }
+);
