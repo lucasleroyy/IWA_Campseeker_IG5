@@ -1,27 +1,26 @@
-// store/index.js
 import { configureStore } from '@reduxjs/toolkit';
-import { persistReducer, persistStore } from 'redux-persist';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import rootReducer from './reducers/indexReducer'; // RootReducer combiné
+import { persistStore, persistReducer } from 'redux-persist';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Remplacez storage par AsyncStorage
+import appReducer from './reducers/indexReducer';
+import thunk from 'redux-thunk';
 
 const persistConfig = {
   key: 'root',
-  storage: AsyncStorage,
-  whitelist: ['user', 'config', 'locations'], // Persistez également le réducteur `locations`
+  storage: AsyncStorage, // Utilisez AsyncStorage pour React Native
+  whitelist: ['user', 'config'], // Définir les reducers à persister
 };
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+const persistedReducer = persistReducer(persistConfig, appReducer);
 
-const store = configureStore({
+export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: ['persist/PERSIST'], // Ignore les vérifications de sérialisation pour redux-persist
+        ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE', 'persist/PURGE', 'persist/REGISTER'],
       },
     }),
 });
 
-const persistor = persistStore(store);
 
-export { store, persistor };
+export const persistor = persistStore(store);

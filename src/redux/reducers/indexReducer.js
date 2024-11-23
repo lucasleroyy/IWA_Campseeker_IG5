@@ -7,7 +7,7 @@ import equipmentReducer from './equipmentReducer';
 import favorisReducer from './favorisReducer';
 import flagReducer from './flagsReducer';
 
-const rootReducer = combineReducers({
+const appReducer = combineReducers({
   user: userReducer,
   config: configReducer,
   locations: locationsReducer,
@@ -15,5 +15,12 @@ const rootReducer = combineReducers({
   favoris: favorisReducer,
   flags: flagReducer,
 });
+
+const rootReducer = (state, action) => {
+  if (action.type === 'RESET_STORE') {
+    return appReducer(undefined, action);
+  }
+  return appReducer(state, action);
+}
 
 export default rootReducer;

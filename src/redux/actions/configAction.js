@@ -3,3 +3,6 @@ export const setApiUrl = (url) => ({
     payload: url
   });
   
+export const resetStore = () => ({
+  type: 'RESET_STORE'
+});

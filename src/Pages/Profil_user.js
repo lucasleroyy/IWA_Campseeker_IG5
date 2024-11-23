@@ -3,18 +3,17 @@ import { ScrollView, View, Text, StyleSheet } from 'react-native';
 import ChampRedirection from '../components/Champ_redirection';
 import Bandeau from '../components/Bandeau';
 import { useDispatch } from 'react-redux';
-import { logout } from '../redux/actions/authActions';
+import { resetStore } from '../redux/actions/configAction';
+import { persistor } from '../redux/store';
 
 const PageProfil = ({ navigation }) => {
   const dispatch = useDispatch();
   
 
   const handleLogout = () => {
-    dispatch(logout());
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Connexion' }], // Réinitialise la navigation
-    });
+    dispatch(resetStore());
+    persistor.purge(); // Réinitialise complètement redux-persist
+    navigation.navigate('Connexion');
   };
   
 
