@@ -1,46 +1,68 @@
-import React, { useEffect } from "react";
-import {
-  View,
-  ScrollView,
-  StyleSheet,
-  Dimensions,
-  Text,
-  Alert,
-  TouchableOpacity,
-} from "react-native";
+import React, { useEffect, useState } from "react";
+import {View,ScrollView,StyleSheet,Dimensions,Text,Alert,TouchableOpacity,TextInput,Modal,} from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchLocationById } from "../redux/actions/locationsActions";
+import { reportFlag } from "../redux/actions/flagsActions";
 import BoiteVerte from "../components/Boite_verte";
 import Photo from "../components/Photo";
 import Favoris from "../components/Favoris";
 import Champ from "../components/Champ";
 import Carte from "../components/Carte";
-import Bouton from "../components/Bouton";
-import Commentaire from "../components/Commentaire";
-import { addFavorite } from "../redux/actions/favorisActions";
 import Champ_selection from "../components/Champ_selection";
 import { MaterialIcons } from "@expo/vector-icons";
 
 const Page_info_lieu = ({ route }) => {
   const { width } = Dimensions.get("window");
-  const { id } = route.params; // Récupère l'id du lieu pour charger les détails
+  const { id } = route.params; // ID du lieu pour charger les détails
   const dispatch = useDispatch();
 
-  // Sélecteurs pour accéder aux détails du lieu et à l'état de chargement
   const { locationDetails, loading, error } = useSelector(
     (state) => state.locations
   );
+  const userId = useSelector((state) => state.user.userInfo?.userId);
+  const apiUrl = useSelector((state) => state.config.apiUrl); // URL de l'API
 
-  const apiUrl = useSelector((state) => state.config.apiUrl); // Récupère l'URL de l'API
+  const [modalVisible, setModalVisible] = useState(false); // État pour le modal
+  const [reason, setReason] = useState(""); // État pour la raison
 
-  // Récupération des données à l'ouverture de la page
   useEffect(() => {
     if (id) {
       dispatch(fetchLocationById(id));
     }
   }, [id, dispatch]);
 
-  // Gestion du chargement et des erreurs
+  const handleReportLieu = () => {
+    if (!userId) {
+      Alert.alert("Erreur", "Vous devez être connecté pour signaler un lieu.");
+      return;
+    }
+    setModalVisible(true); // Affiche le modal
+  };
+
+  const submitFlag = () => {
+    if (!reason.trim()) {
+      Alert.alert("Erreur", "Veuillez saisir une raison pour signaler ce lieu.");
+      return;
+    }
+
+    dispatch(
+      reportFlag({
+        userId,
+        locationId: id,
+        reason,
+      })
+    )
+      .then(() => {
+        Alert.alert("Succès", "Lieu signalé avec succès.");
+        setModalVisible(false);
+        setReason(""); // Réinitialise la raison
+      })
+      .catch((error) => {
+        console.error("Erreur lors du signalement :", error);
+        Alert.alert("Erreur", "Impossible de signaler le lieu.");
+      });
+  };
+
   if (loading) {
     return (
       <View style={styles.container}>
@@ -65,24 +87,11 @@ const Page_info_lieu = ({ route }) => {
     );
   }
 
-  // Données récupérées
   const { name, adresse, photo, equipments } = locationDetails;
 
-  // Construction de l'URL de la photo
   const imageUrl = photo?.photoId
-    ? `${apiUrl}/photos/get/${photo.photoId}` // Construit une URL valide
+    ? `${apiUrl}/photos/get/${photo.photoId}`
     : null;
-
-  const handleReportLieu = () => {
-    Alert.alert(
-      "Signaler ce lieu",
-      "Êtes-vous sûr de vouloir signaler ce lieu ?",
-      [
-        { text: "Annuler", style: "cancel" },
-        { text: "Oui", onPress: () => console.log("Lieu signalé") },
-      ]
-    );
-  };
 
   return (
     <View style={styles.container}>
@@ -91,7 +100,6 @@ const Page_info_lieu = ({ route }) => {
         <BoiteVerte style={styles.boiteVerte}>
           <View style={styles.headerContainer}>
             <Favoris locationId={id} apiUrl={apiUrl} />
-
             <TouchableOpacity
               onPress={handleReportLieu}
               style={styles.reportIcon}
@@ -99,8 +107,6 @@ const Page_info_lieu = ({ route }) => {
               <MaterialIcons name="report" size={30} color="#F25C05" />
             </TouchableOpacity>
           </View>
-
-          {/* Vue pour aligner la photo et les champs */}
           <View style={styles.photoContainer}>
             {imageUrl && (
               <Photo imageUrl={imageUrl} width="100%" height={200} />
@@ -110,7 +116,6 @@ const Page_info_lieu = ({ route }) => {
             placeholder={`${adresse}, ${locationDetails.ville} ${locationDetails.codePostal}`}
             editable={false}
           />
-
           <Carte
             ville={`${adresse}, ${locationDetails.ville}`}
             style={styles.map}
@@ -125,14 +130,40 @@ const Page_info_lieu = ({ route }) => {
               />
             ))}
           </View>
-          {/* <Text style={styles.sectionTitle}>COMMENTAIRES :</Text>
-          <ScrollHorizontal items={commentaires} containerWidth={width * 0.9} />
-          <Bouton
-            label="Ajouter un commentaire"
-            onClick={() => console.log("Ajouter")}
-          /> */}
         </BoiteVerte>
       </ScrollView>
+
+      {/* Modal pour signaler un lieu */}
+      <Modal visible={modalVisible} animationType="slide" transparent={true}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Signaler ce lieu</Text>
+            <TextInput
+              style={styles.textInput}
+              placeholder="Raison du signalement"
+              value={reason}
+              onChangeText={setReason}
+            />
+            <View style={styles.modalButtons}>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.cancelButton]}
+                onPress={() => {
+                  setModalVisible(false);
+                  setReason("");
+                }}
+              >
+                <Text style={styles.cancelButtonText}>Annuler</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.submitButton]}
+                onPress={submitFlag}
+              >
+                <Text style={styles.submitButtonText}>Envoyer</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -146,7 +177,7 @@ const styles = StyleSheet.create({
   scrollContainer: {
     flexGrow: 1,
     alignItems: "center",
-    paddingVertical: "15%",
+    paddingVertical: 20,
   },
   headerContainer: {
     flexDirection: "row",
@@ -157,8 +188,8 @@ const styles = StyleSheet.create({
     marginTop: -15,
   },
   photoContainer: {
-    width: "90%", // Largeur du conteneur pour s'adapter à l'écran
-    alignSelf: "center", // Centrer le conteneur horizontalement
+    width: "90%",
+    alignSelf: "center",
     marginBottom: 10,
   },
   reportIcon: {
@@ -189,6 +220,59 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 20,
     color: "#000",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  modalContent: {
+    width: "80%",
+    padding: 20,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  textInput: {
+    width: "100%",
+    height: 40,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginBottom: 20,
+  },
+  modalButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  modalButton: {
+    flex: 1,
+    marginHorizontal: 5,
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  cancelButton: {
+    backgroundColor: "#ccc",
+  },
+  submitButton: {
+    backgroundColor: "#F25C05",
+  },
+  cancelButtonText: {
+    color: "#000",
+    fontWeight: "bold",
+  },
+  submitButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
 });
 

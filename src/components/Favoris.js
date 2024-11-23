@@ -21,33 +21,37 @@ const Favoris = ({ locationId }) => {
     }
   }, [userId, locationId, dispatch]);
 
+  // Gère l'ajout/suppression des favoris avec confirmation
   const toggleFavorite = () => {
     if (!userId) {
       Alert.alert("Erreur", "Vous devez être connecté pour modifier vos favoris.");
       return;
     }
 
-    if (!isFavorite) {
-      // Ajout aux favoris
-      dispatch(addFavorite({ userId, locationId }))
-        .then(() => {
-          Alert.alert("Succès", "Lieu ajouté aux favoris.");
-        })
-        .catch((error) => {
-          console.error("Erreur lors de l'ajout aux favoris :", error);
-          Alert.alert("Erreur", "Impossible d'ajouter aux favoris.");
-        });
-    } else {
-      // Suppression des favoris
-      dispatch(removeFavorite({ userId, locationId }))
-        .then(() => {
-          Alert.alert("Succès", "Lieu retiré des favoris.");
-        })
-        .catch((error) => {
-          console.error("Erreur lors de la suppression des favoris :", error);
-          Alert.alert("Erreur", "Impossible de retirer des favoris.");
-        });
-    }
+    const action = isFavorite ? "retirer" : "ajouter";
+    const dispatchAction = isFavorite ? removeFavorite : addFavorite;
+
+    Alert.alert(
+      `Confirmer l'action`,
+      `Voulez-vous ${action} ce lieu ${isFavorite ? "des favoris" : "aux favoris"} ?`,
+      [
+        { text: "Annuler", style: "cancel" }, // Ne fait rien si annulé
+        {
+          text: "Oui",
+          onPress: () => {
+            // Ajout ou suppression du favori
+            dispatch(dispatchAction({ userId, locationId }))
+              .then(() => {
+                Alert.alert("Succès", `Lieu ${isFavorite ? "retiré des" : "ajouté aux"} favoris.`);
+              })
+              .catch((error) => {
+                console.error(`Erreur lors de l'action sur les favoris :`, error);
+                Alert.alert("Erreur", "Impossible de modifier vos favoris.");
+              });
+          },
+        },
+      ]
+    );
   };
 
   return (
