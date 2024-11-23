@@ -1,5 +1,15 @@
 import React, { useEffect, useState } from "react";
-import {View,ScrollView,StyleSheet,Dimensions,Text,Alert,TouchableOpacity,TextInput,Modal,} from "react-native";
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  Dimensions,
+  Text,
+  Alert,
+  TouchableOpacity,
+  TextInput,
+  Modal,
+} from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchLocationById } from "../redux/actions/locationsActions";
 import { reportFlag } from "../redux/actions/flagsActions";
@@ -10,6 +20,10 @@ import Champ from "../components/Champ";
 import Carte from "../components/Carte";
 import Champ_selection from "../components/Champ_selection";
 import { MaterialIcons } from "@expo/vector-icons";
+import Scroll_horizontal from "../components/Scroll_horizontal";
+import Commentaire from "../components/Commentaire";
+import { fetchCommentsByLocationId } from "../redux/actions/commentsActions";
+import Bouton from "../components/Bouton";
 
 const Page_info_lieu = ({ route }) => {
   const { width } = Dimensions.get("window");
@@ -21,15 +35,35 @@ const Page_info_lieu = ({ route }) => {
   );
   const userId = useSelector((state) => state.user.userInfo?.userId);
   const apiUrl = useSelector((state) => state.config.apiUrl); // URL de l'API
+  const { comments, loading: commentsLoading } = useSelector(
+    (state) => state.comments
+  );
 
   const [modalVisible, setModalVisible] = useState(false); // État pour le modal
   const [reason, setReason] = useState(""); // État pour la raison
+  const users = useSelector((state) => state.user.userDetails);
 
   useEffect(() => {
     if (id) {
+      console.log("API URL:", apiUrl); // Debug
+      console.log("Fetching comments for location:", id); // Debug
+
       dispatch(fetchLocationById(id));
+      dispatch(fetchCommentsByLocationId(id));
     }
-  }, [id, dispatch]);
+  }, [id, dispatch, apiUrl]);
+
+  useEffect(() => {
+    if (comments.length > 0) {
+      // Liste unique des userId à partir des commentaires
+      const userIds = [...new Set(comments.map((comment) => comment.userId))];
+      userIds.forEach((id) => {
+        if (!users[id]) {
+          dispatch(fetchUserById(id)); // Charge les données utilisateur manquantes
+        }
+      });
+    }
+  }, [comments, users, dispatch]);
 
   const handleReportLieu = () => {
     if (!userId) {
@@ -41,7 +75,10 @@ const Page_info_lieu = ({ route }) => {
 
   const submitFlag = () => {
     if (!reason.trim()) {
-      Alert.alert("Erreur", "Veuillez saisir une raison pour signaler ce lieu.");
+      Alert.alert(
+        "Erreur",
+        "Veuillez saisir une raison pour signaler ce lieu."
+      );
       return;
     }
 
@@ -112,10 +149,13 @@ const Page_info_lieu = ({ route }) => {
               <Photo imageUrl={imageUrl} width="100%" height={200} />
             )}
           </View>
+          {/* Champ multiligne pour l'adresse */}
           <Champ
-            placeholder={`${adresse}, ${locationDetails.ville} ${locationDetails.codePostal}`}
+            placeholder={`${adresse}, ${locationDetails.ville}, ${locationDetails.codePostal}`}
             editable={false}
+            multiline={true} // Permet plusieurs lignes
           />
+
           <Carte
             ville={`${adresse}, ${locationDetails.ville}`}
             style={styles.map}
@@ -130,6 +170,38 @@ const Page_info_lieu = ({ route }) => {
               />
             ))}
           </View>
+          <Text style={styles.sectionTitle}>COMMENTAIRES :</Text>
+          {commentsLoading ? (
+            <Text>Chargement des commentaires...</Text>
+          ) : (
+            <>
+              {console.log("Comments to render:", comments)} {/* Debug */}
+              <Scroll_horizontal
+                items={comments.map((comment) => {
+                  const user = users?.[comment.userId];
+                  const userName = user
+                    ? `${user.firstName} ${user.lastName}`.trim()
+                    : "Utilisateur inconnu";
+
+                  console.log("Rendu commentaire :", {
+                    pseudo: userName,
+                    note: comment.rating,
+                    texte: comment.commentText,
+                  });
+
+                  return (
+                    <Commentaire
+                      key={comment.commentId}
+                      pseudo={userName || "Utilisateur inconnu"}
+                      note={comment.rating || 0}
+                      texte={comment.commentText || "Pas de texte"}
+                    />
+                  );
+                })}
+              />
+            </>
+          )}
+          <Bouton label="Ajouter un commentaire" onClick={alert}/>
         </BoiteVerte>
       </ScrollView>
 
@@ -213,6 +285,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#000",
     marginLeft: "5%",
+    marginTop: 10,
   },
   titre: {
     fontSize: 32,

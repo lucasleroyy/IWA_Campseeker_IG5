@@ -1,19 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserById } from "../redux/actions/userActions";
 
 const Commentaire = ({ pseudo, note, texte }) => {
+  console.log("Props Commentaire :", { pseudo, note, texte });
+  
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.pseudo}>{pseudo}</Text>
+      <Text style={styles.pseudo}>{pseudo || "Utilisateur inconnu"}</Text>
         <View style={styles.actions}>
           <View style={styles.note}>
-            {[...Array(note)].map((_, index) => (
+            {[...Array(note || 0)].map((_, index) => (
               <MaterialIcons
                 key={index}
                 name="star"
-                size={20}
+                size={15}
                 color="#FF6D00"
               />
             ))}
@@ -39,7 +43,7 @@ const Commentaire = ({ pseudo, note, texte }) => {
       </View>
 
       <View style={styles.separator} />
-      <Text style={styles.texte}>{texte}</Text>
+      <Text style={styles.texte}>{texte || "Texte non disponible"}</Text>
     </View>
   );
 };
@@ -70,6 +74,7 @@ const styles = StyleSheet.create({
   note: {
     flexDirection: "row",
     alignItems: "center",
+    marginRight: 10,
   },
   separator: {
     height: 1,
@@ -81,15 +86,9 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   actions: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
-  note: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginRight: 10,
-  },
-  
 });
 
 export default Commentaire;

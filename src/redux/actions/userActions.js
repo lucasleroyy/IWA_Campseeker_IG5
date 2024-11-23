@@ -22,7 +22,3 @@ export const fetchUserById = createAsyncThunk(
     }
   }
 );
-
-  
-
-  
