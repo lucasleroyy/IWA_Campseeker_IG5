@@ -1,5 +1,5 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { addFavorite, checkIfFavorite, removeFavorite } from "../actions/favorisActions";
+import { addFavorite, checkIfFavorite, removeFavorite, fetchFavoritesByUserId } from "../actions/favorisActions";
 
 const initialState = {
   favoris: [], // Liste des favoris
@@ -55,7 +55,21 @@ const favorisReducer = createReducer(initialState, (builder) => {
     .addCase(removeFavorite.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
-    });
+    })
+
+    // Fetch favoris par user id
+    .addCase(fetchFavoritesByUserId.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(fetchFavoritesByUserId.fulfilled, (state, action) => {
+      state.favoris = action.payload; // Met à jour la liste des favoris
+      state.loading = false;
+      state.error = null;
+    })
+    .addCase(fetchFavoritesByUserId.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
 });
 
 export default favorisReducer;

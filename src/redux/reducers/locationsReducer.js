@@ -56,6 +56,4 @@ const locationsReducer = createReducer(initialState, (builder) => {
     });
 });
 
-
-
 export default locationsReducer;

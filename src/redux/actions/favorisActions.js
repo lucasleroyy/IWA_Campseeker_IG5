@@ -103,5 +103,22 @@ export const removeFavorite = createAsyncThunk(
   }
 );
 
+export const fetchFavoritesByUserId = createAsyncThunk(
+  "favoris/fetchByUserId",
+  async (userId, thunkAPI) => {
+    const apiUrl = thunkAPI.getState().config.apiUrl; // Base URL de l'API
+    try {
+      const response = await fetch(`${apiUrl}/favoris/user/${userId}`);
+      const data = await response.json();
 
+      if (response.ok) {
+        return data; // Liste des favoris
+      } else {
+        return thunkAPI.rejectWithValue(data);
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
 
