@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { fetchRecentLocations, fetchAllLocations, fetchLocationById } from '../actions/locationsActions';
+import { fetchRecentLocations, fetchAllLocations, fetchLocationById, deleteLocation, } from '../actions/locationsActions';
 
 
 const initialState = {
@@ -53,7 +53,24 @@ const locationsReducer = createReducer(initialState, (builder) => {
     .addCase(fetchAllLocations.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload; // Stocke l'erreur en cas de problème de fetchAllLocations
-    });
+    })
+
+    // Suppression d’un lieu
+    .addCase(deleteLocation.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    })
+    .addCase(deleteLocation.fulfilled, (state, action) => {
+      state.loading = false;
+      // Supprime le lieu de la liste par son ID
+      state.locations = state.locations.filter(
+        (location) => location.locationId !== action.payload
+      );
+    })
+    .addCase(deleteLocation.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload; // Stocke l'erreur en cas d’échec
+    })
 });
 
 
