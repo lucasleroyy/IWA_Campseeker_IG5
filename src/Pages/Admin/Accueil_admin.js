@@ -2,19 +2,19 @@ import React from 'react';
 import { ScrollView, View,Image, Text, StyleSheet } from 'react-native';
 import ChampRedirection from '../../components/Champ_redirection';
 import { useDispatch } from 'react-redux';
-import { logout } from '../../redux/actions/authActions';
+import { resetStore } from '../../redux/actions/configAction';
+import { persistor } from '../../redux/store';
 
 const AccueilAdmin = ({ navigation }) => {
   const dispatch = useDispatch();
   
 
   const handleLogout = () => {
-    dispatch(logout());
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Connexion' }], // Réinitialise la navigation
-    });
+    dispatch(resetStore());
+    persistor.purge(); // Réinitialise complètement redux-persist
+    navigation.navigate('Connexion');
   };
+  
 
 
     return(
@@ -37,7 +37,7 @@ const AccueilAdmin = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#F6F6F6',
+      backgroundColor: 'rgba(166, 116, 55, 0.1)',
       paddingBottom: 50, 
     },
     scrollContent: {
