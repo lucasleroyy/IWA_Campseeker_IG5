@@ -8,7 +8,7 @@ import favorisReducer from './favorisReducer';
 import flagReducer from './flagsReducer';
 import commentReducer from './commentsReducer';
 import notifsReducer from './notifsReducer';
-
+import supportReducer from './supportReducer';
 const appReducer = combineReducers({
   user: userReducer,
   config: configReducer,
@@ -18,6 +18,7 @@ const appReducer = combineReducers({
   flags: flagReducer,
   comments: commentReducer,
   notifications: notifsReducer,
+  support: supportReducer,
 });
 
 const rootReducer = (state, action) => {
