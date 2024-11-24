@@ -117,23 +117,28 @@ export const createLocation = createAsyncThunk(
 );
 
 
-export const linkEquipmentToLocation = createAsyncThunk(
-  "locations/linkEquipment",
-  async ({ locationId, equipmentId }, thunkAPI) => {
+// Lier plusieurs équipements à un lieu
+export const linkEquipmentsToLocation = createAsyncThunk(
+  "locations/linkEquipments",
+  async ({ locationId, equipmentIds }, thunkAPI) => {
     const apiUrl = thunkAPI.getState().config.apiUrl;
     try {
-      const response = await fetch(`${apiUrl}/locations/${locationId}/equipments/${equipmentId}`, {
+      const response = await fetch(`${apiUrl}/locations/${locationId}/equipments`, {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(equipmentIds),
       });
 
       if (response.ok) {
-        return { locationId, equipmentId };
+        return { locationId, equipmentIds };
       } else {
-        return thunkAPI.rejectWithValue("Erreur lors de l'association de l'équipement.");
+        const error = await response.json();
+        return thunkAPI.rejectWithValue(error.message || "Erreur lors de l'association des équipements.");
       }
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
-

@@ -18,7 +18,7 @@ import Photo from "../components/Photo";
 import { fetchEquipments } from "../redux/actions/equipmentActions";
 import {
   createLocation,
-  linkEquipmentToLocation,
+  linkEquipmentsToLocation,
 } from "../redux/actions/locationsActions";
 import { addPhotoToLocation } from "../redux/actions/photosActions";
 
@@ -35,18 +35,21 @@ const Ajout_lieu = ({ navigation }) => {
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.user.userInfo?.userId);
   const apiUrl = useSelector((state) => state.config.apiUrl);
-  const equipments = useSelector((state) => state.equipments.equipments);
+  const { equipments, loading, error } = useSelector(
+    (state) => state.equipments
+  );
 
   useEffect(() => {
+    // Charger les équipements lors du montage du composant
     dispatch(fetchEquipments());
   }, [dispatch]);
 
-  const handleTagPress = (label) => {
+  const handleTagPress = (equipmentId) => {
     setSelectedTags((prevSelectedTags) => {
-      if (prevSelectedTags.includes(label)) {
-        return prevSelectedTags.filter((tag) => tag !== label);
+      if (prevSelectedTags.includes(equipmentId)) {
+        return prevSelectedTags.filter((tag) => tag !== equipmentId);
       } else {
-        return [...prevSelectedTags, label];
+        return [...prevSelectedTags, equipmentId];
       }
     });
   };
@@ -132,6 +135,7 @@ const Ajout_lieu = ({ navigation }) => {
     console.log("Données du lieu à créer :", locationData);
 
     try {
+      // Création du lieu
       const response = await dispatch(createLocation(locationData));
       console.log("Réponse de création du lieu :", response);
 
@@ -143,19 +147,9 @@ const Ajout_lieu = ({ navigation }) => {
       console.log("Lieu créé avec ID :", locationId);
 
       // Ajout des équipements
-      const equipmentPromises = selectedTags.map((tag) => {
-        const equipment = equipments.find((e) => e.name === tag);
-        if (equipment) {
-          console.log("Ajout de l'équipement :", equipment);
-          return dispatch(
-            linkEquipmentToLocation({
-              locationId,
-              equipmentId: equipment.equipmentId,
-            })
-          );
-        }
-      });
-      await Promise.all(equipmentPromises);
+      await dispatch(
+        linkEquipmentsToLocation({ locationId, equipmentIds: selectedTags })
+      );
 
       // Ajout de la photo
       const formData = new FormData();
@@ -167,6 +161,15 @@ const Ajout_lieu = ({ navigation }) => {
       await dispatch(addPhotoToLocation({ locationId, formData }));
 
       Alert.alert("Succès", "Lieu ajouté avec succès !");
+      setLocationName("");
+      setLocationAddress("");
+      setLocationCity("");
+      setLocationZip("");
+      setLocationDescription("");
+      setLocationLatitude("");
+      setLocationLongitude("");
+      setPhoto(null);
+      setSelectedTags([]);
     } catch (error) {
       console.error("Erreur lors de la soumission :", error);
       Alert.alert("Erreur", error.message || "Impossible d'ajouter le lieu.");
@@ -247,33 +250,22 @@ const Ajout_lieu = ({ navigation }) => {
           />
 
           <Text style={styles.sectionTitle}>ÉQUIPEMENTS :</Text>
-          <View style={styles.Equipementcontainer}>
-            <ChampSelection
-              label="Abrité"
-              isSelected={selectedTags.includes("Abrité")}
-              onPress={() => handleTagPress("Abrité")}
-            />
-            <ChampSelection
-              label="Sanitaire"
-              isSelected={selectedTags.includes("Sanitaire")}
-              onPress={() => handleTagPress("Sanitaire")}
-            />
-            <ChampSelection
-              label="Wifi"
-              isSelected={selectedTags.includes("Wifi")}
-              onPress={() => handleTagPress("Wifi")}
-            />
-            <ChampSelection
-              label="Parking"
-              isSelected={selectedTags.includes("Parking")}
-              onPress={() => handleTagPress("Parking")}
-            />
-            <ChampSelection
-              label="Électricité"
-              isSelected={selectedTags.includes("Électricité")}
-              onPress={() => handleTagPress("Électricité")}
-            />
-          </View>
+          {loading ? (
+            <Text>Chargement des équipements...</Text>
+          ) : error ? (
+            <Text>Erreur : {error}</Text>
+          ) : (
+            <View style={styles.Equipementcontainer}>
+              {equipments.map((equipment) => (
+                <ChampSelection
+                  key={equipment.equipmentId}
+                  label={equipment.name}
+                  isSelected={selectedTags.includes(equipment.equipmentId)}
+                  onPress={() => handleTagPress(equipment.equipmentId)}
+                />
+              ))}
+            </View>
+          )}
           <Bouton label="Ajouter" onClick={handleSubmit} />
         </BoiteVerte>
       </ScrollView>

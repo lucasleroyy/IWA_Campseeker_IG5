@@ -7,6 +7,7 @@ import Bandeau from "../components/Bandeau";
 import ChampRedirection from "../components/Champ_redirection";
 import Photo from "../components/Photo";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import { useFocusEffect } from "@react-navigation/native";
 
 const Page_accueil = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -18,9 +19,12 @@ const Page_accueil = ({ navigation }) => {
   const { userDetails = {} } = useSelector((state) => state.user || {});
   const apiUrl = useSelector((state) => state.config.apiUrl); // Récupère l'URL de l'API
 
-  useEffect(() => {
-    dispatch(fetchRecentLocations());
-  }, [dispatch]);
+  // Charger les lieux récents à chaque fois que la page est affichée
+  useFocusEffect(
+    React.useCallback(() => {
+      dispatch(fetchRecentLocations());
+    }, [dispatch])
+  );
 
   useEffect(() => {
     if (!locations || !Array.isArray(locations)) return;

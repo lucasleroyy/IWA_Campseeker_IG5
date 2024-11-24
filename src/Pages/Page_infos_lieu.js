@@ -16,7 +16,6 @@ import { reportFlag } from "../redux/actions/flagsActions";
 import BoiteVerte from "../components/Boite_verte";
 import Photo from "../components/Photo";
 import Favoris from "../components/Favoris";
-import Champ from "../components/Champ";
 import Carte from "../components/Carte";
 import Champ_selection from "../components/Champ_selection";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -27,7 +26,6 @@ import { fetchUserById } from "../redux/actions/userActions";
 import Bouton from "../components/Bouton";
 
 const Page_info_lieu = ({ route }) => {
-  const { width } = Dimensions.get("window");
   const { id } = route.params; // ID du lieu pour charger les détails
   const dispatch = useDispatch();
 
@@ -42,7 +40,6 @@ const Page_info_lieu = ({ route }) => {
   const users = useSelector((state) => state.user.userDetails);
 
   const [ownerName, setOwnerName] = useState(""); // État pour stocker le nom complet du propriétaire
-
   const [modalVisible, setModalVisible] = useState(false);
   const [reason, setReason] = useState("");
 
@@ -108,10 +105,16 @@ const Page_info_lieu = ({ route }) => {
       });
   };
 
-  const name = locationDetails?.name;
-  const adresse = locationDetails?.adresse;
-  const photo = locationDetails?.photo;
-  const equipments = locationDetails?.equipments || [];
+  const {
+    name,
+    adresse,
+    latitude,
+    longitude,
+    photo,
+    equipments,
+    ville,
+    codePostal,
+  } = locationDetails || {};
 
   const imageUrl = photo?.photoId
     ? `${apiUrl}/photos/get/${photo.photoId}`
@@ -170,6 +173,12 @@ const Page_info_lieu = ({ route }) => {
             <Text style={styles.ownerText}>
               Adresse :{" "}
               {`${adresse}, ${locationDetails.ville}, ${locationDetails.codePostal}`}
+            </Text>
+          )}
+
+          {latitude && longitude && (
+            <Text style={styles.ownerText}>
+              Coordonnées : Latitude {latitude}, Longitude {longitude}
             </Text>
           )}
 

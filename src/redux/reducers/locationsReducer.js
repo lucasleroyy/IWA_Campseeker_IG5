@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { fetchRecentLocations, fetchAllLocations, fetchLocationById, deleteLocation, createLocation, linkEquipmentToLocation } from '../actions/locationsActions';
+import { fetchRecentLocations, fetchAllLocations, fetchLocationById, deleteLocation, createLocation, linkEquipmentsToLocation } from '../actions/locationsActions';
 
 
 const initialState = {
@@ -86,14 +86,19 @@ const locationsReducer = createReducer(initialState, (builder) => {
       state.error = action.payload;
     })
 
-    // Associer un équipement
-    .addCase(linkEquipmentToLocation.pending, (state) => {
+    // Ajouter plusieurs équipements
+    .addCase(linkEquipmentsToLocation.pending, (state) => {
       state.loading = true;
     })
-    .addCase(linkEquipmentToLocation.fulfilled, (state) => {
+    .addCase(linkEquipmentsToLocation.fulfilled, (state, action) => {
       state.loading = false;
+      const { locationId, equipmentIds } = action.payload;
+      const location = state.locations.find((loc) => loc.locationId === locationId);
+      if (location) {
+        location.equipmentIds = equipmentIds; // Met à jour la liste d'équipements
+      }
     })
-    .addCase(linkEquipmentToLocation.rejected, (state, action) => {
+    .addCase(linkEquipmentsToLocation.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });
