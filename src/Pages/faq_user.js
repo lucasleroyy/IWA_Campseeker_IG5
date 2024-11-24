@@ -137,8 +137,9 @@ const FAQUser = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
-    backgroundColor: "#F2EDE5",
+    flex: 1,
+    paddingTop: 50,
+    backgroundColor: "rgba(166, 116, 55, 0.1)",
   },
   title: {
     fontSize: 32,
