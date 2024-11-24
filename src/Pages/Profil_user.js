@@ -57,7 +57,7 @@ const PageProfil = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F6F6F6',
+    backgroundColor: 'rgba(166, 116, 55, 0.1)',
     paddingBottom: 50, 
   },
   scrollContent: {

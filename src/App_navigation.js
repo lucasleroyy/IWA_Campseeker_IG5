@@ -46,23 +46,27 @@ const AppNavigator = () => {
         <Stack.Screen
           name="PageAccueil"
           component={PageAccueil}
-          options={{ headerShown: false }}
+          options={{ headerShown: false,
+            gestureEnabled: true, animationEnabled: false,}}
         />
 
         <Stack.Screen
           name="AjouterLieu"
           component={AjoutLieu}
-          options={{ headerShown: false }}
+          options={{ headerShown: false,
+            gestureEnabled: true, animationEnabled: false, }}
         />
         <Stack.Screen
           name="PageFavoris"
           component={PageFavoris}
-          options={{ headerShown: false }}
+          options={{ headerShown: false,
+            gestureEnabled: true, animationEnabled: false, }}
         />
         <Stack.Screen
           name="ProfilUser"
           component={ProfilUser}
-          options={{ headerShown: false }}
+          options={{ headerShown: false,
+            gestureEnabled: true, animationEnabled: false, }}
         />
 
         <Stack.Screen
