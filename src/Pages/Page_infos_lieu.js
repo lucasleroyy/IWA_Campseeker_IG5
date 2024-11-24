@@ -21,11 +21,18 @@ import Champ_selection from "../components/Champ_selection";
 import { MaterialIcons } from "@expo/vector-icons";
 import Scroll_horizontal from "../components/Scroll_horizontal";
 import Commentaire from "../components/Commentaire";
-import { fetchCommentsByLocationId } from "../redux/actions/commentsActions";
+import {
+  fetchCommentsByLocationId,
+  createComment,
+} from "../redux/actions/commentsActions";
 import { fetchUserById } from "../redux/actions/userActions";
 import Bouton from "../components/Bouton";
 
 const Page_info_lieu = ({ route }) => {
+
+  const screenWidth = Dimensions.get("window").width; // Largeur de l'écran
+  const boiteVerteWidth = screenWidth * 0.9;
+
   const { id } = route.params; // ID du lieu pour charger les détails
   const dispatch = useDispatch();
 
@@ -43,12 +50,27 @@ const Page_info_lieu = ({ route }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [reason, setReason] = useState("");
 
+  const [commentModalVisible, setCommentModalVisible] = useState(false);
+  const [commentText, setCommentText] = useState("");
+  const [rating, setRating] = useState(0);
+
   useEffect(() => {
     if (id) {
       dispatch(fetchLocationById(id));
-      dispatch(fetchCommentsByLocationId(id));
+      dispatch(fetchCommentsByLocationId(id)).then((response) => {
+        if (response.payload) {
+          const userIds = [
+            ...new Set(response.payload.map((comment) => comment.userId)),
+          ];
+          userIds.forEach((userId) => {
+            if (!users[userId]) {
+              dispatch(fetchUserById(userId));
+            }
+          });
+        }
+      });
     }
-  }, [id, dispatch]);
+  }, [id, dispatch, users]);
 
   useEffect(() => {
     if (locationDetails?.userId) {
@@ -102,6 +124,32 @@ const Page_info_lieu = ({ route }) => {
       .catch((error) => {
         console.error("Erreur lors du signalement :", error);
         Alert.alert("Erreur", "Impossible de signaler le lieu.");
+      });
+  };
+
+  const handleAddComment = () => {
+    if (!commentText.trim() || rating === 0) {
+      Alert.alert("Erreur", "Veuillez saisir un commentaire et une note.");
+      return;
+    }
+
+    dispatch(
+      createComment({
+        userId,
+        locationId: id,
+        commentText,
+        rating,
+      })
+    )
+      .then(() => {
+        Alert.alert("Succès", "Votre commentaire a été ajouté.");
+        setCommentModalVisible(false);
+        setCommentText("");
+        setRating(0);
+      })
+      .catch((error) => {
+        console.error("Erreur lors de l'ajout du commentaire :", error);
+        Alert.alert("Erreur", "Impossible d'ajouter le commentaire.");
       });
   };
 
@@ -204,28 +252,33 @@ const Page_info_lieu = ({ route }) => {
               Soyez le premier à laisser un commentaire sous ce lieu !
             </Text>
           ) : (
-            <Scroll_horizontal
-              items={comments.map((comment) => {
-                const user = users?.[comment.userId];
-                const userName = user
-                  ? `${user.firstName} ${user.lastName}`.trim()
-                  : "Utilisateur inconnu";
+              <Scroll_horizontal
+                items={comments.map((comment) => {
+                  const user = users?.[comment.userId];
+                  const userName = user
+                    ? `${user.firstName} ${user.lastName}`.trim()
+                    : "Utilisateur inconnu";
 
-                return (
-                  <Commentaire
-                    key={comment.commentId}
-                    pseudo={userName || "Utilisateur inconnu"}
-                    note={comment.rating || 0}
-                    texte={comment.commentText || "Pas de texte"}
-                  />
-                );
-              })}
-            />
+                  return (
+                    <Commentaire
+                      key={comment.commentId}
+                      pseudo={userName || "Utilisateur inconnu"}
+                      note={comment.rating || 0}
+                      texte={comment.commentText || "Pas de texte"}
+                    />
+                  );
+                })}
+                parentWidth={boiteVerteWidth}
+              />
           )}
 
-          <Bouton label="Ajouter un commentaire" onClick={alert} />
+          <Bouton
+            label="Ajouter un commentaire"
+            onClick={() => setCommentModalVisible(true)}
+          />
         </BoiteVerte>
       </ScrollView>
+
       {/* Modal pour signaler un lieu */}
       <Modal visible={modalVisible} animationType="slide" transparent={true}>
         <View style={styles.modalContainer}>
@@ -250,6 +303,54 @@ const Page_info_lieu = ({ route }) => {
               <TouchableOpacity
                 style={[styles.modalButton, styles.submitButton]}
                 onPress={submitFlag}
+              >
+                <Text style={styles.submitButtonText}>Envoyer</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Modale pour ajouter un commentaire */}
+      <Modal
+        visible={commentModalVisible}
+        animationType="slide"
+        transparent={true}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Ajouter un commentaire</Text>
+            <TextInput
+              style={styles.textInput}
+              placeholder="Votre commentaire"
+              value={commentText}
+              onChangeText={setCommentText}
+            />
+            <View style={styles.ratingContainer}>
+              {[1, 2, 3, 4, 5].map((star) => (
+                <TouchableOpacity key={star} onPress={() => setRating(star)}>
+                  <MaterialIcons
+                    name={star <= rating ? "star" : "star-border"}
+                    size={30}
+                    color="#F25C05"
+                  />
+                </TouchableOpacity>
+              ))}
+            </View>
+            <View style={styles.modalButtons}>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.cancelButton]}
+                onPress={() => {
+                  setCommentModalVisible(false);
+                  setCommentText("");
+                  setRating(0);
+                }}
+              >
+                <Text style={styles.cancelButtonText}>Annuler</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.submitButton]}
+                onPress={handleAddComment}
               >
                 <Text style={styles.submitButtonText}>Envoyer</Text>
               </TouchableOpacity>
@@ -378,6 +479,12 @@ const styles = StyleSheet.create({
   submitButtonText: {
     color: "#fff",
     fontWeight: "bold",
+  },
+  ratingContainer: {
+    flexDirection: "row", // Assure que les étoiles sont disposées en ligne
+    justifyContent: "center", // Centre les étoiles horizontalement
+    alignItems: "center", // Centre les étoiles verticalement
+    marginBottom: 20, // Espacement avec les autres éléments
   },
 });
 

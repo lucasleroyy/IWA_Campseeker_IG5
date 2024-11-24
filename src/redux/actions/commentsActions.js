@@ -25,4 +25,33 @@ export const fetchCommentsByLocationId = createAsyncThunk(
       }
     }
   );
+
+  // Action pour créer un commentaire
+export const createComment = createAsyncThunk(
+  "comments/create",
+  async (commentData, thunkAPI) => {
+    const apiUrl = thunkAPI.getState().config.apiUrl;
+
+    try {
+      const response = await fetch(`${apiUrl}/comments`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(commentData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        return data; // Retourne le commentaire créé
+      } else {
+        return thunkAPI.rejectWithValue(data); // Retourne une erreur
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message); // Gestion des erreurs réseau
+    }
+  }
+);
+
   
