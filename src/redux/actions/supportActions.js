@@ -68,3 +68,54 @@ export const deleteQuestion = createAsyncThunk(
       }
     }
   );
+
+
+export const fetchAnsweredQuestions = createAsyncThunk(
+  "support/fetchAnsweredQuestions",
+  async (_, thunkAPI) => {
+    const apiUrl = thunkAPI.getState().config.apiUrl; // URL de l'API
+    try {
+      const response = await fetch(`${apiUrl}/support/answered`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Erreur lors de la récupération des questions répondues.");
+      }
+
+      const data = await response.json();
+      return data; // Retourne les questions répondues
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+// Action pour créer une nouvelle question
+export const createQuestion = createAsyncThunk(
+    "support/createQuestion",
+    async ({ userId, question }, thunkAPI) => {
+      const apiUrl = thunkAPI.getState().config.apiUrl; // Récupération de l'URL de l'API
+      try {
+        const response = await fetch(`${apiUrl}/support`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId, question }),
+        });
+  
+        if (!response.ok) {
+          throw new Error("Erreur lors de la création de la question.");
+        }
+  
+        const data = await response.json();
+        return data; // Retourne la question créée
+      } catch (error) {
+        return thunkAPI.rejectWithValue(error.message);
+      }
+    }
+  );

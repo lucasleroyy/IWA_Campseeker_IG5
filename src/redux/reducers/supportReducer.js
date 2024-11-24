@@ -1,67 +1,80 @@
-import { createReducer } from "@reduxjs/toolkit";
-import { fetchOpenQuestions, answerQuestion, deleteQuestion } from "../actions/supportActions";
+// src/redux/reducers/supportReducer.js
+import { createSlice } from "@reduxjs/toolkit";
+import { fetchOpenQuestions, answerQuestion, deleteQuestion, fetchAnsweredQuestions, createQuestion } from "../actions/supportActions";
 
 const initialState = {
-  openQuestions: [], // Liste des questions ouvertes
-  loading: false,    // État de chargement
-  error: null,       // Erreur potentielle
+  openQuestions: [],
+  answeredQuestions: [], // Ajout des questions répondues
+  loading: false,
+  error: null,
 };
 
-const supportReducer = createReducer(initialState, (builder) => {
-  builder
-    // Pendant le chargement
-    .addCase(fetchOpenQuestions.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    })
-    // Succès de la récupération
-    .addCase(fetchOpenQuestions.fulfilled, (state, action) => {
-      state.loading = false;
-      state.openQuestions = action.payload; // Met à jour les questions ouvertes
-    })
-    // Échec de la récupération
-    .addCase(fetchOpenQuestions.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload; // Enregistre l'erreur
-    })
-
-    .addCase(answerQuestion.pending, (state) => {
+const supportSlice = createSlice({
+  name: "support",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    // Récupérer les questions ouvertes
+    builder
+      .addCase(fetchOpenQuestions.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(answerQuestion.fulfilled, (state, action) => {
+      .addCase(fetchOpenQuestions.fulfilled, (state, action) => {
         state.loading = false;
-  
-        // Met à jour la question dans la liste
-        const updatedQuestion = action.payload;
-        const index = state.openQuestions.findIndex(
-          (question) => question.questionId === updatedQuestion.questionId
-        );
-        if (index !== -1) {
-          state.openQuestions[index] = updatedQuestion; // Remplace la question par la version mise à jour
-        }
+        state.openQuestions = action.payload;
       })
-      .addCase(answerQuestion.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-
-          // Delete a question
-    .addCase(deleteQuestion.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(deleteQuestion.fulfilled, (state, action) => {
-        state.loading = false;
-        const deletedQuestionId = action.payload;
-        state.openQuestions = state.openQuestions.filter(
-          (question) => question.questionId !== deletedQuestionId
-        );
-      })
-      .addCase(deleteQuestion.rejected, (state, action) => {
+      .addCase(fetchOpenQuestions.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
+
+    // Répondre à une question
+    builder
+      .addCase(answerQuestion.fulfilled, (state, action) => {
+        state.openQuestions = state.openQuestions.filter(
+          (question) => question.questionId !== action.payload.questionId
+        );
+        state.answeredQuestions.push(action.payload); // Ajouter la question répondue à la liste
+      });
+
+    // Supprimer une question
+    builder
+      .addCase(deleteQuestion.fulfilled, (state, action) => {
+        state.openQuestions = state.openQuestions.filter(
+          (question) => question.questionId !== action.payload
+        );
+      });
+
+    // Récupérer les questions répondues
+    builder
+      .addCase(fetchAnsweredQuestions.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchAnsweredQuestions.fulfilled, (state, action) => {
+        state.loading = false;
+        state.answeredQuestions = action.payload; // Stocker les questions répondues
+      })
+      .addCase(fetchAnsweredQuestions.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // Create Question
+    builder
+    .addCase(createQuestion.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    })
+    .addCase(createQuestion.fulfilled, (state, action) => {
+      state.loading = false;
+      state.openQuestions.push(action.payload); // Ajoute la nouvelle question aux questions ouvertes
+    })
+    .addCase(createQuestion.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+  },
 });
 
-export default supportReducer;
+export default supportSlice.reducer;
