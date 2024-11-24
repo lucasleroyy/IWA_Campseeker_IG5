@@ -43,6 +43,9 @@ const Page_info_lieu = ({ route }) => {
 
   const [ownerName, setOwnerName] = useState(""); // État pour stocker le nom complet du propriétaire
 
+  const [modalVisible, setModalVisible] = useState(false);
+  const [reason, setReason] = useState("");
+
   useEffect(() => {
     if (id) {
       dispatch(fetchLocationById(id));
@@ -105,6 +108,15 @@ const Page_info_lieu = ({ route }) => {
       });
   };
 
+  const name = locationDetails?.name;
+  const adresse = locationDetails?.adresse;
+  const photo = locationDetails?.photo;
+  const equipments = locationDetails?.equipments || [];
+
+  const imageUrl = photo?.photoId
+    ? `${apiUrl}/photos/get/${photo.photoId}`
+    : null;
+
   if (loading) {
     return (
       <View style={styles.container}>
@@ -129,12 +141,6 @@ const Page_info_lieu = ({ route }) => {
     );
   }
 
-  const { name, adresse, photo, equipments } = locationDetails;
-
-  const imageUrl = photo?.photoId
-    ? `${apiUrl}/photos/get/${photo.photoId}`
-    : null;
-
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -155,16 +161,17 @@ const Page_info_lieu = ({ route }) => {
             )}
           </View>
 
-
           {/* Affichage du nom complet du propriétaire */}
           {ownerName && (
             <Text style={styles.ownerText}>Propriétaire : {ownerName}</Text>
           )}
 
-          {(adresse && locationDetails.ville && locationDetails.codePostal) && (
-            <Text style={styles.ownerText}>Adresse : {`${adresse}, ${locationDetails.ville}, ${locationDetails.codePostal}`}</Text>
+          {adresse && locationDetails.ville && locationDetails.codePostal && (
+            <Text style={styles.ownerText}>
+              Adresse :{" "}
+              {`${adresse}, ${locationDetails.ville}, ${locationDetails.codePostal}`}
+            </Text>
           )}
-
 
           <Carte
             ville={`${adresse}, ${locationDetails.ville}`}
@@ -183,30 +190,64 @@ const Page_info_lieu = ({ route }) => {
           <Text style={styles.sectionTitle}>COMMENTAIRES :</Text>
           {commentsLoading ? (
             <Text>Chargement des commentaires...</Text>
+          ) : comments.length === 0 ? (
+            <Text style={styles.noCommentsText}>
+              Soyez le premier à laisser un commentaire sous ce lieu !
+            </Text>
           ) : (
-            <>
-              <Scroll_horizontal
-                items={comments.map((comment) => {
-                  const user = users?.[comment.userId];
-                  const userName = user
-                    ? `${user.firstName} ${user.lastName}`.trim()
-                    : "Utilisateur inconnu";
+            <Scroll_horizontal
+              items={comments.map((comment) => {
+                const user = users?.[comment.userId];
+                const userName = user
+                  ? `${user.firstName} ${user.lastName}`.trim()
+                  : "Utilisateur inconnu";
 
-                  return (
-                    <Commentaire
-                      key={comment.commentId}
-                      pseudo={userName || "Utilisateur inconnu"}
-                      note={comment.rating || 0}
-                      texte={comment.commentText || "Pas de texte"}
-                    />
-                  );
-                })}
-              />
-            </>
+                return (
+                  <Commentaire
+                    key={comment.commentId}
+                    pseudo={userName || "Utilisateur inconnu"}
+                    note={comment.rating || 0}
+                    texte={comment.commentText || "Pas de texte"}
+                  />
+                );
+              })}
+            />
           )}
-          <Bouton label="Ajouter un commentaire"  onClick={alert}/>
+
+          <Bouton label="Ajouter un commentaire" onClick={alert} />
         </BoiteVerte>
       </ScrollView>
+      {/* Modal pour signaler un lieu */}
+      <Modal visible={modalVisible} animationType="slide" transparent={true}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Signaler ce lieu</Text>
+            <TextInput
+              style={styles.textInput}
+              placeholder="Raison du signalement"
+              value={reason}
+              onChangeText={setReason}
+            />
+            <View style={styles.modalButtons}>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.cancelButton]}
+                onPress={() => {
+                  setModalVisible(false);
+                  setReason("");
+                }}
+              >
+                <Text style={styles.cancelButtonText}>Annuler</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.submitButton]}
+                onPress={submitFlag}
+              >
+                <Text style={styles.submitButtonText}>Envoyer</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -263,12 +304,71 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 20,
-    color: "#000",
+    color: "#F25C05",
   },
   ownerText: {
     fontSize: 18,
     marginHorizontal: "5%",
     marginTop: 10,
+  },
+  noCommentsText: {
+    fontSize: 18,
+    color: "#000",
+    textAlign: "center",
+    marginVertical: 10,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  modalContent: {
+    width: "80%",
+    padding: 20,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  textInput: {
+    width: "100%",
+    height: 40,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginBottom: 20,
+  },
+  modalButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  modalButton: {
+    flex: 1,
+    marginHorizontal: 5,
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  cancelButton: {
+    backgroundColor: "#ccc",
+  },
+  submitButton: {
+    backgroundColor: "#F25C05",
+  },
+  cancelButtonText: {
+    color: "#000",
+    fontWeight: "bold",
+  },
+  submitButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
 });
 

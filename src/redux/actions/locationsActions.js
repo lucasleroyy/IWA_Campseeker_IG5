@@ -83,3 +83,57 @@ export const deleteLocation = createAsyncThunk(
     }
   }
 );
+
+export const createLocation = createAsyncThunk(
+  "locations/create",
+  async (locationData, thunkAPI) => {
+    const apiUrl = thunkAPI.getState().config.apiUrl;
+    console.log("API URL pour créer le lieu :", apiUrl);
+    console.log("Données envoyées :", locationData);
+
+    try {
+      const response = await fetch(`${apiUrl}/locations`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(locationData),
+      });
+
+      const data = await response.json();
+      console.log("Réponse brute du serveur :", data);
+
+      if (response.ok) {
+        return data; // Retourne les détails du lieu créé
+      } else {
+        console.error("Erreur API :", data);
+        return thunkAPI.rejectWithValue(data);
+      }
+    } catch (error) {
+      console.error("Erreur réseau :", error.message);
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+
+export const linkEquipmentToLocation = createAsyncThunk(
+  "locations/linkEquipment",
+  async ({ locationId, equipmentId }, thunkAPI) => {
+    const apiUrl = thunkAPI.getState().config.apiUrl;
+    try {
+      const response = await fetch(`${apiUrl}/locations/${locationId}/equipments/${equipmentId}`, {
+        method: "POST",
+      });
+
+      if (response.ok) {
+        return { locationId, equipmentId };
+      } else {
+        return thunkAPI.rejectWithValue("Erreur lors de l'association de l'équipement.");
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
