@@ -142,3 +142,21 @@ export const linkEquipmentsToLocation = createAsyncThunk(
     }
   }
 );
+
+
+// Action to fetch locations by user ID
+export const fetchLocationsByUserId = createAsyncThunk(
+  "locations/fetchByUserId",
+  async (userId, { rejectWithValue, getState }) => {
+    const apiUrl = getState().config.apiUrl; // Fetch the API URL from the state
+    try {
+      const response = await fetch(`${apiUrl}/locations/user/${userId}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch locations for the user.");
+      }
+      return await response.json();
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
