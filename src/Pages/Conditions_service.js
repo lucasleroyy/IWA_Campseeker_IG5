@@ -64,12 +64,12 @@ const Conditions_service = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F6F6F6',
+    backgroundColor: "rgba(166, 116, 55, 0.1)",
     paddingBottom: 50, 
   },
   scrollContent: {
     flexGrow: 1,
-    paddingVertical: '15%',
+    paddingVertical: '5%',
     alignItems: 'center',
   },
   title: {
