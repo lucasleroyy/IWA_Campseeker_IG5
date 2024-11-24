@@ -25,7 +25,7 @@ export const fetchCommentsByLocationId = createAsyncThunk(
       }
     }
   );
-<<<<<<< HEAD
+
 
   // Action pour créer un commentaire
 export const createComment = createAsyncThunk(
@@ -51,7 +51,10 @@ export const createComment = createAsyncThunk(
       }
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message); // Gestion des erreurs réseau
-=======
+    }
+  }
+);
+
   
 // Action pour supprimer un commentaire par ID
 export const deleteComment = createAsyncThunk(
@@ -74,14 +77,13 @@ export const deleteComment = createAsyncThunk(
     } catch (error) {
       console.error("Network error while deleting comment:", error.message); // Debug
       return thunkAPI.rejectWithValue(error.message);
->>>>>>> dev
+
     }
   }
 );
 
-<<<<<<< HEAD
-  
-=======
+
+
 export const fetchCommentById = createAsyncThunk(
   'comments/fetchById',
   async (commentId, thunkAPI) => {
@@ -98,4 +100,4 @@ export const fetchCommentById = createAsyncThunk(
     }
   }
 );
->>>>>>> dev
+
