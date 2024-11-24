@@ -1,3 +1,4 @@
+// userReducer.js
 import { createReducer } from '@reduxjs/toolkit';
 import { authenticateUser } from '../actions/authActions';
 import { fetchUserById } from '../actions/userActions';
@@ -19,7 +20,7 @@ const userReducer = createReducer(initialState, (builder) => {
     })
     .addCase(authenticateUser.fulfilled, (state, action) => {
       state.isLoggedIn = true;
-      state.userInfo = action.payload.userInfo; // Stocke userId et token
+      state.userInfo = action.payload.userInfo; // Stocke userId, token, email
       state.loading = false;
       state.error = null;
     })
@@ -31,26 +32,23 @@ const userReducer = createReducer(initialState, (builder) => {
     })
     .addCase('LOGOUT', (state) => {
       return {
-      ...initialState,
-    userDetails: {},
+        ...initialState,
+        userDetails: {},
       };
     })
-
     // Récupération des détails d'un utilisateur
-    .addCase(fetchUserById.pending, (state, action) => {
+    .addCase(fetchUserById.pending, (state) => {
       state.loading = true;
     })
     .addCase(fetchUserById.fulfilled, (state, action) => {
-      if (!state.userDetails[action.payload.userId]) {
-        state.userDetails = {
-          ...state.userDetails,
-          [action.payload.userId]: action.payload, // Stocke uniquement si l'utilisateur n'est pas déjà chargé
-        };
-      }
+      state.userDetails = {
+        ...state.userDetails,
+        [action.payload.userId]: action.payload, // Stocke les détails de l'utilisateur
+      };
       state.loading = false;
-    })    
+    })
     .addCase(fetchUserById.rejected, (state, action) => {
-      console.error("Error fetching user:", action.payload); // Log des erreurs
+      console.error('Error fetching user:', action.payload); // Log des erreurs
       state.loading = false;
     });
 });

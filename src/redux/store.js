@@ -1,12 +1,12 @@
+// store.js
 import { configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Remplacez storage par AsyncStorage
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import appReducer from './reducers/indexReducer';
-import thunk from 'redux-thunk';
 
 const persistConfig = {
   key: 'root',
-  storage: AsyncStorage, // Utilisez AsyncStorage pour React Native
+  storage: AsyncStorage,
   whitelist: ['user', 'config'], // Définir les reducers à persister
 };
 
@@ -21,6 +21,5 @@ export const store = configureStore({
       },
     }),
 });
-
 
 export const persistor = persistStore(store);

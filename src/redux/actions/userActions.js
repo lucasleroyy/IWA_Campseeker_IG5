@@ -1,3 +1,4 @@
+// userActions.js
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 export const fetchUserById = createAsyncThunk(
@@ -12,7 +13,8 @@ export const fetchUserById = createAsyncThunk(
           userId: data.userId,
           firstName: data.firstName,
           lastName: data.lastName,
-          role: data.role, // Ajoute le rôle ici
+          email: data.email, // Ajoutez l'email si nécessaire
+          role: data.role,
         };
       } else {
         return thunkAPI.rejectWithValue(data);
