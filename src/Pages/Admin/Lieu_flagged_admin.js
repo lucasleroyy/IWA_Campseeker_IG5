@@ -1,26 +1,29 @@
 import React, { useEffect } from "react";
-import { View, ScrollView, StyleSheet, Dimensions, Text, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Text, ScrollView, Alert, TouchableOpacity } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchLocationById } from "../../redux/actions/locationsActions";
 import { fetchCommentsByLocationId } from "../../redux/actions/commentsActions";
 import { deleteLocation } from "../../redux/actions/locationsActions";
+import { updateFlag } from "../../redux/actions/flagsActions";
+import { fetchUserById } from "../../redux/actions/userActions";
 import BoiteVerte from "../../components/Boite_verte";
 import Champ from "../../components/Champ";
 import Photo from "../../components/Photo";
+import Bouton from "../../components/Bouton";
 import Champ_selection from "../../components/Champ_selection";
 import Carte from "../../components/Carte";
 import Scroll_horizontal from "../../components/Scroll_horizontal";
 import Commentaire from "../../components/Commentaire";
 
-const LieuAdmin = ({ route, navigation }) => {
-  const { width } = Dimensions.get("window");
-  const { id } = route.params; // ID du lieu pour charger les détails
+const LieuFlaggedAdmin = ({ route, navigation }) => {
+  const { id, flagId } = route.params; // ID du lieu pour charger les détails
   const dispatch = useDispatch();
   
   const { locationDetails, loading, error } = useSelector((state) => state.locations);
   const apiUrl = useSelector((state) => state.config.apiUrl);
   const { comments, loading: commentsLoading } = useSelector((state) => state.comments);
   const users = useSelector((state) => state.user.userDetails);
+  const userId = useSelector((state) => state.user.userInfo?.userId);
 
   useEffect(() => {
     if (id) {
@@ -29,17 +32,52 @@ const LieuAdmin = ({ route, navigation }) => {
     }
   }, [id, dispatch]);
 
-  const handleDeleteLocation = () => {
-    dispatch(deleteLocation(id))
-      .then(() => {
-        Alert.alert("Succès", "Lieu supprimé avec succès.");
-        navigation.goBack();
-      })
-      .catch((error) => {
-        console.error("Erreur lors de la suppression :", error);
-        Alert.alert("Erreur", "Impossible de supprimer le lieu.");
-      });
+  const handleDeleteLocation = (locationId, flagId, userId) => {
+    Alert.alert(
+      "Confirmation",
+      "Voulez-vous vraiment supprimer ce lieu ?",
+      [
+        { text: "Annuler", style: "cancel" },
+        {
+          text: "Supprimer",
+          onPress: () => {
+            dispatch(deleteLocation(locationId))
+              .unwrap()
+              .then(() => {
+                // Met à jour le flag après la suppression
+                dispatch(
+                  updateFlag({
+                    flagId,
+                    status: "resolved", // Statut mis à jour
+                    reviewedBy: userId, // Administrateur ayant résolu le flag
+                  })
+                )
+                  .unwrap()
+                  .then(() => {
+                    Alert.alert(
+                      "Succès",
+                      "Lieu supprimé et flag mis à jour avec succès."
+                    );
+                    navigation.navigate("AccueilAdmin");
+                  })
+                  .catch((error) => {
+                    console.error("Erreur lors de la mise à jour du flag :", error);
+                    Alert.alert(
+                      "Erreur",
+                      "Le lieu a été supprimé, mais la mise à jour du flag a échoué."
+                    );
+                  });
+              })
+              .catch((error) => {
+                console.error("Erreur lors de la suppression :", error);
+                Alert.alert("Erreur", "Impossible de supprimer le lieu.");
+              });
+          },
+        },
+      ]
+    );
   };
+  
 
   if (loading) {
     return (
@@ -104,8 +142,14 @@ const LieuAdmin = ({ route, navigation }) => {
             />
           )}
         </BoiteVerte>
-        <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteLocation}>
-          <Text style={styles.deleteButtonText}>Supprimer le lieu</Text>
+        <TouchableOpacity >
+          <Bouton
+            style={styles.deleteButton}
+            label="Supprimer ce lieu"
+            onClick={() =>
+            handleDeleteLocation(locationDetails.locationId, flagId, userId)
+            }
+            />
         </TouchableOpacity>
       </ScrollView>
     </View>
@@ -171,4 +215,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LieuAdmin;
+export default LieuFlaggedAdmin;
