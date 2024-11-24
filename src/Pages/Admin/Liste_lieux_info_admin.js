@@ -85,7 +85,7 @@ const LieuxSignales = ({ navigation, apiUrl }) => {
             key={location.locationId}
             style={styles.locationContainer}
             onPress={() =>{
-              navigation.navigate("LieuAdmin", { id: location.locationId });
+              navigation.navigate("LieuFlaggedAdmin", { id: location.locationId, flagId: location.flagId });
             }
             }
           >

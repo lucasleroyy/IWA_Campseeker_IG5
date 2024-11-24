@@ -26,3 +26,44 @@ export const fetchCommentsByLocationId = createAsyncThunk(
     }
   );
   
+// Action pour supprimer un commentaire par ID
+export const deleteComment = createAsyncThunk(
+  "comments/delete",
+  async (commentId, thunkAPI) => {
+    const apiUrl = thunkAPI.getState().config.apiUrl;
+
+    try {
+      const response = await fetch(`${apiUrl}/comments/${commentId}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error deleting comment:", errorData); // Debug
+        return thunkAPI.rejectWithValue(errorData.message || "Erreur lors de la suppression du commentaire.");
+      }
+
+      return commentId; // Retourne l'ID du commentaire supprimé
+    } catch (error) {
+      console.error("Network error while deleting comment:", error.message); // Debug
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const fetchCommentById = createAsyncThunk(
+  'comments/fetchById',
+  async (commentId, thunkAPI) => {
+    const apiUrl = thunkAPI.getState().config.apiUrl;
+    try {
+      const response = await fetch(`${apiUrl}/comments/${commentId}`);
+      if (!response.ok) {
+        throw new Error('Erreur lors de la récupération du commentaire.');
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);

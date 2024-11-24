@@ -14,11 +14,13 @@ import PolitiqueConfidentialite from "./pages/Politique_confidentialite";
 import AccueilAdmin from "./pages/Admin/Accueil_admin";
 import ListeLieuxCommentaireAdmin from "./pages/Admin/Liste_lieux_commentaire_admin";
 import CommentaireAdmin from "./pages/Admin/Commentaire_admin";
+import CommentaireFlaggedAdmin from "./pages/Admin/Commentaire_Flagged_admin";
 import ListeLieuxAdminInfo from "./pages/Admin/Liste_lieux_info_admin";
 import LieuAdmin from "./pages/Admin/Lieu_admin";
+import LieuFlaggedAdmin from "./pages/Admin/Lieu_flagged_admin";
 import SupportAdmin from "./pages/Admin/Support_admin";
 import Parametres from "./pages/Parametres";
-import FAQUser from "./pages/faq_user"; // Import correct pour faq_user
+import FAQUser from "./pages/faq_user";
 import MonCompteUser from "./pages/Mon_compte_user";
 import GestionEquipement from "./pages/Admin/Equipements_admin";
 import Notification from "./pages/Notifications";
@@ -208,6 +210,15 @@ const AppNavigator = () => {
           }}
         />
         <Stack.Screen
+          name="CommentaireFlaggedAdmin"
+          component={CommentaireFlaggedAdmin}
+          options={{
+            headerShown: true,
+            headerBackTitle: "Retour",
+            title: "Commentaire du lieu",
+          }}
+        />
+        <Stack.Screen
           name="ListeLieuxInfoAdmin"
           component={ListeLieuxAdminInfo}
           options={{
@@ -222,7 +233,16 @@ const AppNavigator = () => {
           options={{
             headerShown: true,
             headerBackTitle: "Retour",
-            title: "Commentaire du lieu",
+            title: "Detail du lieu",
+          }}
+        />
+        <Stack.Screen
+          name="LieuFlaggedAdmin"
+          component={LieuFlaggedAdmin}
+          options={{
+            headerShown: true,
+            headerBackTitle: "Retour",
+            title: "Detail du lieu",
           }}
         />
         <Stack.Screen
