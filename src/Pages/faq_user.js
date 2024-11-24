@@ -135,11 +135,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#F2EDE5',
   },
   title: {
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: 'bold',
-    color: '#D2691E',
     textAlign: 'center',
     marginBottom: 20,
+    color: '#F25C05',
   },
   questionContainer: {
     flexDirection: 'row',

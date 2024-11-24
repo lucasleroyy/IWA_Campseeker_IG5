@@ -35,7 +35,7 @@ const AppNavigator = () => {
         initialRouteName="Connexion"
         screenOptions={{
           animationEnabled: true,
-          gestureEnabled: true, // Doit être vrai pour activer les gestes de navigation
+          gestureEnabled: false, // Doit être vrai pour activer les gestes de navigation
           headerStyle: { backgroundColor: "#fff" },
           headerTintColor: "#333",
           headerBackTitleStyle: { fontSize: 14 },
@@ -76,7 +76,8 @@ const AppNavigator = () => {
           options={{
             headerShown: true,
             headerBackTitle: "Retour",
-            title: "Connexion",
+            title: "Inscription",
+            gestureEnabled: true,
           }}
         />
 
@@ -87,6 +88,7 @@ const AppNavigator = () => {
             headerShown: true,
             headerBackTitle: "Retour",
             title: "Détail du lieu",
+            gestureEnabled: true,
           }}
         />
         <Stack.Screen
@@ -96,6 +98,7 @@ const AppNavigator = () => {
             headerShown: true,
             headerBackTitle: "Retour",
             title: "Conditions de Service",
+            gestureEnabled: true,
           }}
         />
         <Stack.Screen
@@ -105,6 +108,7 @@ const AppNavigator = () => {
             headerShown: true,
             headerBackTitle: "Retour",
             title: "Paramètres",
+            gestureEnabled: true,
           }}
         />
         <Stack.Screen
@@ -114,6 +118,7 @@ const AppNavigator = () => {
             headerShown: true,
             headerBackTitle: "Retour",
             title: "Mes lieux",
+            gestureEnabled: true,
           }}
         />
         <Stack.Screen
@@ -123,6 +128,7 @@ const AppNavigator = () => {
             headerShown: true,
             headerBackTitle: "Retour",
             title: "Détail du lieu",
+            gestureEnabled: true,
           }}
         />
         <Stack.Screen
@@ -132,6 +138,7 @@ const AppNavigator = () => {
             headerShown: true,
             headerBackTitle: "Retour",
             title: "Recherche",
+            gestureEnabled: true,
           }}
         />
         <Stack.Screen
@@ -141,6 +148,7 @@ const AppNavigator = () => {
             headerShown: true,
             headerBackTitle: "Retour",
             title: "Politique de Confidentialité",
+            gestureEnabled: true,
           }}
         />
 
@@ -151,6 +159,7 @@ const AppNavigator = () => {
             headerShown: true,
             headerBackTitle: "Retour",
             title: "Mon Compte",
+            gestureEnabled: true,
           }}
         />
 
@@ -161,6 +170,7 @@ const AppNavigator = () => {
             headerShown: true,
             headerBackTitle: "Retour",
             title: "Modifier le lieu",
+            gestureEnabled: true,
           }}
         />
 
@@ -172,6 +182,7 @@ const AppNavigator = () => {
             headerShown: true,
             headerBackTitle: "Retour",
             title: "F.A.Q",
+            gestureEnabled: true,
           }}
         />
 
@@ -187,6 +198,7 @@ const AppNavigator = () => {
             headerShown: true,
             headerBackTitle: "Retour",
             title: "Les Lieux",
+            gestureEnabled: true,
           }}
         />
         <Stack.Screen
@@ -196,6 +208,7 @@ const AppNavigator = () => {
             headerShown: true,
             headerBackTitle: "Retour",
             title: "Notifications",
+            gestureEnabled: true,
           }}
         />
         <Stack.Screen
@@ -205,6 +218,7 @@ const AppNavigator = () => {
             headerShown: true,
             headerBackTitle: "Retour",
             title: "Commentaire du lieu",
+            gestureEnabled: true,
           }}
         />
         <Stack.Screen
@@ -214,6 +228,7 @@ const AppNavigator = () => {
             headerShown: true,
             headerBackTitle: "Retour",
             title: "Les Lieux",
+            gestureEnabled: true,
           }}
         />
         <Stack.Screen
@@ -223,6 +238,7 @@ const AppNavigator = () => {
             headerShown: true,
             headerBackTitle: "Retour",
             title: "Commentaire du lieu",
+            gestureEnabled: true,
           }}
         />
         <Stack.Screen
@@ -232,6 +248,7 @@ const AppNavigator = () => {
             headerShown: true,
             headerBackTitle: "Retour",
             title: "Support",
+            gestureEnabled: true,
           }}
         />
         <Stack.Screen
@@ -241,6 +258,7 @@ const AppNavigator = () => {
             headerShown: true,
             headerBackTitle: "Retour",
             title: "Équipements",
+            gestureEnabled: true,
           }}
         />
       </Stack.Navigator>

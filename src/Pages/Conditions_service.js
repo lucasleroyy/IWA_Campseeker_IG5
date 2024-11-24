@@ -63,9 +63,9 @@ const Conditions_service = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
+    flex: 1,
     backgroundColor: '#F6F6F6',
-    paddingBottom: 50,
+    paddingBottom: 50, 
   },
   scrollContent: {
     flexGrow: 1,
@@ -73,11 +73,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    fontSize: 26,
+    fontSize: 32,
     fontWeight: 'bold',
-    color: '#F2994A', // Couleur orange pour le titre
     textAlign: 'center',
     marginBottom: 20,
+    color: '#F25C05',
   },
   sectionTitle: {
     fontSize: 20,

@@ -89,20 +89,20 @@ const PolitiqueConfidentialite = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'rgba(166, 116, 55, 0.1)',
-    paddingBottom: 50,
+    backgroundColor: '#F6F6F6',
+    paddingBottom: 50, 
   },
   scrollContainer: {
     flexGrow: 1,
-    alignItems: 'center',
     paddingVertical: '15%',
+    alignItems: 'center',
   },
   title: {
-    fontSize: 26,
+    fontSize: 32,
     fontWeight: 'bold',
-    color: '#F2994A', // Couleur orange pour le titre
     textAlign: 'center',
     marginBottom: 20,
+    color: '#F25C05',
   },
   sectionTitle: {
     fontSize: 20,
