@@ -7,6 +7,7 @@ import equipmentReducer from './equipmentReducer';
 import favorisReducer from './favorisReducer';
 import flagReducer from './flagsReducer';
 import commentReducer from './commentsReducer';
+import supportReducer from './supportReducer';
 
 const appReducer = combineReducers({
   user: userReducer,
@@ -16,6 +17,7 @@ const appReducer = combineReducers({
   favoris: favorisReducer,
   flags: flagReducer,
   comments: commentReducer,
+  support: supportReducer,
 });
 
 const rootReducer = (state, action) => {
