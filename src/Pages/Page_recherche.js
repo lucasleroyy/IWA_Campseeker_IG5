@@ -56,7 +56,6 @@ const Page_recherche = ({ navigation }) => {
                 )}
                 <Carte ville={searchCity} locations={locations} style={styles.map} />
             </ScrollView>
-            <Bandeau currentPage='PageRecherche' onNavigate={navigation.navigate}/>
         </View>
     );
 };
