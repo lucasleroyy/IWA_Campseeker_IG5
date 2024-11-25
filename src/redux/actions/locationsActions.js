@@ -207,3 +207,22 @@ export const fetchLocationsByEquipments = createAsyncThunk(
     }
   }
 );
+
+// Délier un équipement d’un lieu
+export const unlinkEquipmentFromLocation = createAsyncThunk(
+  'locations/unlinkEquipmentFromLocation',
+  async ({ locationId, equipmentId }, thunkAPI) => {
+    const apiUrl = thunkAPI.getState().config.apiUrl;
+    try {
+      const response = await fetch(`${apiUrl}/locations/${locationId}/equipments/${equipmentId}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        throw new Error('Erreur lors de la suppression de l’équipement.');
+      }
+      return { locationId, equipmentId };
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);

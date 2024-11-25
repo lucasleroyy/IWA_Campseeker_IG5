@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-import { createReducer } from '@reduxjs/toolkit';
-import { fetchRecentLocations, fetchAllLocations, fetchLocationById, deleteLocation, createLocation, linkEquipmentsToLocation, fetchLocationsByUserId,
-  fetchLocationsByEquipments } from '../actions/locationsActions';
-
-=======
 import { createReducer } from "@reduxjs/toolkit";
 import {
   fetchRecentLocations,
@@ -13,9 +7,9 @@ import {
   createLocation,
   linkEquipmentsToLocation,
   fetchLocationsByUserId,
-  updateLocation
+  fetchLocationsByEquipments,
+  updateLocation,
 } from "../actions/locationsActions";
->>>>>>> auriane
 
 const initialState = {
   locations: [], // Liste des lieux récents
@@ -132,39 +126,21 @@ const locationsReducer = createReducer(initialState, (builder) => {
     .addCase(fetchLocationsByUserId.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
+    });
+  builder
+    // Ajout du traitement pour fetchLocationsByEquipment
+    .addCase(fetchLocationsByEquipments.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(fetchLocationsByEquipments.fulfilled, (state, action) => {
+      state.loading = false;
+      state.locations = action.payload; // Met à jour les lieux avec ceux récupérés
+    })
+    .addCase(fetchLocationsByEquipments.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
     })
 
-<<<<<<< HEAD
-    builder
-      // Fetch Locations by User ID
-      .addCase(fetchLocationsByUserId.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchLocationsByUserId.fulfilled, (state, action) => {
-        state.loading = false;
-        state.userLocations = action.payload;
-      })
-      .addCase(fetchLocationsByUserId.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-
-      builder
-      // Ajout du traitement pour fetchLocationsByEquipment
-      .addCase(fetchLocationsByEquipments.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(fetchLocationsByEquipments.fulfilled, (state, action) => {
-        state.loading = false;
-        state.locations = action.payload;  // Met à jour les lieux avec ceux récupérés
-      })
-      .addCase(fetchLocationsByEquipments.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      });
-    
-=======
     // Gestion de la mise à jour d'un lieu
     .addCase(updateLocation.pending, (state) => {
       state.loading = true;
@@ -180,7 +156,6 @@ const locationsReducer = createReducer(initialState, (builder) => {
       state.loading = false;
       state.error = action.payload;
     });
->>>>>>> auriane
 });
 
 export default locationsReducer;

@@ -23,6 +23,9 @@ import Champ_selection from "../components/Champ_selection";
 import { MaterialIcons } from "@expo/vector-icons";
 import Scroll_horizontal from "../components/Scroll_horizontal";
 import Commentaire from "../components/Commentaire";
+import { fetchEquipments } from "../redux/actions/equipmentActions";
+import { linkEquipmentsToLocation } from "../redux/actions/locationsActions";
+import { unlinkEquipmentFromLocation } from "../redux/actions/locationsActions";
 
 const DetailMesLieux = ({ route, navigation }) => {
   const screenWidth = Dimensions.get("window").width; // Largeur de l'écran
@@ -44,11 +47,65 @@ const DetailMesLieux = ({ route, navigation }) => {
   const [isEditModalVisible, setEditModalVisible] = useState(false); // État pour la modale
   const [updatedLocation, setUpdatedLocation] = useState({}); // Données mises à jour
 
+  const [availableEquipments, setAvailableEquipments] = useState([]); // Tous les équipements disponibles
+  const [selectedEquipments, setSelectedEquipments] = useState([]); // Équipements actuellement liés
+  const [tempSelectedEquipments, setTempSelectedEquipments] = useState([]);
+
   useEffect(() => {
     if (id) {
-      dispatch(fetchLocationById(id));
+      dispatch(fetchLocationById(id)).then((response) => {
+        if (response.payload) {
+          setSelectedEquipments(response.payload.equipments || []);
+        }
+      });
+      dispatch(fetchEquipments()).then((response) => {
+        if (response.payload) {
+          setAvailableEquipments(response.payload);
+        }
+      });
     }
-  }, [dispatch, id]);
+  }, [id, dispatch]);
+
+  const handleAddEquipment = (equipmentId) => {
+    if (!selectedEquipments.some((e) => e.equipmentId === equipmentId)) {
+      dispatch(
+        linkEquipmentsToLocation({
+          locationId: id,
+          equipmentIds: [equipmentId],
+        })
+      ).then(() => {
+        setSelectedEquipments([
+          ...selectedEquipments,
+          availableEquipments.find((e) => e.equipmentId === equipmentId),
+        ]);
+      });
+    }
+  };
+
+  const toggleEquipmentSelection = (equipmentId) => {
+    if (tempSelectedEquipments.some((e) => e.equipmentId === equipmentId)) {
+      // Supprime l'équipement s'il est déjà sélectionné
+      setTempSelectedEquipments(
+        tempSelectedEquipments.filter((e) => e.equipmentId !== equipmentId)
+      );
+    } else {
+      // Ajoute l'équipement s'il n'est pas encore sélectionné
+      const newEquipment = availableEquipments.find(
+        (e) => e.equipmentId === equipmentId
+      );
+      setTempSelectedEquipments([...tempSelectedEquipments, newEquipment]);
+    }
+  };
+
+  const handleRemoveEquipment = (equipmentId) => {
+    dispatch(unlinkEquipmentFromLocation({ locationId: id, equipmentId })).then(
+      () => {
+        setSelectedEquipments(
+          selectedEquipments.filter((e) => e.equipmentId !== equipmentId)
+        );
+      }
+    );
+  };
 
   const handleDelete = () => {
     Alert.alert(
@@ -84,6 +141,7 @@ const DetailMesLieux = ({ route, navigation }) => {
       latitude: locationDetails.latitude.toString(),
       longitude: locationDetails.longitude.toString(),
     });
+    setTempSelectedEquipments([...selectedEquipments]); // Copie des équipements actuels
     setEditModalVisible(true);
   };
 
@@ -106,10 +164,44 @@ const DetailMesLieux = ({ route, navigation }) => {
       longitude: parseFloat(updatedLocation.longitude),
     };
 
+    // Détecte les ajouts et suppressions d'équipements
+    const equipmentIdsToAdd = tempSelectedEquipments
+      .filter(
+        (e) =>
+          !selectedEquipments.some((se) => se.equipmentId === e.equipmentId)
+      )
+      .map((e) => e.equipmentId);
+
+    const equipmentIdsToRemove = selectedEquipments
+      .filter(
+        (se) =>
+          !tempSelectedEquipments.some((e) => e.equipmentId === se.equipmentId)
+      )
+      .map((e) => e.equipmentId);
+
+    // Met à jour les équipements ajoutés
+    if (equipmentIdsToAdd.length > 0) {
+      dispatch(
+        linkEquipmentsToLocation({
+          locationId: id,
+          equipmentIds: equipmentIdsToAdd,
+        })
+      );
+    }
+
+    // Met à jour les équipements supprimés
+    if (equipmentIdsToRemove.length > 0) {
+      equipmentIdsToRemove.forEach((equipmentId) => {
+        dispatch(unlinkEquipmentFromLocation({ locationId: id, equipmentId }));
+      });
+    }
+
+    // Met à jour les informations du lieu
     dispatch(updateLocation({ id, locationData: formattedLocation }))
       .unwrap()
       .then(() => {
         Alert.alert("Succès", "Le lieu a été mis à jour avec succès.");
+        setSelectedEquipments(tempSelectedEquipments); // Met à jour la sélection principale
         setEditModalVisible(false);
       })
       .catch((error) => {
@@ -282,6 +374,36 @@ const DetailMesLieux = ({ route, navigation }) => {
               placeholder="Longitude"
             />
 
+            <Text style={styles.modalTitle}>Équipements disponibles</Text>
+            <View style={styles.equipmentsContainer}>
+              {availableEquipments.map((equipment) => (
+                <Champ_selection
+                  key={equipment.equipmentId}
+                  label={equipment.name}
+                  isSelected={tempSelectedEquipments.some(
+                    (e) => e.equipmentId === equipment.equipmentId
+                  )}
+                  onPress={() =>
+                    toggleEquipmentSelection(equipment.equipmentId)
+                  }
+                />
+              ))}
+            </View>
+
+            <Text style={styles.modalTitle}>Équipements sélectionnés</Text>
+            <View style={styles.equipmentsContainer}>
+              {tempSelectedEquipments.map((equipment) => (
+                <Champ_selection
+                  key={equipment.equipmentId}
+                  label={equipment.name}
+                  isSelected={true} // Toujours sélectionné dans cette liste
+                  onPress={() =>
+                    toggleEquipmentSelection(equipment.equipmentId)
+                  }
+                />
+              ))}
+            </View>
+
             <View style={styles.modalButtons}>
               <TouchableOpacity
                 style={[styles.modalButton, styles.cancelButton]}
@@ -440,6 +562,33 @@ const styles = StyleSheet.create({
   submitButtonText: {
     color: "#fff", // Texte blanc pour "Enregistrer"
     fontWeight: "bold",
+  },
+  equipmentsContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
+    padding: 10,
+  },
+  equipmentItem: {
+    padding: 10,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    backgroundColor: "#f9f9f9",
+  },
+  selectedEquipment: {
+    backgroundColor: "#d4edda",
+  },
+  selectedEquipmentItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: 10,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    backgroundColor: "#f9f9f9",
+    marginBottom: 5,
   },
 });
 
