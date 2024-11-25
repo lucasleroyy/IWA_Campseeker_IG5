@@ -1,15 +1,55 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+  Modal,
+  TextInput,
+} from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserById } from "../redux/actions/userActions";
+import { reportFlag } from "../redux/actions/flagsActions";
 
-const Commentaire = ({ pseudo, note, texte }) => {
-  
+const Commentaire = ({ commentId, pseudo, note, texte }) => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [reason, setReason] = useState("");
+
+  const dispatch = useDispatch();
+  const userId = useSelector((state) => state.user.userInfo?.userId);
+
+  const submitFlag = () => {
+    if (!reason.trim()) {
+      Alert.alert(
+        "Erreur",
+        "Veuillez saisir une raison pour signaler ce commentaire."
+      );
+      return;
+    }
+
+    dispatch(
+      reportFlag({
+        userId,
+        commentId, // Utilisation de commentId
+        reason,
+      })
+    )
+      .then(() => {
+        Alert.alert("Succès", "Commentaire signalé avec succès.");
+        setModalVisible(false);
+        setReason(""); // Réinitialise la raison
+      })
+      .catch((error) => {
+        console.error("Erreur lors du signalement :", error);
+        Alert.alert("Erreur", "Impossible de signaler le commentaire.");
+      });
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-      <Text style={styles.pseudo}>{pseudo || "Utilisateur inconnu"}</Text>
+        <Text style={styles.pseudo}>{pseudo || "Utilisateur inconnu"}</Text>
         <View style={styles.actions}>
           <View style={styles.note}>
             {[...Array(note || 0)].map((_, index) => (
@@ -22,19 +62,16 @@ const Commentaire = ({ pseudo, note, texte }) => {
             ))}
           </View>
           <TouchableOpacity
-            onPress={() =>
-              Alert.alert(
-                "Signaler ce commentaire",
-                "Êtes-vous sûr de vouloir signaler ce commentaire ?",
-                [
-                  { text: "Annuler", style: "cancel" },
-                  {
-                    text: "Oui",
-                    onPress: () => console.log("Commentaire signalé"),
-                  },
-                ]
-              )
-            }
+            onPress={() => {
+              if (!userId) {
+                Alert.alert(
+                  "Erreur",
+                  "Vous devez être connecté pour signaler un commentaire."
+                );
+                return;
+              }
+              setModalVisible(true);
+            }}
           >
             <MaterialIcons name="report" size={25} color="#F25C05" />
           </TouchableOpacity>
@@ -43,6 +80,38 @@ const Commentaire = ({ pseudo, note, texte }) => {
 
       <View style={styles.separator} />
       <Text style={styles.texte}>{texte || "Texte non disponible"}</Text>
+
+      {/* Modal pour signaler un commentaire */}
+      <Modal visible={modalVisible} animationType="slide" transparent={true}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Signaler ce commentaire</Text>
+            <TextInput
+              style={styles.textInput}
+              placeholder="Raison du signalement"
+              value={reason}
+              onChangeText={setReason}
+            />
+            <View style={styles.modalButtons}>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.cancelButton]}
+                onPress={() => {
+                  setModalVisible(false);
+                  setReason("");
+                }}
+              >
+                <Text style={styles.cancelButtonText}>Annuler</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.submitButton]}
+                onPress={submitFlag}
+              >
+                <Text style={styles.submitButtonText}>Envoyer</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -87,6 +156,59 @@ const styles = StyleSheet.create({
   actions: {
     flexDirection: "row",
     alignItems: "center",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  modalContent: {
+    width: "80%",
+    padding: 20,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  textInput: {
+    width: "100%",
+    height: 40,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginBottom: 20,
+  },
+  modalButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  modalButton: {
+    flex: 1,
+    marginHorizontal: 5,
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  cancelButton: {
+    backgroundColor: "#ccc",
+  },
+  submitButton: {
+    backgroundColor: "#F25C05",
+  },
+  cancelButtonText: {
+    color: "#000",
+    fontWeight: "bold",
+  },
+  submitButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
 });
 
