@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { fetchRecentLocations, fetchAllLocations, fetchLocationById, deleteLocation, createLocation, linkEquipmentsToLocation, fetchLocationsByUserId,
-  fetchLocationsByEquipments } from '../actions/locationsActions';
+  fetchLocationsByEquipments, fetchLocationsByCity } from '../actions/locationsActions';
 
 
 const initialState = {
@@ -104,7 +104,6 @@ const locationsReducer = createReducer(initialState, (builder) => {
       state.error = action.payload;
     })
 
-    builder
       // Fetch Locations by User ID
       .addCase(fetchLocationsByUserId.pending, (state) => {
         state.loading = true;
@@ -119,7 +118,6 @@ const locationsReducer = createReducer(initialState, (builder) => {
         state.error = action.payload;
       })
 
-      builder
       // Ajout du traitement pour fetchLocationsByEquipment
       .addCase(fetchLocationsByEquipments.pending, (state) => {
         state.loading = true;
@@ -131,7 +129,21 @@ const locationsReducer = createReducer(initialState, (builder) => {
       .addCase(fetchLocationsByEquipments.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      });
+      })
+
+      // Handle fetching locations by city
+    .addCase(fetchLocationsByCity.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    })
+    .addCase(fetchLocationsByCity.fulfilled, (state, action) => {
+      state.loading = false;
+      state.locations = action.payload;  // Update locations with those found by city search
+    })
+    .addCase(fetchLocationsByCity.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
     
 });
 

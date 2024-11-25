@@ -182,3 +182,23 @@ export const fetchLocationsByEquipments = createAsyncThunk(
     }
   }
 );
+
+// Async action to fetch locations by city
+export const fetchLocationsByCity = createAsyncThunk(
+  'locations/fetchByCity',
+  async (city, { rejectWithValue }) => {
+    const apiUrl = getState().config.apiUrl;
+    try {
+      const response = await fetch(`${apiUrl}/locations/ville/${encodeURIComponent(city)}`);
+      const data = await response.json();
+      if (response.ok) {
+        return data;
+      } else {
+        return rejectWithValue(data);
+      }
+    } catch (error) {
+      return rejectWithValue(error.toString());
+    }
+  }
+);
+

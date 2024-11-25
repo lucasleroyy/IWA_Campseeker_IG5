@@ -55,9 +55,10 @@ const Recherche = ({ placeholder, editable = true, onCitySelect }) => {
 
   const handleSelectCity = (city) => {
     setQuery(city);
-    setSuggestions([]);  // Vide les suggestions après la sélection
-    onCitySelect(city);  // Notifie le composant parent
+    setSuggestions([]);  // Clears suggestions after selection
+    onCitySelect(city);  // Triggers a fetch in the parent component
   };
+  
 
   return (
     <View style={styles.container}>
