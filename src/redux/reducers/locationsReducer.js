@@ -9,7 +9,7 @@ import {
   fetchLocationsByUserId,
   fetchLocationsByEquipments,
   updateLocation,
-  fetchLocationsByCity
+  fetchLocationsByCity,
 } from "../actions/locationsActions";
 
 const initialState = {
@@ -112,9 +112,8 @@ const locationsReducer = createReducer(initialState, (builder) => {
     .addCase(linkEquipmentsToLocation.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
-    });
+    })
 
-  builder
     // Fetch Locations by User ID
     .addCase(fetchLocationsByUserId.pending, (state) => {
       state.loading = true;
@@ -127,8 +126,8 @@ const locationsReducer = createReducer(initialState, (builder) => {
     .addCase(fetchLocationsByUserId.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
-    });
-  builder
+    })
+
     // Ajout du traitement pour fetchLocationsByEquipment
     .addCase(fetchLocationsByEquipments.pending, (state) => {
       state.loading = true;
