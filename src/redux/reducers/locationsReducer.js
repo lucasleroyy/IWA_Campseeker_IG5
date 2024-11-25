@@ -1,5 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { fetchRecentLocations, fetchAllLocations, fetchLocationById, deleteLocation, createLocation, linkEquipmentsToLocation, fetchLocationsByUserId } from '../actions/locationsActions';
+import { fetchRecentLocations, fetchAllLocations, fetchLocationById, deleteLocation, createLocation, linkEquipmentsToLocation, fetchLocationsByUserId,
+  fetchLocationsByEquipments } from '../actions/locationsActions';
 
 
 const initialState = {
@@ -114,6 +115,20 @@ const locationsReducer = createReducer(initialState, (builder) => {
         state.userLocations = action.payload;
       })
       .addCase(fetchLocationsByUserId.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      builder
+      // Ajout du traitement pour fetchLocationsByEquipment
+      .addCase(fetchLocationsByEquipments.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchLocationsByEquipments.fulfilled, (state, action) => {
+        state.loading = false;
+        state.locations = action.payload;  // Met à jour les lieux avec ceux récupérés
+      })
+      .addCase(fetchLocationsByEquipments.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

@@ -160,3 +160,25 @@ export const fetchLocationsByUserId = createAsyncThunk(
     }
   }
 );
+
+// Action to fetch locations by multiple equipment IDs
+export const fetchLocationsByEquipments = createAsyncThunk(
+  'locations/fetchByEquipments',
+  async (equipmentIds, { getState, rejectWithValue }) => {
+    const apiUrl = getState().config.apiUrl;
+    try {
+      // Join the equipmentIds array into a comma-separated string for the query
+      const response = await fetch(`${apiUrl}/search/locations?equipmentIds=${equipmentIds.join(',')}`, {
+        method: 'GET',
+      });
+      const data = await response.json();
+      if (response.ok) {
+        return data;  // Return the fetched locations
+      } else {
+        return rejectWithValue(data);  // Return error if not successful
+      }
+    } catch (error) {
+      return rejectWithValue(error.message);  // Handle network errors
+    }
+  }
+);

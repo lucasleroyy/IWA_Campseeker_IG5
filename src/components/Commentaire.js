@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchUserById } from "../redux/actions/userActions";
 
 const Commentaire = ({ pseudo, note, texte }) => {
-  console.log("Props Commentaire :", { pseudo, note, texte });
   
   return (
     <View style={styles.container}>
