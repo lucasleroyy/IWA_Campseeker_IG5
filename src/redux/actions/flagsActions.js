@@ -3,8 +3,9 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 // Action pour signaler un lieu
 export const reportFlag = createAsyncThunk(
   'flags/report',
-  async ({ userId, locationId, reason }, thunkAPI) => {
-    const apiUrl = thunkAPI.getState().config.apiUrl; // Récupère l'URL de l'API
+  async ({ userId, locationId, commentId, reason }, thunkAPI) => {
+    console.log("Payload reçu dans reportFlag:", { userId, locationId, commentId, reason }); // Debug
+    const apiUrl = thunkAPI.getState().config.apiUrl;
     try {
       const response = await fetch(`${apiUrl}/flags`, {
         method: 'POST',
@@ -14,6 +15,7 @@ export const reportFlag = createAsyncThunk(
         body: JSON.stringify({
           userId,
           locationId,
+          commentId,
           reason,
         }),
       });
@@ -22,13 +24,13 @@ export const reportFlag = createAsyncThunk(
         throw new Error('Erreur lors de la création du flag.');
       }
 
-      const data = await response.json();
-      return data; // Retourne le flag créé
+      return await response.json();
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
+
 
 // Action pour récupérer les lieux signalés
 export const fetchFlaggedLocations = createAsyncThunk(

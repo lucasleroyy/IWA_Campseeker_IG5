@@ -1,7 +1,7 @@
 const initialState = {
     //commande: ifconfig ou ipconfig
     //le port est celui de la Gateway, il faut lancer la Gateway et les MS
-    apiUrl: 'http://192.168.1.21:8086'
+    apiUrl: 'http://162.38.35.249:8086'
   };
   
   const configReducer = (state = initialState, action) => {

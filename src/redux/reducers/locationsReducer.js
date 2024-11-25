@@ -1,6 +1,14 @@
-import { createReducer } from '@reduxjs/toolkit';
-import { fetchRecentLocations, fetchAllLocations, fetchLocationById, deleteLocation, createLocation, linkEquipmentsToLocation, fetchLocationsByUserId } from '../actions/locationsActions';
-
+import { createReducer } from "@reduxjs/toolkit";
+import {
+  fetchRecentLocations,
+  fetchAllLocations,
+  fetchLocationById,
+  deleteLocation,
+  createLocation,
+  linkEquipmentsToLocation,
+  fetchLocationsByUserId,
+  updateLocation
+} from "../actions/locationsActions";
 
 const initialState = {
   locations: [], // Liste des lieux récents
@@ -41,7 +49,6 @@ const locationsReducer = createReducer(initialState, (builder) => {
       state.error = action.payload; // Stocke l'erreur en cas de problème
     })
 
-    
     .addCase(fetchAllLocations.pending, (state) => {
       state.loading = true;
       state.error = null;
@@ -71,7 +78,7 @@ const locationsReducer = createReducer(initialState, (builder) => {
       state.loading = false;
       state.error = action.payload; // Stocke l'erreur en cas d’échec
     })
-    
+
     //créer un lieu
     .addCase(createLocation.pending, (state) => {
       state.loading = true;
@@ -93,7 +100,9 @@ const locationsReducer = createReducer(initialState, (builder) => {
     .addCase(linkEquipmentsToLocation.fulfilled, (state, action) => {
       state.loading = false;
       const { locationId, equipmentIds } = action.payload;
-      const location = state.locations.find((loc) => loc.locationId === locationId);
+      const location = state.locations.find(
+        (loc) => loc.locationId === locationId
+      );
       if (location) {
         location.equipmentIds = equipmentIds; // Met à jour la liste d'équipements
       }
@@ -101,23 +110,38 @@ const locationsReducer = createReducer(initialState, (builder) => {
     .addCase(linkEquipmentsToLocation.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
+    });
+
+  builder
+    // Fetch Locations by User ID
+    .addCase(fetchLocationsByUserId.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    })
+    .addCase(fetchLocationsByUserId.fulfilled, (state, action) => {
+      state.loading = false;
+      state.userLocations = action.payload;
+    })
+    .addCase(fetchLocationsByUserId.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
     })
 
-    builder
-      // Fetch Locations by User ID
-      .addCase(fetchLocationsByUserId.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchLocationsByUserId.fulfilled, (state, action) => {
-        state.loading = false;
-        state.userLocations = action.payload;
-      })
-      .addCase(fetchLocationsByUserId.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      });
-    
+    // Gestion de la mise à jour d'un lieu
+    .addCase(updateLocation.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    })
+    .addCase(updateLocation.fulfilled, (state, action) => {
+      state.loading = false;
+      if (state.locationDetails?.locationId === action.payload.locationId) {
+        state.locationDetails = action.payload; // Met à jour les détails du lieu
+      }
+    })
+    .addCase(updateLocation.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
 });
 
 export default locationsReducer;
