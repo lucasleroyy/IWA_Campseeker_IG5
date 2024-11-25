@@ -37,8 +37,8 @@ const Page_recherche = ({ navigation }) => {
   };
   return (
     <View style={styles.container}>
+      <Recherche placeholder="Rechercher un lieu" editable={true} onCitySelect={handleSearchChange} />
         <ScrollView contentContainerStyle={styles.scrollContainer}>
-            <Recherche placeholder="Rechercher un lieu" editable={true} onCitySelect={handleSearchChange} />
             {loading ? <Text>Chargement des équipements...</Text> : error ? <Text>Erreur : {error}</Text> : (
                 <View style={styles.Equipementcontainer}>
                     {equipments.map((equipment) => (
@@ -88,6 +88,7 @@ const styles = StyleSheet.create({
       width: '90%',
       marginBottom: 20,
       alignSelf: 'center',
+      height: 300,
     },
     Equipementcontainer: {
       flexDirection: 'row',

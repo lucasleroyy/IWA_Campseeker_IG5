@@ -30,10 +30,13 @@ const Mes_lieux_user = ({ navigation }) => {
     );
   }
 
+  // Ensure error is handled as a string
   if (error) {
+    // Check if error is an object and has a message property
+    const errorMessage = error.message ? error.message : "An unexpected error occurred";
     return (
       <View style={styles.container}>
-        <Text>Erreur : {error}</Text>
+        <Text>Erreur : {errorMessage}</Text>
       </View>
     );
   }
@@ -56,7 +59,7 @@ const Mes_lieux_user = ({ navigation }) => {
 
             return (
               <TouchableOpacity
-                key={location.locationId}
+                key={location.locationId.toString()} // Ensure key is always a string
                 style={styles.locationContainer}
                 onPress={() =>
                   navigation.navigate("DetailMesLieux", { id: location.locationId })
@@ -133,7 +136,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 5, // Ajuste l'espacement entre les éléments
+    marginTop: 5,
   },
   noLocationsText: {
     fontSize: 18,
