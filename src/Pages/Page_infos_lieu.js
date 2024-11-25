@@ -29,7 +29,6 @@ import { fetchUserById } from "../redux/actions/userActions";
 import Bouton from "../components/Bouton";
 
 const Page_info_lieu = ({ route }) => {
-
   const screenWidth = Dimensions.get("window").width; // Largeur de l'écran
   const boiteVerteWidth = screenWidth * 0.9;
 
@@ -252,24 +251,25 @@ const Page_info_lieu = ({ route }) => {
               Soyez le premier à laisser un commentaire sous ce lieu !
             </Text>
           ) : (
-              <Scroll_horizontal
-                items={comments.map((comment) => {
-                  const user = users?.[comment.userId];
-                  const userName = user
-                    ? `${user.firstName} ${user.lastName}`.trim()
-                    : "Utilisateur inconnu";
+            <Scroll_horizontal
+              items={comments.map((comment) => {
+                const user = users?.[comment.userId];
+                const userName = user
+                  ? `${user.firstName} ${user.lastName}`.trim()
+                  : "Utilisateur inconnu";
 
-                  return (
-                    <Commentaire
-                      key={comment.commentId}
-                      pseudo={userName || "Utilisateur inconnu"}
-                      note={comment.rating || 0}
-                      texte={comment.commentText || "Pas de texte"}
-                    />
-                  );
-                })}
-                parentWidth={boiteVerteWidth}
-              />
+                return (
+                  <Commentaire
+                    key={comment.commentId} // Assurez-vous que `commentId` est bien défini ici
+                    commentId={comment.commentId} // Passez l'ID du commentaire
+                    pseudo={userName || "Utilisateur inconnu"}
+                    note={comment.rating || 0}
+                    texte={comment.commentText || "Pas de texte"}
+                  />
+                );
+              })}
+              parentWidth={boiteVerteWidth}
+            />
           )}
 
           <Bouton

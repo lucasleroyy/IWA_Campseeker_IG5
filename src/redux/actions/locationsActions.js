@@ -161,6 +161,31 @@ export const fetchLocationsByUserId = createAsyncThunk(
   }
 );
 
+// Action pour mettre à jour un lieu
+export const updateLocation = createAsyncThunk(
+  "locations/updateLocation",
+  async ({ id, locationData }, { getState, rejectWithValue }) => {
+    const apiUrl = getState().config.apiUrl; // Récupère l'URL de l'API depuis le state
+    try {
+      const response = await fetch(`${apiUrl}/locations/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(locationData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Impossible de mettre à jour le lieu.");
+      }
+
+      return await response.json(); // Retourne les données mises à jour
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 // Action to fetch locations by multiple equipment IDs
 export const fetchLocationsByEquipments = createAsyncThunk(
   'locations/fetchByEquipments',
@@ -183,6 +208,7 @@ export const fetchLocationsByEquipments = createAsyncThunk(
   }
 );
 
+
 // Async action to fetch locations by city
 export const fetchLocationsByCity = createAsyncThunk(
   'locations/fetchByCity',
@@ -202,3 +228,22 @@ export const fetchLocationsByCity = createAsyncThunk(
   }
 );
 
+
+// Délier un équipement d’un lieu
+export const unlinkEquipmentFromLocation = createAsyncThunk(
+  'locations/unlinkEquipmentFromLocation',
+  async ({ locationId, equipmentId }, thunkAPI) => {
+    const apiUrl = thunkAPI.getState().config.apiUrl;
+    try {
+      const response = await fetch(`${apiUrl}/locations/${locationId}/equipments/${equipmentId}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        throw new Error('Erreur lors de la suppression de l’équipement.');
+      }
+      return { locationId, equipmentId };
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
