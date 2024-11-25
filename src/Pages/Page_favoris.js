@@ -36,7 +36,8 @@ const Page_favoris = ({ navigation }) => {
     });
 
     const locations = await Promise.all(promises);
-    setFavoriteLocations(locations); // Met à jour l'état local
+    const validLocations = locations.filter(location => location && location.locationId); // Filter out any locations without a valid ID
+    setFavoriteLocations(validLocations); // Met à jour l'état local
   };
 
   useEffect(() => {
@@ -61,7 +62,7 @@ const Page_favoris = ({ navigation }) => {
         <Text style={styles.titre}>
           Mes lieux <Text style={{ color: "#F25C05" }}>favoris</Text>
         </Text>
-        {favoriteLocations && favoriteLocations.length > 0 ? (
+        {favoriteLocations.length > 0 ? (
           favoriteLocations.map((location) => {
             const imageUrl = location.photo?.photoId
               ? `${apiUrl}/photos/get/${location.photo.photoId}`
@@ -84,7 +85,7 @@ const Page_favoris = ({ navigation }) => {
                     <View>
                       <Text style={styles.nomLieu}>{location.name}</Text>
                       <Text style={styles.proprietaire}>
-                        {location.adresse} | {location.ville}
+                        {location.adresse} | {location.ville}
                       </Text>
                     </View>
                     <Icon name="chevron-right" size={24} color="#555" />
