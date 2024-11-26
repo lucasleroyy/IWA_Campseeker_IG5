@@ -1,44 +1,50 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
+// authActions.js
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
+// Authentification utilisateur
 export const authenticateUser = createAsyncThunk(
-  "user/authenticate",
+  'user/authenticate',
   async ({ email, password }, thunkAPI) => {
     const apiUrl = thunkAPI.getState().config.apiUrl;
     try {
       const response = await fetch(`${apiUrl}/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
+
       const data = await response.json();
-      if (response.ok) {
-        console.log("Réponse API de connexion :", data);
-        // Inclut le userId et le token dans la payload
-        return { userInfo: { userId: data.userId, token: data.token } };
+
+      // Vérifie si la réponse est OK et contient les champs attendus
+      if (response.ok && data.userId && data.token) {
+        console.log('Réponse API de connexion :', data);
+        return { userInfo: { userId: data.userId, token: data.token, email } }; // Ajoutez l'email si nécessaire
+      } else if (!response.ok) {
+        console.error('Erreur API de connexion :', data.message || data);
+        return thunkAPI.rejectWithValue(data.message || 'Erreur d\'authentification');
       } else {
-        console.error("Erreur API de connexion :", data);
-        return thunkAPI.rejectWithValue(data);
+        console.error('Données manquantes dans la réponse de l\'API :', data);
+        return thunkAPI.rejectWithValue('Les informations utilisateur sont incomplètes.');
       }
     } catch (error) {
-      console.error("Erreur réseau :", error.message);
-      return thunkAPI.rejectWithValue(error.message);
+      console.error('Erreur réseau :', error.message);
+      return thunkAPI.rejectWithValue('Erreur réseau : ' + error.message);
     }
   }
 );
 
+// Inscription utilisateur
 export const registerUser = createAsyncThunk(
-  "user/register",
+  'user/register',
   async (
-    { firstName, lastName, email, password, phoneNumber, role = "user" },
+    { firstName, lastName, email, password, phoneNumber, role = 'user' },
     thunkAPI
   ) => {
     const apiUrl = thunkAPI.getState().config.apiUrl;
     try {
       const response = await fetch(`${apiUrl}/users`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           firstName,
           lastName,
@@ -49,26 +55,25 @@ export const registerUser = createAsyncThunk(
         }),
       });
 
-      // Vérifiez si le corps de la réponse existe avant de le parser
-      const text = await response.text(); // Récupère la réponse sous forme de texte brut
-      const data = text ? JSON.parse(text) : {}; // Parse uniquement si le texte existe
+      const text = await response.text(); // Récupère la réponse brute
+      const data = text ? JSON.parse(text) : {}; // Parse uniquement si non vide
 
-      console.log("Response:", data);
-
+      // Vérifie la validité de la réponse
       if (response.ok) {
-        console.log("Registration successful", data);
-        return data; // Renvoie les données en cas de succès
+        console.log('Inscription réussie :', data);
+        return data; // Retourne les données utilisateur
       } else {
-        console.log("Registration failed", data);
-        return thunkAPI.rejectWithValue(data); // Rejet en cas d'erreur
+        console.error('Erreur API d\'inscription :', data.message || data);
+        return thunkAPI.rejectWithValue(data.message || 'Erreur lors de l\'inscription.');
       }
     } catch (error) {
-      console.log("Network or other error", error);
-      return thunkAPI.rejectWithValue(error.message); // Rejet en cas d'erreur réseau
+      console.error('Erreur réseau :', error.message);
+      return thunkAPI.rejectWithValue('Erreur réseau : ' + error.message);
     }
   }
 );
 
+// Déconnexion utilisateur
 export const logout = () => ({
-  type: "LOGOUT",
+  type: 'LOGOUT',
 });

@@ -32,6 +32,7 @@ const Page_recherche = ({ navigation }) => {
       });
   };
 
+<<<<<<< HEAD
   const handleSearchChange = (text) => {
       setSearchCity(text);
   };
@@ -71,6 +72,36 @@ const Page_recherche = ({ navigation }) => {
         </ScrollView>
     </View>
 );
+=======
+    const handleSearchChange = (text) => {
+        setSearchCity(text);
+    };
+
+    return(
+        <View style={styles.container}>
+            <ScrollView contentContainerStyle={styles.scrollContainer}>
+                <Recherche 
+                    placeholder="Rechercher un lieu" 
+                    editable={true}
+                    onCitySelect={handleSearchChange}
+                />
+                {loading ? <Text>Chargement des équipements...</Text> : error ? <Text>Erreur : {error}</Text> : (
+                    <View style={styles.Equipementcontainer}>
+                        {equipments.map((equipment) => (
+                            <Champ_selection 
+                                key={equipment.equipmentId}
+                                label={equipment.name}
+                                isSelected={selectedTags.includes(equipment.name)}
+                                onPress={() => handleTagPress(equipment.name)}
+                            />
+                        ))}
+                    </View>
+                )}
+                <Carte ville={searchCity} locations={locations} style={styles.map} />
+            </ScrollView>
+        </View>
+    );
+>>>>>>> ProfilLuc
 };
 
 const styles = StyleSheet.create({
