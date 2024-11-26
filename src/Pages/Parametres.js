@@ -7,14 +7,14 @@ import { useTheme } from '../ThemeContext';
 
 const Parametres = () => {
   const { t, i18n } = useTranslation();
-  const { isDarkMode, toggleTheme } = useTheme();
+  const { isDarkMode = false, toggleTheme = () => {} } = useTheme() || {}; // Ajout des valeurs par défaut
 
-  // States for language and notifications
+  // État local
   const [language, setLanguage] = useState('fr');
   const [newsNotification, setNewsNotification] = useState(true);
   const [reviewNotification, setReviewNotification] = useState(true);
 
-  // Load and set language from AsyncStorage when the component mounts
+  // Chargement de la langue depuis AsyncStorage
   useEffect(() => {
     const loadLanguage = async () => {
       const savedLanguage = await AsyncStorage.getItem('language');
@@ -24,21 +24,21 @@ const Parametres = () => {
       }
     };
     loadLanguage();
-  }, []);
+  }, [i18n]);
 
-  // Handle language change and save to AsyncStorage
+  // Changement de langue
   const changeLanguage = async (lang) => {
     setLanguage(lang);
     i18n.changeLanguage(lang);
     await AsyncStorage.setItem('language', lang);
   };
 
-  // Display alert for notification toggle
+  // Notification Alert
   const handleNotificationToggle = (notificationType, isEnabled) => {
     const message = isEnabled
-      ? `Vous avez activé les notifications pour "${notificationType}".`
-      : `Vous avez désactivé les notifications pour "${notificationType}".`;
-    Alert.alert('Notification', message);
+      ? t('notificationEnabled', { notificationType })
+      : t('notificationDisabled', { notificationType });
+    Alert.alert(t('notificationTitle'), message);
   };
 
   return (
@@ -47,7 +47,7 @@ const Parametres = () => {
         {t('settings')}
       </Text>
 
-      {/* Language Section */}
+      {/* Langue */}
       <View style={styles.section}>
         <Text style={[styles.sectionTitle, isDarkMode ? styles.darkText : styles.lightText]}>
           {t('language')}
@@ -66,10 +66,10 @@ const Parametres = () => {
         </View>
       </View>
 
-      {/* Theme Section */}
+      {/* Thème */}
       <View style={styles.section}>
         <Text style={[styles.sectionTitle, isDarkMode ? styles.darkText : styles.lightText]}>
-          {t('Theme')}
+          {t('theme')}
         </Text>
         <View style={styles.themeContainer}>
           <ChampSelection
@@ -81,59 +81,6 @@ const Parametres = () => {
             label={t('lightMode')}
             isSelected={!isDarkMode}
             onPress={toggleTheme}
-          />
-        </View>
-      </View>
-
-      {/* Notification Section */}
-      <View style={styles.notificationSection}>
-        <Text style={[styles.notificationTitle, isDarkMode ? styles.darkText : styles.lightText]}>
-          {t('notifications')}
-        </Text>
-
-        {/* News Notification */}
-        <View style={styles.notificationRow}>
-          <Text style={[styles.notificationLabel, isDarkMode ? styles.darkText : styles.lightText]}>
-            {t('news')}
-          </Text>
-          <ChampSelection
-            label={t('yes')}
-            isSelected={newsNotification}
-            onPress={() => {
-              setNewsNotification(true);
-              handleNotificationToggle(t('news'), true);
-            }}
-          />
-          <ChampSelection
-            label={t('no')}
-            isSelected={!newsNotification}
-            onPress={() => {
-              setNewsNotification(false);
-              handleNotificationToggle(t('news'), false);
-            }}
-          />
-        </View>
-
-        {/* Review Notification */}
-        <View style={styles.notificationRow}>
-          <Text style={[styles.notificationLabel, isDarkMode ? styles.darkText : styles.lightText]}>
-            {t('reviewAlert')}
-          </Text>
-          <ChampSelection
-            label={t('yes')}
-            isSelected={reviewNotification}
-            onPress={() => {
-              setReviewNotification(true);
-              handleNotificationToggle(t('reviewAlert'), true);
-            }}
-          />
-          <ChampSelection
-            label={t('no')}
-            isSelected={!reviewNotification}
-            onPress={() => {
-              setReviewNotification(false);
-              handleNotificationToggle(t('reviewAlert'), false);
-            }}
           />
         </View>
       </View>
@@ -159,7 +106,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   lightText: {
-    color: '#D2691E',
+    color: '#000000',
   },
   darkText: {
     color: '#FFFFFF',
@@ -167,8 +114,8 @@ const styles = StyleSheet.create({
   section: {
     marginBottom: 30,
     padding: 20,
-    borderColor: '#D2691E',
     borderWidth: 1,
+    borderColor: '#AAA',
     borderRadius: 15,
   },
   sectionTitle: {
@@ -185,10 +132,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   notificationSection: {
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    borderColor: '#D2691E',
+    padding: 20,
     borderWidth: 1,
+    borderColor: '#AAA',
     borderRadius: 15,
   },
   notificationTitle: {

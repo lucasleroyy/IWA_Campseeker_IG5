@@ -1,10 +1,17 @@
 import React from 'react';
 import { ScrollView,View, Text, StyleSheet } from 'react-native';
 import BoiteBlanche from '../components/Boite_blanche';  // Assurez-vous que le chemin est correct
+import { useTheme } from "../ThemeContext";
+import createGlobalStyles from "../styles/globalStyles";
+
 
 const Conditions_service = () => {
+  const { isDarkMode } = useTheme();
   return (
-    <View style={styles.container}>
+    <View style={[
+      styles.container,
+      { backgroundColor: isDarkMode ? "#333333" : "rgba(166, 116, 55, 0.1)" },
+    ]}>
     <ScrollView contentContainerStyle={styles.scrollContent}>
       <Text style={styles.title}>Conditions Générales d'Utilisation</Text>
 

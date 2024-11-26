@@ -7,9 +7,11 @@ import { fetchUnreadNotifications } from "../redux/actions/notifsActions";
 import { persistor } from "../redux/store";
 import ChampRedirection from "../components/Champ_redirection";
 import Bandeau from "../components/Bandeau";
+import { useTheme } from "../ThemeContext";
 
 const PageProfil = ({ navigation }) => {
   const dispatch = useDispatch();
+  const { isDarkMode } = useTheme();
 
   // Sélectionnez les notifications depuis Redux
   const { notifications } = useSelector((state) => state.notifications);
@@ -28,11 +30,14 @@ const PageProfil = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[
+      styles.container,
+      { backgroundColor: isDarkMode ? "#333333" : "rgba(166, 116, 55, 0.1)" },
+    ]}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <Text style={styles.title}>Profil</Text>
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>GÉNÉRAL</Text>
+          <Text style={[styles.sectionTitle, {color:isDarkMode ? "#FFFFFF" : "#333333" }]}>GÉNÉRAL</Text>
 
           {/* Autres champs */}
           <ChampRedirection
@@ -76,7 +81,7 @@ const PageProfil = ({ navigation }) => {
           </TouchableOpacity>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>AIDE</Text>
+        <Text style={[styles.sectionTitle, {color:isDarkMode ? "#FFFFFF" : "#333333" }]}>AIDE</Text>
           <ChampRedirection
             label="F.A.Q"
             targetScreen="faq_user"
@@ -85,7 +90,7 @@ const PageProfil = ({ navigation }) => {
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>LÉGAL</Text>
+        <Text style={[styles.sectionTitle, {color:isDarkMode ? "#FFFFFF" : "#333333" }]}>LÉGAL</Text>
           <ChampRedirection
             label="Conditions générales d'utilisation"
             targetScreen="ConditionsService"
@@ -136,7 +141,6 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#000",
     marginLeft: "5%",
     marginBottom: 10,
   },

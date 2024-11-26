@@ -32,47 +32,6 @@ const Page_recherche = ({ navigation }) => {
       });
   };
 
-<<<<<<< HEAD
-  const handleSearchChange = (text) => {
-      setSearchCity(text);
-  };
-  return (
-    <View style={styles.container}>
-      <Recherche placeholder="Rechercher un lieu" editable={true} onCitySelect={handleSearchChange} />
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
-            {loading ? <Text>Chargement des équipements...</Text> : error ? <Text>Erreur : {error}</Text> : (
-                <View style={styles.Equipementcontainer}>
-                    {equipments.map((equipment) => (
-                        <Champ_selection 
-                            key={equipment.equipmentId}
-                            label={equipment.name}
-                            isSelected={selectedEquipmentIds.includes(equipment.equipmentId)}
-                            onPress={() => handleTagPress(equipment.equipmentId)}
-                        />
-                    ))}
-                </View>
-            )}
-            <Carte ville={searchCity} locations={locations} style={styles.map} />
-            {locationsLoading ? (
-                <Text>Chargement des lieux...</Text>
-            ) : locationsError ? (
-                <Text>Erreur lors du chargement des lieux : {locationsError}</Text>
-            ) : (
-                locations.map((location, index) => (
-                    <TouchableOpacity key={location.id || index} style={styles.locationContainer} onPress={() => navigation.navigate('PageInfoLieu', { id: location.locationId })}>
-                        <View style={styles.locationHeader}>
-                          <Text style={styles.locationName}>{location.name}</Text>
-                          <Icon name="chevron-right" size={24} color="#555" />
-                        </View>
-                        <Text style={styles.locationInfo}>{location.description || "Pas de description"}</Text>
-                        
-                    </TouchableOpacity>
-                ))
-            )}
-        </ScrollView>
-    </View>
-);
-=======
     const handleSearchChange = (text) => {
         setSearchCity(text);
     };
@@ -101,7 +60,6 @@ const Page_recherche = ({ navigation }) => {
             </ScrollView>
         </View>
     );
->>>>>>> ProfilLuc
 };
 
 const styles = StyleSheet.create({

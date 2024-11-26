@@ -2,12 +2,18 @@ import React from 'react';
 import { ScrollView, View, Text, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import BoiteBlanche from '../components/Boite_blanche'; 
+import { useTheme } from "../ThemeContext";
+import createGlobalStyles from "../styles/globalStyles";
 
 
 const PolitiqueConfidentialite = () => {
+  const { isDarkMode } = useTheme();
 
   return (
-    <View style={styles.container}>
+    <View style={[
+      styles.container,
+      { backgroundColor: isDarkMode ? "#333333" : "rgba(166, 116, 55, 0.1)" },
+    ]}>
     <ScrollView contentContainerStyle={styles.scrollContainer}>
        
       <Text style={styles.title}>Politique de Confidentialité</Text>
@@ -89,7 +95,6 @@ const PolitiqueConfidentialite = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "rgba(166, 116, 55, 0.1)",
     paddingBottom: 50, 
   },
   scrollContainer: {
