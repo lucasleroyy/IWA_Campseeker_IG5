@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchUserById } from '../redux/actions/userActions'; // Importer l'action
 import BoiteVerte from '../components/Boite_verte';
 import Bouton from '../components/Bouton';
-import Champ from '../components/Champ';
+import { fetchUserById, updateUserProfile } from '../redux/actions/userActions';
+import Champ from "../components/Champ";
 
 const MonCompteUser = () => {
   const dispatch = useDispatch();
@@ -13,9 +13,8 @@ const MonCompteUser = () => {
 
   const [name, setName] = useState('');
   const [firstName, setFirstName] = useState('');
-  const [address, setAddress] = useState('');
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState(''); // Ajout du champ téléphone
 
   useEffect(() => {
     if (userId) {
@@ -28,14 +27,34 @@ const MonCompteUser = () => {
       const user = userDetails[userId];
       setName(user.lastName || '');
       setFirstName(user.firstName || '');
-      setEmail(user.email || '');
-      setAddress(''); // Ajoutez l'adresse si elle est disponible
+      setEmail(user.email || ''); //
+      setPhoneNumber(user.phoneNumber || ''); 
     }
   }, [userDetails, userId]);
 
   const handleSaveProfile = () => {
-    Alert.alert('Profil modifié', 'Vos modifications ont été enregistrées avec succès.');
-    console.log('Profil modifié :', { name, firstName, address, email, password });
+    if (!phoneNumber) {
+      Alert.alert('Erreur', 'Veuillez entrer un numéro de téléphone.');
+      return;
+    }
+
+    const updatedUserData = {
+      userId,
+      firstName: firstName.trim(),
+      lastName: name.trim(),
+      phoneNumber: phoneNumber.trim(), // Ajout du champ téléphone
+    };
+
+    dispatch(updateUserProfile(updatedUserData))
+      .unwrap()
+      .then(() => {
+        Alert.alert('Profil modifié', 'Vos modifications ont été enregistrées avec succès.');
+        console.log('Profil modifié :', updatedUserData);
+      })
+      .catch((error) => {
+        Alert.alert('Erreur', `Une erreur est survenue lors de la mise à jour du profil : ${error}`);
+        console.error('Erreur lors de la mise à jour du profil :', error);
+      });
   };
 
   if (loading) {
@@ -85,36 +104,28 @@ const MonCompteUser = () => {
         </View>
 
         <View style={styles.fieldContainer}>
-          <Text style={styles.label}>Adresse</Text>
-          <Champ
-            style={styles.input}
-            value={address}
-            onChangeText={setAddress}
-            placeholder="Entrez votre adresse"
-          />
-        </View>
-
-        <View style={styles.fieldContainer}>
           <Text style={styles.label}>Email</Text>
           <Champ
-            style={styles.input}
+            style={[styles.input, styles.disabledInput]} // Champ non modifiable
             value={email}
-            onChangeText={setEmail}
             placeholder="Entrez votre email"
             keyboardType="email-address"
+            editable={false}
           />
         </View>
 
         <View style={styles.fieldContainer}>
-          <Text style={styles.label}>Modifier le mot de passe</Text>
-          <Champ
-            style={styles.input}
-            placeholder="Entrez votre nouveau mot de passe"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry={true}
-          />
-        </View>
+  <Text style={styles.label}>Téléphone</Text>
+  <Champ
+    style={styles.input}
+    value={phoneNumber} // Affiche directement le numéro récupéré
+    onChangeText={setPhoneNumber}
+    keyboardType="phone-pad"
+  />
+</View>
+
+
+
       </BoiteVerte>
 
       <Bouton onClick={handleSaveProfile} label="Modifier le profil" />
@@ -167,6 +178,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#3E6D61',
     alignSelf: 'center',
+  },
+  disabledInput: {
+    backgroundColor: '#E0E0E0',
+    color: '#A0A0A0',
   },
 });
 
