@@ -191,7 +191,7 @@ const AppNavigator = () => {
           options={{
             headerShown: true,
             headerBackTitle: "Retour",
-            title: "Les Lieux",
+            title: "Les Commentaires signalés",
             gestureEnabled: true,
           }}
         />

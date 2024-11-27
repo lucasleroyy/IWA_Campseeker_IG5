@@ -1,191 +1,167 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
-  ScrollView,
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
-  Dimensions,
   FlatList,
+  Alert,
 } from "react-native";
-import { TabView, SceneMap, TabBar } from "react-native-tab-view";
-import Photo from "../../components/Photo";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchAllLocations } from "../../redux/actions/locationsActions";
-import { fetchFlaggedComments } from "../../redux/actions/flagsActions";
+import {
+  fetchFlaggedComments,
+  updateFlag,
+} from "../../redux/actions/flagsActions";
+import { fetchCommentById, deleteComment } from "../../redux/actions/commentsActions";
+import { fetchUserById } from "../../redux/actions/userActions";
+import Commentaire from "../../components/Commentaire";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
-const ListeLieux = ({ locations, navigation, apiUrl }) => {
-  if (!locations || locations.length === 0) {
+const CommentaireSignales = () => {
+  const dispatch = useDispatch();
+
+  // Charger les commentaires signalés et les utilisateurs associés
+  const flaggedComments = useSelector((state) => state.flags.commentFlags);
+  const users = useSelector((state) => state.user.userDetails);
+  const commentsById = useSelector((state) => state.comments.commentsById || {});
+  const userId = useSelector((state) => state.user.userInfo?.userId);
+  const loading = useSelector((state) => state.flags.loading);
+  const error = useSelector((state) => state.flags.error);
+
+  // Charger les commentaires signalés et leurs données associées
+  useEffect(() => {
+    const loadFlaggedCommentsData = async () => {
+      const response = await dispatch(fetchFlaggedComments());
+      if (response.payload) {
+        response.payload.forEach((flag) => {
+          if (flag.commentId && !commentsById[flag.commentId]) {
+            dispatch(fetchCommentById(flag.commentId)); // Charger les détails du commentaire
+          }
+        });
+      }
+    };
+    loadFlaggedCommentsData();
+  }, [dispatch, commentsById]);
+
+  // Charger les utilisateurs associés aux commentaires
+  useEffect(() => {
+    flaggedComments.forEach((flag) => {
+      const commentDetails = commentsById[flag.commentId];
+      if (commentDetails?.userId && !users[commentDetails.userId]) {
+        dispatch(fetchUserById(commentDetails.userId));
+      }
+    });
+  }, [flaggedComments, commentsById, users, dispatch]);
+
+  const removeComment = (commentId, flagId) => {
+    Alert.alert(
+      "Confirmation",
+      "Voulez-vous vraiment supprimer ce commentaire ?",
+      [
+        { text: "Annuler", style: "cancel" },
+        {
+          text: "Supprimer",
+          onPress: () => {
+            dispatch(deleteComment(commentId))
+              .unwrap()
+              .then(() => {
+                dispatch(
+                  updateFlag({
+                    flagId,
+                    status: "resolved",
+                    reviewedBy: userId,
+                  })
+                )
+                  .unwrap()
+                  .then(() => {
+                    Alert.alert(
+                      "Succès",
+                      "Commentaire supprimé et flag mis à jour avec succès."
+                    );
+                    dispatch(fetchFlaggedComments());
+                  })
+                  .catch((error) => {
+                    console.error(
+                      "Erreur lors de la mise à jour du flag :",
+                      error
+                    );
+                    Alert.alert(
+                      "Erreur",
+                      "Le commentaire a été supprimé, mais la mise à jour du flag a échoué."
+                    );
+                  });
+              })
+              .catch((error) => {
+                console.error("Erreur lors de la suppression :", error);
+                Alert.alert(
+                  "Erreur",
+                  "Impossible de supprimer le commentaire."
+                );
+              });
+          },
+        },
+      ]
+    );
+  };
+
+  if (loading) {
     return (
-      <View style={styles.emptyContainer}>
-        <Text style={styles.emptyText}>Aucun lieu disponible.</Text>
+      <View style={styles.container}>
+        <Text>Chargement des commentaires signalés...</Text>
       </View>
     );
   }
 
-  const renderItem = ({ item: location }) => {
-    const imageUrl = location.photo?.photoId
-      ? `${apiUrl}/photos/get/${location.photo.photoId}`
-      : null;
+  if (error) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.errorText}>Erreur : {error}</Text>
+      </View>
+    );
+  }
+
+  if (!flaggedComments || flaggedComments.length === 0) {
+    return (
+      <View style={styles.emptyContainer}>
+        <Text style={styles.message}>Aucun commentaire signalé.</Text>
+      </View>
+    );
+  }
+
+  const renderItem = ({ item: commentFlag }) => {
+    const commentDetails = commentsById[commentFlag.commentId]; // Récupérer les détails du commentaire
+    const commentUser = commentDetails?.userId ? users[commentDetails.userId] : null;
+    const userName = commentUser
+      ? `${commentUser.firstName} ${commentUser.lastName}`
+      : "Utilisateur inconnu";
 
     return (
-      <TouchableOpacity
-        key={location.locationId}
-        style={styles.locationContainer}
-        onPress={() =>
-          navigation.navigate("CommentaireAdmin", { id: location.locationId })
-        }
-      >
-        <View style={styles.bandeau}>
-          {imageUrl && (
-            <Photo
-              imageUrl={imageUrl}
-              width="100%"
-              height={230}
-              accessibilityLabel={`Photo de ${location.name}`}
-            />
-          )}
-          <View style={styles.row}>
-            <View>
-              <Text style={styles.nomLieu}>{location.name}</Text>
-              <Text style={styles.proprietaire}>
-                {location.adresse} | {location.ville}
-              </Text>
-            </View>
-            <Icon name="chevron-right" size={24} color="#555" />
-          </View>
+      <View style={styles.bandeau}>
+        <View style={styles.commentRow}>
+          <Commentaire
+            commentId={commentFlag.commentId}
+            pseudo={userName} // Nom de l'utilisateur qui a posté le commentaire
+            note={commentDetails?.rating || 0} // Note du commentaire
+            texte={commentDetails?.commentText || "Pas de texte"} // Texte du commentaire
+          />
+          <TouchableOpacity
+            style={styles.deleteButton}
+            onPress={() => removeComment(commentFlag.commentId, commentFlag.flagId)}
+          >
+            <Icon name="delete" size={24} color="#FF6D00" />
+          </TouchableOpacity>
         </View>
-      </TouchableOpacity>
+        <Text style={styles.reason}>Raison : {commentFlag.reason}</Text>
+      </View>
     );
   };
 
   return (
     <FlatList
-      data={locations}
+      data={flaggedComments}
       renderItem={renderItem}
-      keyExtractor={(item) => item.locationId.toString()}
+      keyExtractor={(item) => item.flagId?.toString()}
       contentContainerStyle={styles.scrollContainer}
-    />
-  );
-};
-
-const CommentaireSignales = ({ navigation }) => {
-    const dispatch = useDispatch();
-    const { commentFlags: flaggedComments, loading, error } = useSelector((state) => state.flags);
-  
-    useEffect(() => {
-      dispatch(fetchFlaggedComments());
-    }, [dispatch]);
-  
-    if (loading) {
-      return (
-        <View style={styles.container}>
-          <Text>Chargement des commentaires signalés...</Text>
-        </View>
-      );
-    }
-  
-    if (error) {
-      return (
-        <View style={styles.container}>
-          <Text style={styles.errorText}>Erreur : {error}</Text>
-        </View>
-      );
-    }
-  
-    if (!flaggedComments || flaggedComments.length === 0) {
-      return (
-        <View style={styles.emptyContainer}>
-          <Text>Aucun commentaire signalé.</Text>
-        </View>
-      );
-    }
-  
-    const renderItem = ({ item: comment }) => (
-      <TouchableOpacity
-        key={comment.flagId}
-        style={styles.locationContainer}
-        onPress={() => navigation.navigate("CommentaireFlaggedAdmin", { id: comment.commentId, flagId: comment.flagId })}
-      >
-        <View style={styles.bandeau}>
-          <Text style={styles.nomLieu}>Commentaire ID : {comment.commentId}</Text>
-          <Text style={styles.reason}>Raison : {comment.reason}</Text>
-          <Text style={styles.status}>Statut : {comment.status}</Text>
-        </View>
-      </TouchableOpacity>
-    );
-  
-    return (
-      <FlatList
-        data={flaggedComments}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.flagId.toString()}
-        contentContainerStyle={styles.scrollContainer}
-      />
-    );
-  };
-  
-
-const ListeLieuxAdminCommentaire = ({ navigation }) => {
-  const dispatch = useDispatch();
-  const { locations, loading: locationsLoading, error: locationsError } =
-    useSelector((state) => state.locations);
-  const apiUrl = useSelector((state) => state.config.apiUrl);
-
-  useEffect(() => {
-    dispatch(fetchAllLocations());
-  }, [dispatch]);
-
-  const [index, setIndex] = useState(0);
-  const [routes] = useState([
-    { key: "liste", title: "Tous les lieux" },
-    { key: "signales", title: "Commentaires signalés" },
-  ]);
-
-  const renderScene = SceneMap({
-    liste: () => (
-      <ListeLieux
-        locations={locations}
-        navigation={navigation}
-        apiUrl={apiUrl}
-      />
-    ),
-    signales: () => <CommentaireSignales navigation={navigation} />,
-  });
-
-  if (locationsLoading) {
-    return (
-      <View style={styles.container}>
-        <Text>Chargement...</Text>
-      </View>
-    );
-  }
-
-  if (locationsError) {
-    return (
-      <View style={styles.container}>
-        <Text>Erreur : {locationsError}</Text>
-      </View>
-    );
-  }
-
-  return (
-    <TabView
-      navigationState={{ index, routes }}
-      renderScene={renderScene}
-      onIndexChange={setIndex}
-      initialLayout={{ width: Dimensions.get("window").width }}
-      renderTabBar={(props) => (
-        <TabBar
-          {...props}
-          indicatorStyle={{ backgroundColor: "#000", height: 2 }}
-          style={{ backgroundColor: "#FFF" }}
-          labelStyle={{ fontSize: 16, fontWeight: "bold" }}
-          activeColor="#000"
-          inactiveColor="#AAA"
-        />
-      )}
     />
   );
 };
@@ -197,12 +173,9 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     flexGrow: 1,
-    paddingVertical: "15%",
-    backgroundColor: "rgba(166, 116, 55, 0.1)",
-  },
-  locationContainer: {
-    marginBottom: 20,
+    paddingVertical: 20,
     alignItems: "center",
+    backgroundColor: "rgba(166, 116, 55, 0.1)",
   },
   bandeau: {
     width: "90%",
@@ -214,48 +187,31 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+    marginBottom: 15,
   },
-  nomLieu: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#000",
-    paddingTop: 10,
-  },
-  proprietaire: {
-    fontSize: 14,
-    color: "#555",
+  commentRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   reason: {
-    fontSize: 14,
+    fontSize: 16,
     color: "red",
-    marginTop: 5,
+    marginVertical: 5,
   },
-  status: {
-    fontSize: 14,
-    color: "#000",
-    marginTop: 5,
-  },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: "center",
-    backgroundColor: "rgba(166, 116, 55, 0.1)",
-    alignItems: "center",
-  },
-  emptyText: {
-    fontSize: 18,
-    color: "#555",
-    textAlign: "center",
-  },
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: 5,
+  deleteButton: {
+    marginLeft: 10,
   },
   errorText: {
     color: "red",
     fontSize: 16,
   },
+  message: {
+    fontSize: 18,
+    color: "#555",
+    textAlign: "center",
+    marginTop: 20,
+  },
 });
 
-export default ListeLieuxAdminCommentaire;
+export default CommentaireSignales;

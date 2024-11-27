@@ -42,44 +42,42 @@ const ListeLieux = ({ locations, navigation, apiUrl }) => (
     })}
   </ScrollView>
 );
-
-
 const LieuxSignales = ({ navigation, apiUrl }) => {
   const dispatch = useDispatch();
   const { flaggedLocations, loading, error } = useSelector((state) => state.flags);
-  const { locations } = useSelector((state) => state.locations); // Récupère tous les lieux
+  const { locations } = useSelector((state) => state.locations);
   const [enhancedFlaggedLocations, setEnhancedFlaggedLocations] = useState([]);
 
+  // Charger les lieux signalés
   useEffect(() => {
     dispatch(fetchFlaggedLocations());
   }, [dispatch]);
 
+  // Transformer les lieux signalés avec leurs détails
   useEffect(() => {
     if (flaggedLocations.length > 0) {
+      console.log("Flagged locations:", flaggedLocations); // Debug
       const enhancedLocations = flaggedLocations.map((flaggedLocation) => {
         const matchedLocation = locations.find(
           (loc) => loc.locationId === flaggedLocation.locationId
         );
 
-        if (matchedLocation) {
-          return {
-            ...flaggedLocation,
-            name: matchedLocation.name || "Lieu inconnu",
-            photo: matchedLocation.photo || null,
-          };
-        }
-
         return {
           ...flaggedLocation,
-          name: "Lieu inconnu",
-          photo: null,
+          name: matchedLocation?.name || "Lieu inconnu",
+          photo: matchedLocation?.photo || null,
         };
       });
 
+      console.log("Enhanced flagged locations:", enhancedLocations); // Debug
       setEnhancedFlaggedLocations(enhancedLocations);
+    } else {
+      console.log("No flagged locations found."); // Debug
+      setEnhancedFlaggedLocations([]); // Réinitialise à une liste vide
     }
   }, [flaggedLocations, locations]);
 
+  // Cas de chargement
   if (loading) {
     return (
       <View style={styles.container}>
@@ -88,11 +86,10 @@ const LieuxSignales = ({ navigation, apiUrl }) => {
     );
   }
 
+  // Cas d'erreur
   if (error) {
     const errorMessage =
-      typeof error === "string"
-        ? error
-        : error.message || JSON.stringify(error);
+      typeof error === "string" ? error : error.message || JSON.stringify(error);
 
     return (
       <View style={styles.container}>
@@ -101,6 +98,16 @@ const LieuxSignales = ({ navigation, apiUrl }) => {
     );
   }
 
+  // Cas où aucun lieu n'est signalé
+  if (!enhancedFlaggedLocations || enhancedFlaggedLocations.length === 0) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.message}>Aucun lieu signalé.</Text>
+      </View>
+    );
+  }
+
+  // Afficher les lieux signalés
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       {enhancedFlaggedLocations.map((location) => {
@@ -248,7 +255,7 @@ const styles = StyleSheet.create({
     color: "#555",
   },
   reason: {
-    fontSize: 16,
+    fontSize: 14,
     color: "red", // Couleur rouge pour mettre en évidence la raison du signalement
     marginTop: 5,
   },
@@ -261,6 +268,12 @@ const styles = StyleSheet.create({
   errorText: {
     color: 'red',
     fontSize: 16,
+  },
+  message: {
+    fontSize: 18,
+    color: "#555",
+    textAlign: "center",
+    marginTop: 20,
   },
 });
 

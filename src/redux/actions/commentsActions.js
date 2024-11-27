@@ -79,8 +79,6 @@ export const deleteComment = createAsyncThunk(
   }
 );
 
-
-
 export const fetchCommentById = createAsyncThunk(
   'comments/fetchById',
   async (commentId, thunkAPI) => {
