@@ -5,16 +5,19 @@ import BoiteVerte from '../components/Boite_verte';
 import Bouton from '../components/Bouton';
 import { fetchUserById, updateUserProfile } from '../redux/actions/userActions';
 import Champ from "../components/Champ";
+import { useTranslation } from "react-i18next";
 
 const MonCompteUser = () => {
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.user.userInfo?.userId); // Récupère le userId du store
   const { userDetails, loading, error } = useSelector((state) => state.user);
 
+
   const [name, setName] = useState('');
   const [firstName, setFirstName] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState(''); // Ajout du champ téléphone
+  const { t } = useTranslation(); 
 
   useEffect(() => {
     if (userId) {
@@ -77,45 +80,44 @@ const MonCompteUser = () => {
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
         <Text style={styles.greeting}>
-          Salut <Text style={styles.username}>{firstName} {name}</Text> !
+        {t("user.greeting")}, <Text style={styles.username}>{firstName} {name}</Text> !
         </Text>
-        <Text style={styles.memberSince}>Membre depuis XX/XX/XXXX</Text>
       </View>
 
       <BoiteVerte>
         <View style={styles.fieldContainer}>
-          <Text style={styles.label}>Nom</Text>
+          <Text style={styles.label}>{t("user.labels.lastName")}</Text>
           <Champ
             style={styles.input}
             value={name}
             onChangeText={setName}
-            placeholder="Entrez votre nom"
+            placeholder={t("user.placeholders.lastName")}
           />
         </View>
 
         <View style={styles.fieldContainer}>
-          <Text style={styles.label}>Prénom</Text>
+          <Text style={styles.label}>{t("user.labels.firstName")}</Text>
           <Champ
             style={styles.input}
             value={firstName}
             onChangeText={setFirstName}
-            placeholder="Entrez votre prénom"
+            placeholder={t("user.placeholders.firstName")}
           />
         </View>
 
         <View style={styles.fieldContainer}>
-          <Text style={styles.label}>Email</Text>
+          <Text style={styles.label}>{t("user.labels.email")}</Text>
           <Champ
             style={[styles.input, styles.disabledInput]} // Champ non modifiable
             value={email}
-            placeholder="Entrez votre email"
+            placeholder={t("user.placeholders.email")}
             keyboardType="email-address"
             editable={false}
           />
         </View>
 
         <View style={styles.fieldContainer}>
-  <Text style={styles.label}>Téléphone</Text>
+  <Text style={styles.label}>{t("user.labels.phone")}</Text>
   <Champ
     style={styles.input}
     value={phoneNumber} // Affiche directement le numéro récupéré

@@ -1,80 +1,55 @@
 import React from 'react';
-import { ScrollView,View, Text, StyleSheet } from 'react-native';
-import BoiteBlanche from '../components/Boite_blanche';  // Assurez-vous que le chemin est correct
-import { useTheme } from "../ThemeContext";
-import createGlobalStyles from "../styles/globalStyles";
+import { ScrollView, View, Text, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { useTheme } from '../ThemeContext';
+import BoiteBlanche from '../components/Boite_blanche';
 
-
-const Conditions_service = () => {
+const ConditionsService = () => {
+  const { t } = useTranslation();
   const { isDarkMode } = useTheme();
-  return (
-    <View style={[
-      styles.container,
-      { backgroundColor: isDarkMode ? "#333333" : "rgba(166, 116, 55, 0.1)" },
-    ]}>
-    <ScrollView contentContainerStyle={styles.scrollContent}>
-      <Text style={styles.title}>Conditions Générales d'Utilisation</Text>
 
-      <BoiteBlanche>
-        <Text style={styles.sectionTitle}>1. Introduction</Text>
-        <Text style={styles.text}>
-          Bienvenue sur l'application CampSeeker. En accédant ou en utilisant notre application, vous acceptez de vous conformer aux présentes conditions d'utilisation. Si vous n'acceptez pas ces conditions, nous vous invitons à ne pas utiliser l'application.
-        </Text>
-    
-        <Text style={styles.sectionTitle}>2. Modification des Conditions</Text>
-        <Text style={styles.text}>
-          CampSeeker se réserve le droit de modifier ces conditions d'utilisation à tout moment. Les modifications entreront en vigueur dès leur publication sur cette page. Nous vous recommandons de consulter régulièrement cette page pour être informé des changements.
-        </Text>
-      
-        <Text style={styles.sectionTitle}>3. Utilisation Acceptable de l'Application</Text>
-        <Text style={styles.text}>
-          Vous acceptez d'utiliser l'application CampSeeker dans le respect des lois et règlements en vigueur. Vous ne devez pas utiliser l'application pour : {"\n"}
-          - Diffuser du contenu illégal, diffamatoire, ou haineux.{"\n"}
-          - Perturber les opérations de l'application ou compromettre sa sécurité.
-        </Text>
-     
-        <Text style={styles.sectionTitle}>4. Propriété Intellectuelle</Text>
-        <Text style={styles.text}>
-          Tous les contenus présents sur l'application CampSeeker, y compris les textes, images, logos, et éléments graphiques, sont protégés par les lois sur la propriété intellectuelle. Toute reproduction ou utilisation non autorisée de ces contenus est strictement interdite.
-        </Text>
-      
-        <Text style={styles.sectionTitle}>5. Collecte et Utilisation des Données</Text>
-        <Text style={styles.text}>
-          En utilisant l'application, vous acceptez que nous collections et utilisions vos données personnelles conformément à notre politique de confidentialité. Nous nous engageons à protéger vos informations et à ne les divulguer qu'avec votre consentement ou lorsque la loi l'exige.
-        </Text>
-      
-        <Text style={styles.sectionTitle}>6. Limitation de Responsabilité</Text>
-        <Text style={styles.text}>
-          CampSeeker décline toute responsabilité quant aux dommages pouvant résulter de l'utilisation de l'application, y compris les pertes de données, les interruptions de service, ou tout autre préjudice indirect.
-        </Text>
-    
-        <Text style={styles.sectionTitle}>7. Résiliation</Text>
-        <Text style={styles.text}>
-          Nous nous réservons le droit de suspendre ou de résilier votre accès à l'application à tout moment et sans préavis, notamment en cas de violation des présentes conditions d'utilisation.
-        </Text>
- 
-        <Text style={styles.sectionTitle}>8. Juridiction et Droit Applicable</Text>
-        <Text style={styles.text}>
-          Les présentes conditions sont régies par les lois du pays où CampSeeker est basé. En cas de litige, les tribunaux de ce pays auront compétence exclusive pour statuer.
-        </Text>
- 
-        <Text style={styles.sectionTitle}>9. Contact</Text>
-        <Text style={styles.text}>
-          Pour toute question relative à ces conditions d'utilisation, veuillez nous contacter à l'adresse suivante : support@campseeker.com.
-        </Text>
-      </BoiteBlanche>
-    </ScrollView>
-  </View>
+  return (
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: isDarkMode ? '#333333' : 'rgba(166, 116, 55, 0.1)' },
+      ]}
+    >
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <Text style={styles.title}>{t('profile.termsOfService.title')}</Text>
+        <BoiteBlanche>
+          {[
+            'introduction',
+            'modifications',
+            'acceptableUse',
+            'intellectualProperty',
+            'dataCollection',
+            'liability',
+            'termination',
+            'jurisdiction',
+            'contact',
+          ].map((sectionKey) => (
+            <View key={sectionKey} style={styles.section}>
+              <Text style={styles.sectionTitle}>
+                {t(`profile.termsOfService.sections.${sectionKey}`)}
+              </Text>
+              <Text style={styles.text}>
+                {t(`profile.termsOfService.content.${sectionKey}`)}
+              </Text>
+            </View>
+          ))}
+        </BoiteBlanche>
+      </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "rgba(166, 116, 55, 0.1)",
-    paddingBottom: 50, 
+    paddingBottom: 50,
   },
-  scrollContent: {
+  scrollContainer: {
     flexGrow: 1,
     paddingVertical: '5%',
     alignItems: 'center',
@@ -95,7 +70,9 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     lineHeight: 24,
+    textAlign: 'justify'
+
   },
 });
 
-export default Conditions_service;
+export default ConditionsService;

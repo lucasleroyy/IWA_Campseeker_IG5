@@ -8,10 +8,14 @@ import { persistor } from "../redux/store";
 import ChampRedirection from "../components/Champ_redirection";
 import Bandeau from "../components/Bandeau";
 import { useTheme } from "../ThemeContext";
+import { useTranslation } from "react-i18next";
+
+
 
 const PageProfil = ({ navigation }) => {
   const dispatch = useDispatch();
   const { isDarkMode } = useTheme();
+  const { t } = useTranslation(); 
 
   // Sélectionnez les notifications depuis Redux
   const { notifications } = useSelector((state) => state.notifications);
@@ -35,23 +39,23 @@ const PageProfil = ({ navigation }) => {
       { backgroundColor: isDarkMode ? "#333333" : "rgba(166, 116, 55, 0.1)" },
     ]}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        <Text style={styles.title}>Profil</Text>
+      <Text style={styles.title}>{t('profile.title')}</Text>
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, {color:isDarkMode ? "#FFFFFF" : "#333333" }]}>GÉNÉRAL</Text>
+          <Text style={[styles.sectionTitle, {color:isDarkMode ? "#FFFFFF" : "#333333" }]}>{t('profile.sections.general')}</Text>
 
           {/* Autres champs */}
           <ChampRedirection
-            label="Mon compte"
+            label={t('profile.labels.myAccount')}
             targetScreen="MonCompte"
             navigation={navigation}
           />
           <ChampRedirection
-            label="Mes lieux"
+            label={t('profile.labels.myPlaces')}
             targetScreen="MesLieux"
             navigation={navigation}
           />
           <ChampRedirection
-            label="Paramètres"
+            label={t('profile.labels.settings')}
             targetScreen="Parametres"
             navigation={navigation}
           />
@@ -68,7 +72,7 @@ const PageProfil = ({ navigation }) => {
                 color="#000"
                 style={styles.icon}
               />
-              <Text style={styles.label}>Notifications</Text>
+              <Text style={styles.label}>{t('profile.labels.notifications')}</Text>
             </View>
             <View style={styles.rightContainer}>
               {unreadCount > 0 && (
@@ -81,23 +85,23 @@ const PageProfil = ({ navigation }) => {
           </TouchableOpacity>
 
         <View style={styles.section}>
-        <Text style={[styles.sectionTitle, {color:isDarkMode ? "#FFFFFF" : "#333333" }]}>AIDE</Text>
+        <Text style={[styles.sectionTitle, {color:isDarkMode ? "#FFFFFF" : "#333333" }]}>{t('profile.sections.help')}</Text>
           <ChampRedirection
-            label="F.A.Q"
+            label={t('profile.labels.faq')}
             targetScreen="faq_user"
             navigation={navigation}
           />
         </View>
 
         <View style={styles.section}>
-        <Text style={[styles.sectionTitle, {color:isDarkMode ? "#FFFFFF" : "#333333" }]}>LÉGAL</Text>
+        <Text style={[styles.sectionTitle, {color:isDarkMode ? "#FFFFFF" : "#333333" }]}>{t('profile.sections.legal')}</Text>
           <ChampRedirection
-            label="Conditions générales d'utilisation"
+            label={t('profile.labels.terms')}
             targetScreen="ConditionsService"
             navigation={navigation}
           />
           <ChampRedirection
-            label="Politique de confidentialité"
+            label={t('profile.labels.privacyPolicy')}
             targetScreen="PolitiqueConfidentialite"
             navigation={navigation}
           />
@@ -105,7 +109,7 @@ const PageProfil = ({ navigation }) => {
 
         <View style={styles.section}>
           <ChampRedirection
-            label="Déconnexion"
+            label={t('profile.labels.logout')}
             onPress={handleLogout}
             style={styles.deconnexion}
           />

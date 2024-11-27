@@ -14,6 +14,7 @@ import {
   markNotificationAsRead,
 } from "../redux/actions/notifsActions";
 import BoiteBlanche from "../components/Boite_blanche";
+import { useTranslation } from "react-i18next";
 
 const PageNotifications = () => {
   const dispatch = useDispatch();
@@ -23,6 +24,7 @@ const PageNotifications = () => {
   const userInfo = useSelector((state) => state.user.userInfo); // Utilisateur connecté
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedNotification, setSelectedNotification] = useState(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (userInfo?.userId) {
@@ -61,7 +63,7 @@ const PageNotifications = () => {
   if (!userInfo) {
     return (
       <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>Veuillez vous connecter.</Text>
+        <Text style={styles.errorText}>{t("notifications.loginRequired")}</Text>
       </View>
     );
   }
@@ -85,7 +87,7 @@ const PageNotifications = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.titre}>
-        Mes <Text style={{ color: "#F25C05" }}>notifications</Text>
+      {t("notification.title")} <Text style={{ color: "#F25C05" }}>{t("notification.subtitle")}</Text> 
       </Text>
 
       <BoiteBlanche>
@@ -97,7 +99,7 @@ const PageNotifications = () => {
           />
         ) : (
           <Text style={styles.message}>
-            Vous n'avez pas de notifications pour le moment.
+             {t("notification.noNotifications")}
           </Text>
         )}
       </BoiteBlanche>
@@ -119,14 +121,14 @@ const PageNotifications = () => {
                     style={[styles.modalButton, styles.cancelButton]}
                     onPress={handleCloseModal}
                   >
-                    <Text style={styles.cancelButtonText}>Annuler</Text>
+                    <Text style={styles.cancelButtonText}>{t("notification.modal.cancel")}</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={[styles.modalButton, styles.submitButton]}
                     onPress={handleMarkAsRead}
                   >
                     <Text style={styles.submitButtonText}>
-                      Marquer comme lu
+                    {t("notification.modal.markAsRead")}
                     </Text>
                   </TouchableOpacity>
                 </View>
