@@ -9,6 +9,8 @@ import flagReducer from './flagsReducer';
 import commentReducer from './commentsReducer';
 import notifsReducer from './notifsReducer';
 import supportReducer from './supportReducer';
+import searchReducer from './searchReducer';
+
 const appReducer = combineReducers({
   user: userReducer,
   config: configReducer,
@@ -19,6 +21,7 @@ const appReducer = combineReducers({
   comments: commentReducer,
   notifications: notifsReducer,
   support: supportReducer,
+  search: searchReducer,
 });
 
 const rootReducer = (state, action) => {

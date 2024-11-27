@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView,TouchableOpacity } from 'react-nativ
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchEquipments } from '../redux/actions/equipmentActions';
 import { fetchAllLocations, fetchLocationsByEquipments } from '../redux/actions/locationsActions'; 
+import { searchLocationsByVille } from '../redux/actions/searchActions';
 import Carte from '../components/Carte';
 import Recherche from '../components/Recherche';
 import Champ_selection from '../components/Champ_selection';
@@ -32,32 +33,66 @@ const Page_recherche = ({ navigation }) => {
       });
   };
 
-    const handleSearchChange = (text) => {
-        setSearchCity(text);
-    };
+  const handleSearchChange = (text) => {
+    // Extraire uniquement le nom de la ville
+    const cityName = text.split(',')[0].trim(); // Sépare sur la virgule et prend la première partie
+    setSearchCity(cityName);
+
+    if (cityName !== '') {
+        dispatch(searchLocationsByVille(cityName)); // Recherche avec uniquement le nom de la ville
+    } else {
+        dispatch(fetchAllLocations()); // Récupère tous les lieux si aucun texte n'est saisi
+    }
+};
+
 
     return(
         <View style={styles.container}>
-            <ScrollView contentContainerStyle={styles.scrollContainer}>
-                <Recherche 
-                    placeholder="Rechercher un lieu" 
-                    editable={true}
-                    onCitySelect={handleSearchChange}
-                />
-                {loading ? <Text>Chargement des équipements...</Text> : error ? <Text>Erreur : {error}</Text> : (
-                    <View style={styles.Equipementcontainer}>
-                        {equipments.map((equipment) => (
-                            <Champ_selection 
-                                key={equipment.equipmentId}
-                                label={equipment.name}
-                                isSelected={selectedTags.includes(equipment.name)}
-                                onPress={() => handleTagPress(equipment.name)}
-                            />
-                        ))}
-                    </View>
+            <Recherche 
+                placeholder="Rechercher un lieu" 
+                editable={true}
+                onCitySelect={handleSearchChange} // Gestionnaire pour les changements de recherche
+            />
+          <ScrollView contentContainerStyle={styles.scrollContainer}>
+          {loading ? (
+          <Text>Chargement des équipements...</Text>
+          ) : error ? (
+          <Text>Erreur : {error}</Text>
+          ) : (
+          <View style={styles.Equipementcontainer}>
+              {equipments.map((equipment) => (
+                  <Champ_selection 
+                      key={equipment.equipmentId}
+                      label={equipment.name}
+                      isSelected={selectedEquipmentIds.includes(equipment.equipmentId)}
+                      onPress={() => handleTagPress(equipment.equipmentId)}
+                  />
+              ))}
+          </View>
+          )}
+          <Carte ville={searchCity} locations={locations} style={styles.map} />
+          <View>
+            {locationsLoading ? (
+                <Text>Chargement des lieux...</Text>
+            ) : locationsError ? (
+                <Text>Erreur : {locationsError}</Text>
+            ) : (
+                locations
+                    .filter((location) => location.ville.toLowerCase() === searchCity.toLowerCase()) // Filtrer par ville
+                    .map((location, index) => (
+                        <View key={`${location.id || index}`} style={styles.locationContainer}>
+                            <View style={styles.locationHeader}>
+                                <Text style={styles.locationName}>{location.name}</Text>
+                                <Icon name="place" size={20} color="#666" />
+                            </View>
+                            <Text style={styles.locationInfo}>{location.ville}</Text>
+                            <Text style={styles.locationInfo}>{location.adresse}</Text>
+                        </View>
+                    ))
                 )}
-                <Carte ville={searchCity} locations={locations} style={styles.map} />
-            </ScrollView>
+            </View>
+          </ScrollView>
+
         </View>
     );
 };
@@ -88,6 +123,7 @@ const styles = StyleSheet.create({
     locationContainer: {
       padding: 10,
       marginTop: 5,
+      marginLeft: 10,
       backgroundColor: '#FFF',
       borderRadius: 5,
       shadowColor: '#000',
@@ -95,7 +131,7 @@ const styles = StyleSheet.create({
       shadowOpacity: 0.22,
       shadowRadius: 2.22,
       elevation: 3,
-      width: '90%',
+      width: '94%',
       marginBottom: 10,
     },
     locationHeader: {
