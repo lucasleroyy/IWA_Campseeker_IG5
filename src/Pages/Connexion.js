@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
+import { View, Text, Image, StyleSheet, ScrollView, Alert } from "react-native";
 import BoiteVerte from "../components/Boite_verte";
 import Champ from "../components/Champ";
 import Bouton from "../components/Bouton";
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { authenticateUser } from "../redux/actions/authActions";
 import { fetchUserById } from "../redux/actions/userActions";
 
@@ -31,35 +30,44 @@ const PageConnexion = () => {
 
   useEffect(() => {
     if (isLoggedIn && userId) {
-      console.log("Utilisateur connecté, ID :", userId);
       dispatch(fetchUserById(userId))
         .unwrap()
         .then((userData) => {
-          console.log("Données utilisateur :", userData);
           if (userData.role === "admin") {
             navigation.navigate("AccueilAdmin");
           } else {
             navigation.navigate("PageAccueil");
           }
         })
-        .catch((error) =>
-          console.error("Erreur lors de la récupération du rôle :", error)
-        );
+        .catch((error) => {
+          console.error("Erreur lors de la récupération du rôle :", error);
+        });
     }
   }, [isLoggedIn, userId, dispatch]);
 
   const handleLogin = () => {
-    console.log("Email:", email, "Password", password);
     if (!email || !password) {
-      alert("Veuillez entrer un email et un mot de passe.");
+      Alert.alert(
+        "Erreur de connexion",
+        "Veuillez entrer un email et un mot de passe."
+      );
       return;
     }
-    dispatch(authenticateUser({ email, password }));
+    dispatch(authenticateUser({ email, password }))
+      .unwrap()
+      .then(() => {
+        console.log("Connexion réussie !");
+      })
+      .catch(() => {
+        Alert.alert(
+          "Erreur de connexion",
+          "Email ou mot de passe incorrect. Veuillez réessayer."
+        );
+      });
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {error && <Text style={{ color: "red", marginBottom: 10 }}>{error}</Text>}
       {loading ? (
         <Text>Chargement...</Text>
       ) : (
@@ -109,11 +117,11 @@ const PageConnexion = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, // Permet au conteneur de prendre tout l'espace disponible
+    flex: 1,
     backgroundColor: "rgba(166, 116, 55, 0.1)",
     alignItems: "center",
-    justifyContent: "center", // Centrage vertical
-    paddingHorizontal: 20, // Ajout d'un espace autour du contenu
+    justifyContent: "center",
+    paddingHorizontal: 20,
   },
   logo: {
     width: 150,

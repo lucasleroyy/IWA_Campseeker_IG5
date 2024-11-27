@@ -165,6 +165,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 20,
     paddingTop: 40,
+    paddingBottom: 50,
   },
   passwordContainer: {
     flexDirection: 'row',
@@ -206,7 +207,7 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderWidth: 1,
-    borderColor: '#FFF',
+    borderColor: '#000',
     marginRight: 8,
     justifyContent: 'center',
     alignItems: 'center',
@@ -216,18 +217,18 @@ const styles = StyleSheet.create({
     height: 12,
   },
   checkboxChecked: {
-    backgroundColor: '#FFF',
+    backgroundColor: '#000',
   },
   checkboxLabel: {
     fontSize: 14,
-    color: '#FFF',
+    color: '#000',
   },
   underlineText: {
     textDecorationLine: 'underline',
-    color: '#FFF',
+    color: '#000',
   },
   link: {
-    color: '#FFF',
+    color: '#000',
     textAlign: 'center',
     marginTop: 10,
     textDecorationLine: 'underline',
