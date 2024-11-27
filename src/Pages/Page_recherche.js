@@ -9,7 +9,6 @@ import Recherche from '../components/Recherche';
 import Champ_selection from '../components/Champ_selection';
 import Icon from "react-native-vector-icons/MaterialIcons";
 
-
 const Page_recherche = ({ navigation }) => {
   const [selectedEquipmentIds, setSelectedEquipmentIds] = useState([]);
   const [searchCity, setSearchCity] = useState('');
@@ -47,14 +46,6 @@ const Page_recherche = ({ navigation }) => {
     }
 };
 
-const filteredLocations = locations.filter((location) => {
-    const matchesCity = searchCity === '' || location.ville.toLowerCase() === searchCity.toLowerCase();
-    const matchesEquipments =
-      selectedEquipmentIds.length === 0 ||
-      selectedEquipmentIds.every((id) => location.equipments.includes(id));
-    return matchesCity && matchesEquipments;
-  });
-
 
     return(
         <View style={styles.container}>
@@ -80,39 +71,34 @@ const filteredLocations = locations.filter((location) => {
               ))}
           </View>
           )}
-          <Carte 
-            ville={searchCity} 
-            locations={locations.filter((location) => {
-                const matchesCity =
-                searchCity === '' || location.ville.toLowerCase() === searchCity.toLowerCase();
-                const matchesEquipments =
-                selectedEquipmentIds.length === 0 ||
-                selectedEquipmentIds.every((id) => location.equipments.includes(id));
-                return matchesCity && matchesEquipments;
-            })} 
-            style={styles.map} 
-            />
-
+          <Carte ville={searchCity} locations={locations} style={styles.map} />
           <View>
             {locationsLoading ? (
                 <Text>Chargement des lieux...</Text>
             ) : locationsError ? (
                 <Text>Erreur : {locationsError}</Text>
             ) : (
-                filteredLocations.map((location, index) => (
+                locations
+                .filter((location) =>
+                    searchCity === '' || location.ville.toLowerCase() === searchCity.toLowerCase()
+                
+                ) 
+                .map((location, index) => (
                     <TouchableOpacity
-                      key={location.locationId || index}
-                      style={styles.locationContainer}
-                      onPress={() => navigation.navigate('PageInfoLieu', { id: location.locationId })}
+                        key={location.id || index}
+                        style={styles.locationContainer}
+                        onPress={() => navigation.navigate('PageInfoLieu', { id: location.locationId })}
                     >
-                      <View style={styles.locationHeader}>
-                        <Text style={styles.locationName}>{location.name}</Text>
-                        <Icon name="chevron-right" size={24} color="#555" />
-                      </View>
-                      <Text style={styles.locationInfo}>{location.ville}</Text>
-                      <Text style={styles.locationInfo}>{location.adresse}</Text>
+                        <View key={`${location.id || index}`}>
+                            <View style={styles.locationHeader}>
+                                <Text style={styles.locationName}>{location.name}</Text>
+                                <Icon name="place" size={20} color="#666" />
+                            </View>
+                            <Text style={styles.locationInfo}>{location.ville}</Text>
+                            <Text style={styles.locationInfo}>{location.adresse}</Text>
+                        </View>
                     </TouchableOpacity>
-                  ))
+                    ))
                 )}
             </View>
           </ScrollView>

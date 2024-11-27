@@ -54,6 +54,12 @@ const Recherche = ({ placeholder, editable = true, onCitySelect }) => {
     onCitySelect(city); // Notifie le parent
   };
 
+  const clearSearch = () => {
+    setQuery(''); // Réinitialise la valeur du champ
+    setSuggestions([]); // Vide les suggestions
+    onCitySelect(''); // Notifie le parent que le champ est vide
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.inputContainer}>
@@ -66,6 +72,11 @@ const Recherche = ({ placeholder, editable = true, onCitySelect }) => {
           onChangeText={searchSuggestions} // Appelle la fonction de recherche
           editable={editable}
         />
+        {query !== '' && (
+          <TouchableOpacity onPress={clearSearch} style={styles.clearButton}>
+            <Text>X</Text>
+          </TouchableOpacity>
+        )}
       </View>
       {suggestions.length > 0 && (
         <FlatList
