@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useSelector, useDispatch } from "react-redux";
-import Bandeau from "../components/Bandeau";
 import BoiteVerte from "../components/Boite_verte";
 import Champ from "../components/Champ";
 import Bouton from "../components/Bouton";
@@ -21,10 +20,11 @@ import {
   linkEquipmentsToLocation,
 } from "../redux/actions/locationsActions";
 import { addPhotoToLocation } from "../redux/actions/photosActions";
+import Bandeau from "../components/Bandeau";
 
 const Ajout_lieu = ({ navigation }) => {
   const [selectedTags, setSelectedTags] = useState([]);
-  const [photo, setPhoto] = useState(null); // Stocke une seule photo
+  const [photo, setPhoto] = useState(null);
   const [locationName, setLocationName] = useState("");
   const [locationAddress, setLocationAddress] = useState("");
   const [locationCity, setLocationCity] = useState("");
@@ -32,6 +32,7 @@ const Ajout_lieu = ({ navigation }) => {
   const [locationDescription, setLocationDescription] = useState("");
   const [locationLatitude, setLocationLatitude] = useState("");
   const [locationLongitude, setLocationLongitude] = useState("");
+
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.user.userInfo?.userId);
   const apiUrl = useSelector((state) => state.config.apiUrl);
@@ -39,65 +40,58 @@ const Ajout_lieu = ({ navigation }) => {
     (state) => state.equipments
   );
 
+  const [localEquipments, setLocalEquipments] = useState([]);
+
   useEffect(() => {
-    // Charger les équipements lors du montage du composant
-    dispatch(fetchEquipments());
-  }, [dispatch]);
+    if (!equipments.length) {
+      dispatch(fetchEquipments());
+    } else {
+      setLocalEquipments(equipments);
+    }
+  }, [equipments, dispatch]);
 
   const handleTagPress = (equipmentId) => {
-    setSelectedTags((prevSelectedTags) => {
-      if (prevSelectedTags.includes(equipmentId)) {
-        return prevSelectedTags.filter((tag) => tag !== equipmentId);
-      } else {
-        return [...prevSelectedTags, equipmentId];
-      }
-    });
+    setSelectedTags((prevSelectedTags) =>
+      prevSelectedTags.includes(equipmentId)
+        ? prevSelectedTags.filter((tag) => tag !== equipmentId)
+        : [...prevSelectedTags, equipmentId]
+    );
   };
 
   const pickImage = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") {
-      Alert.alert(
-        "Permission refusée",
-        "Veuillez autoriser l'accès à la galerie."
-      );
-      return;
-    }
+    try {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== "granted") {
+        Alert.alert(
+          "Permission refusée",
+          "Veuillez autoriser l'accès à la galerie."
+        );
+        return;
+      }
 
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
 
-    if (!result.canceled && result.assets?.[0]?.uri) {
-      setPhoto(result.assets[0].uri); // Stocke l'URI de la photo
-    } else {
-      console.warn("Aucune URI d'image valide trouvée.");
+      if (!result.canceled && result.assets?.[0]?.uri) {
+        setPhoto(result.assets[0].uri);
+      }
+    } catch (error) {
+      console.error("Erreur lors de la sélection de l'image :", error);
     }
   };
 
   const deleteImage = () => {
-    Alert.alert(
-      "Supprimer la photo",
-      "Voulez-vous vraiment supprimer cette photo ?",
-      [
-        { text: "Annuler", style: "cancel" },
-        {
-          text: "Supprimer",
-          style: "destructive",
-          onPress: () => {
-            setPhoto(null); // Supprime la photo
-          },
-        },
-      ]
-    );
+    Alert.alert("Supprimer la photo", "Voulez-vous vraiment supprimer cette photo ?", [
+      { text: "Annuler", style: "cancel" },
+      { text: "Supprimer", style: "destructive", onPress: () => setPhoto(null) },
+    ]);
   };
 
   const handleSubmit = async () => {
-    console.log("Soumission du formulaire...");
-
     if (
       !locationName ||
       !locationAddress ||
@@ -127,38 +121,26 @@ const Ajout_lieu = ({ navigation }) => {
       ville: locationCity,
       codePostal: locationZip,
       description: locationDescription,
-      userId, // ID de l'utilisateur connecté
+      userId,
       latitude: locationLatitude,
       longitude: locationLongitude,
     };
 
-    console.log("Données du lieu à créer :", locationData);
-
     try {
-      // Création du lieu
-      const response = await dispatch(createLocation(locationData));
-      console.log("Réponse de création du lieu :", response);
+      const response = await dispatch(createLocation(locationData)).unwrap();
+      const locationId = response.locationId;
 
-      if (response.meta.requestStatus !== "fulfilled") {
-        throw new Error("Erreur lors de la création du lieu.");
-      }
-
-      const locationId = response.payload.locationId;
-      console.log("Lieu créé avec ID :", locationId);
-
-      // Ajout des équipements
       await dispatch(
         linkEquipmentsToLocation({ locationId, equipmentIds: selectedTags })
-      );
+      ).unwrap();
 
-      // Ajout de la photo
       const formData = new FormData();
       formData.append("photo", {
         uri: photo,
         name: "photo.jpg",
         type: "image/jpeg",
       });
-      await dispatch(addPhotoToLocation({ locationId, formData }));
+      await dispatch(addPhotoToLocation({ locationId, formData })).unwrap();
 
       Alert.alert("Succès", "Lieu ajouté avec succès !");
       setLocationName("");
@@ -256,7 +238,7 @@ const Ajout_lieu = ({ navigation }) => {
             <Text>Erreur : {error}</Text>
           ) : (
             <View style={styles.Equipementcontainer}>
-              {equipments.map((equipment) => (
+              {localEquipments.map((equipment) => (
                 <ChampSelection
                   key={equipment.equipmentId}
                   label={equipment.name}
