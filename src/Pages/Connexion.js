@@ -21,6 +21,15 @@ const PageConnexion = () => {
   const loading = useSelector((state) => state.user.loading);
 
   useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      setEmail("");
+      setPassword("");
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+  useEffect(() => {
     if (isLoggedIn && userId) {
       console.log("Utilisateur connecté, ID :", userId);
       dispatch(fetchUserById(userId))
@@ -107,8 +116,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20, // Ajout d'un espace autour du contenu
   },
   logo: {
-    width: 100,
-    height: 100,
+    width: 150,
+    height: 150,
     marginBottom: 20,
   },
   title: {

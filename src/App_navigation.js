@@ -24,7 +24,6 @@ import FAQUser from "./pages/faq_user";
 import MonCompteUser from "./pages/Mon_compte_user";
 import GestionEquipement from "./pages/Admin/Equipements_admin";
 import Notification from "./pages/Notifications";
-import ModifierMonLieu from "./pages/Modifier_mon_lieu";
 import Connexion from "./pages/Connexion";
 import Inscription from "./pages/Inscription";
 
@@ -165,17 +164,6 @@ const AppNavigator = () => {
             headerShown: true,
             headerBackTitle: "Retour",
             title: "Mon Compte",
-            gestureEnabled: true,
-          }}
-        />
-
-        <Stack.Screen
-          name="ModifierMonLieu"
-          component={ModifierMonLieu}
-          options={{
-            headerShown: true,
-            headerBackTitle: "Retour",
-            title: "Modifier le lieu",
             gestureEnabled: true,
           }}
         />
