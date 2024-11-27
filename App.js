@@ -5,6 +5,10 @@ import { store, persistor } from './src/redux/store';
 import { ThemeProvider } from './src/ThemeContext'; // Assurez-vous que le chemin est correct
 import AppNavigator from './src/App_navigation';
 import useAppStateReset from './useAppStateReset';
+import './src/i18n';
+import 'intl-pluralrules';
+
+
 
 const AppWithAppState = () => {
   useAppStateReset();

@@ -6,6 +6,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import Bandeau from "../components/Bandeau";
 import Photo from "../components/Photo";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import { useTranslation } from "react-i18next";
 
 const Mes_lieux_user = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -13,6 +14,7 @@ const Mes_lieux_user = ({ navigation }) => {
   const userId = useSelector((state) => state.user.userInfo?.userId); // Récupère le userId dans le store
   const { userLocations, loading, error } = useSelector((state) => state.locations);
   const apiUrl = useSelector((state) => state.config.apiUrl); // URL de l'API
+  const { t } = useTranslation();
 
   useFocusEffect(
     React.useCallback(() => {
@@ -25,7 +27,7 @@ const Mes_lieux_user = ({ navigation }) => {
   if (loading) {
     return (
       <View style={styles.container}>
-        <Text>Chargement...</Text>
+        <Text>{t("locations.loading")}.</Text>
       </View>
     );
   }
@@ -45,11 +47,11 @@ const Mes_lieux_user = ({ navigation }) => {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Text style={styles.titre}>
-          Mes <Text style={{ color: "#F25C05" }}>lieux</Text>
+        {t("locations.title")} <Text style={{ color: "#F25C05" }}>{t("locations.subtitle")}</Text>
         </Text>
         {(!userLocations || userLocations.length === 0) ? (
           <Text style={styles.noLocationsText}>
-            Vous n'avez pas encore ajouté de lieux. Postez votre premier lieu dès aujourd'hui !
+           {t("locations.noLocations")}
           </Text>
         ) : (
           userLocations.map((location) => {

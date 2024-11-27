@@ -1,12 +1,178 @@
 {
-    "settings": "Settings",
-    "language": "Language",
-    "darkMode": "Dark Mode",
-    "lightMode": "Light Mode",
-    "notifications": "Notification",
-    "news": "News",
-    "reviewAlert": "New review on your location",
-    "yes": "Yes",
-    "no": "No"
+  "settings": "Settings",
+  "language": "Language",
+  "darkMode": "Dark Mode",
+  "lightMode": "Light Mode",
+  "notifications": "Notification",
+  "news": "News",
+  "reviewAlert": "New review on your location",
+  "yes": "Yes",
+  "no": "No",
+  "profile": {
+    "title": "Profile",
+    "sections": {
+      "general": "GENERAL",
+      "help": "HELP",
+      "legal": "LEGAL"
+    },
+    "labels": {
+      "myAccount": "My Account",
+      "myPlaces": "My Places",
+      "settings": "Settings",
+      "notifications": "Notifications",
+      "faq": "F.A.Q",
+      "terms": "Terms and Conditions",
+      "privacyPolicy": "Privacy Policy",
+      "logout": "Logout"
+    },
+    "privacyPolicy": {
+      "title": "Privacy Policy",
+      "introduction": {
+        "title": "1. Introduction",
+        "content": "Welcome to CampSeeker, a platform dedicated to connecting hikers and property owners. This privacy policy describes how we collect, use, share, and protect your personal information when you use our service."
+      },
+      "dataCollected": {
+        "title": "2. Data Collected",
+        "content": "When you use CampSeeker, we collect several types of personal data:\n- Registration data: such as your name, email address, and password.\n- Profile data: such as your profile picture, hiking or lodging preferences.\n- Transaction data: information related to your bookings or payments made on the platform.\n- Usage data: including login logs, service usage, and interactions with other users."
+      },
+      "dataPurposes": {
+        "title": "3. Purposes of Data Collection",
+        "content": "We use your data for the following purposes:\n- Service provision: to enable you to use our platform, make bookings, and connect with property owners.\n- User experience improvement: to personalize recommendations and features based on your preferences.\n- Security: to protect your data against unauthorized access and ensure platform security.\n- Marketing: to send you special offers or updates, if you have consented."
+      },
+      "dataSharing": {
+        "title": "4. Data Sharing",
+        "content": "Your data may be shared with third parties in the following cases:\n- Property owners: when you make a booking, certain personal information is shared with hosts to arrange your stay.\n- Service providers: we use service providers to process payments, send emails, or analyze platform usage.\n- Legal obligations: in case of legal requests or to comply with a legal obligation."
+      },
+      "userRights": {
+        "title": "5. Your Data Protection Rights",
+        "content": "As a user located in the European Union, you have the following rights under the General Data Protection Regulation (GDPR):\n- Access: you can request access to the information we hold about you.\n- Rectification: you have the right to correct any inaccurate or incomplete information.\n- Erasure: you can request the deletion of your personal data.\n- Restriction: you have the right to restrict the processing of your data in certain circumstances.\n- Portability: you can request to receive your data in a structured, commonly used, and machine-readable format.\n- Objection: you have the right to object to the use of your personal data, especially for direct marketing purposes."
+      },
+      "dataRetention": {
+        "title": "6. Data Retention",
+        "content": "We retain your data for as long as necessary to provide our services and for legal or business reasons. Your data will be deleted or anonymized once its use for the original purposes is no longer justified."
+      },
+      "dataSecurity": {
+        "title": "7. Data Security",
+        "content": "We take the security of your data very seriously. We have implemented technical and organizational security measures to protect your information against loss, unauthorized access, alteration, or disclosure."
+      },
+      "dataTransfer": {
+        "title": "8. International Data Transfers",
+        "content": "Your information may be transferred to countries outside the European Union, where data protection laws may differ from those in your country. In such cases, we ensure that your data receives an equivalent level of protection, notably through standard contractual clauses approved by the European Commission."
+      },
+      "policyChanges": {
+        "title": "9. Privacy Policy Changes",
+        "content": "We may update this privacy policy at any time. Changes will take effect upon their publication on this page. We encourage you to regularly review this page to stay informed about how we protect your data."
+      },
+      "contact": {
+        "title": "10. Contact",
+        "content": "If you have any questions about this privacy policy or wish to exercise your data protection rights, please contact us at: support@campseeker.com."
+      }
+    }, 
+    "termsOfService": {
+      "title": "Terms and Conditions",
+      "sections": {
+        "introduction": "1. Introduction",
+        "modifications": "2. Terms Modifications",
+        "acceptableUse": "3. Acceptable Use of the App",
+        "intellectualProperty": "4. Intellectual Property",
+        "dataCollection": "5. Data Collection and Use",
+        "liability": "6. Limitation of Liability",
+        "termination": "7. Termination",
+        "jurisdiction": "8. Jurisdiction and Governing Law",
+        "contact": "9. Contact"
+      },
+      "content": {
+        "introduction": "Welcome to the CampSeeker app. By accessing or using our application, you agree to comply with these terms of use. If you do not agree to these terms, please do not use the application.",
+        "modifications": "CampSeeker reserves the right to modify these terms of use at any time. Changes will take effect upon publication on this page. We recommend that you check this page regularly to stay informed of any changes.",
+        "acceptableUse": "You agree to use the CampSeeker application in compliance with applicable laws and regulations. You must not use the application to:\n- Share illegal, defamatory, or hateful content.\n- Disrupt the operation of the application or compromise its security.",
+        "intellectualProperty": "All content on the CampSeeker application, including text, images, logos, and graphic elements, is protected by intellectual property laws. Any unauthorized reproduction or use of this content is strictly prohibited.",
+        "dataCollection": "By using the application, you agree that we collect and use your personal data in accordance with our privacy policy. We are committed to protecting your information and will only disclose it with your consent or as required by law.",
+        "liability": "CampSeeker disclaims all liability for damages that may result from using the application, including data loss, service interruptions, or any other indirect damage.",
+        "termination": "We reserve the right to suspend or terminate your access to the application at any time without notice, particularly in the event of a violation of these terms of use.",
+        "jurisdiction": "These terms are governed by the laws of the country where CampSeeker is based. In the event of a dispute, the courts of that country will have exclusive jurisdiction.",
+        "contact": "If you have any questions about these terms of use, please contact us at: support@campseeker.com."
+      }
+    }, 
+      "profil": {
+        "title": "My Account",
+        "greeting": "Hello {{firstName}} {{lastName}}!",
+        "memberSince": "Member since {{date}}",
+        "labels": {
+          "name": "Last Name",
+          "firstName": "First Name",
+          "email": "Email",
+          "phoneNumber": "Phone Number"
+        },
+        "placeholders": {
+          "name": "Enter your last name",
+          "firstName": "Enter your first name",
+          "email": "Enter your email",
+          "phoneNumber": "Enter your phone number"
+        },
+        "buttons": {
+          "saveProfile": "Update Profile"
+        },
+        "messages": {
+          "loading": "Loading user data...",
+          "error": "Error: {{error}}",
+          "phoneNumberRequired": "Please enter a phone number.",
+          "updateSuccess": "Profile updated successfully.",
+          "updateError": "An error occurred while updating the profile: {{error}}"
+        }
+      }
+      
+        
+      },
+      "locations": {
+          "title": "My",
+          "subtitle": "Places",
+          "noLocations": "You haven't added any places yet. Post your first place today!",
+          "loading": "Loading...",
+          "error": "Error: {{errorMessage}}",
+          "address": "{{address}} | {{city}}"
+        },
+        
+        "notification": {
+    "title": "My ",
+    "subtitle": "Notifications",
+    "noNotifications": "You don't have any notifications at the moment.",
+    "loginRequired": "Please log in.",
+    "error": "Error: {{errorMessage}}",
+    "modal": {
+      "cancel": "Cancel",
+      "markAsRead": "Mark as read"
+    },
+    "loading": "Loading notifications..."
+  },
+    "user": {
+      "title": "My Account",
+      "greeting": "Hello",
+      "memberSince": "Member since {{date}}",
+      "labels": {
+        "lastName": "Last Name",
+        "firstName": "First Name",
+        "email": "Email",
+        "phone": "Phone Number"
+      },
+      "placeholders": {
+        "lastName": "Enter your last name",
+        "firstName": "Enter your first name",
+        "email": "Enter your email",
+        "phone": "Enter your phone number"
+      },
+      "messages": {
+        "loading": "Loading user data...",
+        "error": "Error: {{error}}",
+        "phoneRequired": "Please enter a phone number.",
+        "profileUpdated": "Profile updated successfully.",
+        "updateError": "An error occurred while updating the profile: {{error}}"
+      },
+      "buttons": {
+        "updateProfile": "Update Profile"
+      }
+    }
   }
   
+
+  
+

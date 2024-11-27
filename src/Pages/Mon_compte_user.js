@@ -14,18 +14,20 @@ import { useDispatch, useSelector } from "react-redux";
 import BoiteVerte from "../components/Boite_verte";
 import { fetchUserById, updateUserProfile } from "../redux/actions/userActions";
 import Champ from "../components/Champ";
+import { useTranslation } from "react-i18next";
 import { MaterialIcons } from "@expo/vector-icons";
 
 const MonCompteUser = () => {
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.user.userInfo?.userId); // Récupère le userId du store
   const { userDetails, loading, error } = useSelector((state) => state.user);
-
   const [isEditModalVisible, setEditModalVisible] = useState(false);
-  const [name, setName] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState(""); // Ajout du champ téléphone
+
+  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState(''); // Ajout du champ téléphone
+  const { t } = useTranslation(); 
 
   useEffect(() => {
     if (userId) {
@@ -91,12 +93,12 @@ const MonCompteUser = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-      <Image
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
+    <Image
             source={require("../../assets/Logo.png")}
             style={styles.logo}
-          />
-        <Text style={styles.titre}>
+      />
+      <Text style={styles.titre}>
           Salut{" "}
           <Text style={{ color: "#F25C05" }}>
             {firstName} {name}
@@ -104,62 +106,57 @@ const MonCompteUser = () => {
           !
         </Text>
 
-        <BoiteVerte>
-          <View style={styles.headerContainer}>
-            <TouchableOpacity
+      <BoiteVerte>
+        <View style={styles.headerContainer}>
+        <TouchableOpacity
               onPress={() => setEditModalVisible(true)}
               style={styles.icons}
             >
               <MaterialIcons name="edit" size={30} color="#F25C05" />
             </TouchableOpacity>
-          </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.label}>Nom</Text>
-            <Champ
-              style={styles.input}
-              value={name}
-              onChangeText={setName}
-              placeholder="Entrez votre nom"
-              editable={false}
+            </View>
+            <View style={styles.fieldContainer}>
+          <Text style={styles.label}>{t("user.labels.lastName")}</Text>
+          <Champ
+            style={styles.input}
+            value={name}
+            onChangeText={setName}
+            placeholder={t("user.placeholders.lastName")}
+          />
+        </View>
+
+        <View style={styles.fieldContainer}>
+          <Text style={styles.label}>{t("user.labels.firstName")}</Text>
+          <Champ
+            style={styles.input}
+            value={firstName}
+            onChangeText={setFirstName}
+            placeholder={t("user.placeholders.firstName")}
             />
           </View>
+        <View style={styles.fieldContainer}>
+          <Text style={styles.label}>{t("user.labels.email")}</Text>
+          <Champ
+            style={[styles.input, styles.disabledInput]} // Champ non modifiable
+            value={email}
+            placeholder={t("user.placeholders.email")}
+            keyboardType="email-address"
+            editable={false}
+          />
+        </View>
 
-          <View style={styles.fieldContainer}>
-            <Text style={styles.label}>Prénom</Text>
-            <Champ
-              style={styles.input}
-              value={firstName}
-              onChangeText={setFirstName}
-              placeholder="Entrez votre prénom"
-              editable={false}
-            />
-          </View>
+        <View style={styles.fieldContainer}>
+  <Text style={styles.label}>{t("user.labels.phone")}</Text>
+  <Champ
+    style={styles.input}
+    value={phoneNumber} // Affiche directement le numéro récupéré
+    onChangeText={setPhoneNumber}
+    keyboardType="phone-pad"
+  />
+</View>
+</BoiteVerte>
+</ScrollView>
 
-          <View style={styles.fieldContainer}>
-            <Text style={styles.label}>Email</Text>
-            <Champ
-              style={[styles.input, styles.disabledInput]} // Champ non modifiable
-              value={email}
-              placeholder="Entrez votre email"
-              keyboardType="email-address"
-              editable={false}
-            />
-          </View>
-
-          <View style={styles.fieldContainer}>
-            <Text style={styles.label}>Téléphone</Text>
-            <Champ
-              style={styles.input}
-              value={phoneNumber} // Affiche directement le numéro récupéré
-              onChangeText={setPhoneNumber}
-              keyboardType="phone-pad"
-              editable={false}
-            />
-          </View>
-        </BoiteVerte>
-      </ScrollView>
-
-      {/* Modale d'édition */}
       <Modal
         visible={isEditModalVisible}
         animationType="slide"
@@ -211,7 +208,7 @@ const MonCompteUser = () => {
           </View>
         </View>
       </Modal>
-    </View>
+      </View>
   );
 };
 

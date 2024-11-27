@@ -1,12 +1,179 @@
 {
-    "settings": "Paramètres",
-    "language": "Langue",
-    "darkMode": "Mode Sombre",
-    "lightMode": "Mode Clair",
-    "notifications": "Notification",
-    "news": "Actualités",
-    "reviewAlert": "Nouvel avis sur votre lieu",
-    "yes": "Oui",
-    "no": "Non"
-  }
+  "settings": "Paramètres",
+  "language": "Langue",
+  "darkMode": "Mode Sombre",
+  "lightMode": "Mode Clair",
+  "notifications": "Notification",
+  "news": "Actualités",
+  "reviewAlert": "Nouvel avis sur votre lieu",
+  "yes": "Oui",
+  "no": "Non",
+  "profile": {
+    "title": "Profil",
+    "sections": {
+      "general": "GÉNÉRAL",
+      "help": "AIDE",
+      "legal": "LÉGAL"
+    },
+    "labels": {
+      "myAccount": "Mon compte",
+      "myPlaces": "Mes lieux",
+      "settings": "Paramètres",
+      "notifications": "Notifications",
+      "faq": "F.A.Q",
+      "terms": "Conditions générales d'utilisation",
+      "privacyPolicy": "Politique de confidentialité",
+      "logout": "Déconnexion"
+    },
+    "privacyPolicy": {
+      "title": "Politique de Confidentialité",
+      "introduction": {
+        "title": "1. Introduction",
+        "content": "Bienvenue sur CampSeeker, une plateforme dédiée à la mise en relation de randonneurs et de propriétaires de logements. Cette politique de confidentialité décrit comment nous collectons, utilisons, partageons et protégeons vos informations personnelles lorsque vous utilisez notre service."
+      },
+      "dataCollected": {
+        "title": "2. Données Collectées",
+        "content": "Lorsque vous utilisez CampSeeker, nous collectons plusieurs types de données personnelles :\n- Données d’inscription : telles que votre nom, adresse e-mail, et mot de passe.\n- Données de profil : comme votre photo de profil, vos préférences de rando ou de logement.\n- Données de transaction : informations liées à vos réservations ou paiements effectués sur la plateforme.\n- Données d’utilisation : incluant les logs de connexion, l’utilisation des services, et les interactions avec les autres utilisateurs."
+      },
+      "dataPurposes": {
+        "title": "3. Finalités de la Collecte des Données",
+        "content": "Nous utilisons vos données pour les finalités suivantes :\n- Prestation du service : pour vous permettre d’utiliser notre plateforme, effectuer des réservations, et entrer en contact avec les propriétaires de logements.\n- Amélioration de l’expérience utilisateur : pour personnaliser les recommandations et les fonctionnalités en fonction de vos préférences.\n- Sécurité : pour protéger vos données contre tout accès non autorisé et assurer la sécurité de la plateforme.\n- Marketing : pour vous envoyer des offres spéciales ou des mises à jour, si vous y avez consenti."
+      },
+      "dataSharing": {
+        "title": "4. Partage des Données",
+        "content": "Vos données peuvent être partagées avec des tiers dans les cas suivants :\n- Propriétaires de logements : lorsque vous effectuez une réservation, certaines informations personnelles sont partagées avec les hôtes pour organiser votre séjour.\n- Prestataires de service : nous faisons appel à des prestataires pour traiter les paiements, envoyer des e-mails ou analyser l’utilisation de la plateforme.\n- Obligations légales : en cas de demande judiciaire ou pour respecter une obligation légale."
+      },
+      "userRights": {
+        "title": "5. Vos Droits en Matière de Protection des Données",
+        "content": "En tant qu'utilisateur situé dans l'Union européenne, vous bénéficiez des droits suivants en vertu du Règlement Général sur la Protection des Données (RGPD) :\n- Accès : vous pouvez demander à accéder aux informations que nous détenons sur vous.\n- Rectification : vous avez le droit de corriger toute information inexacte ou incomplète.\n- Suppression : vous pouvez demander la suppression de vos données personnelles.\n- Limitation : vous avez le droit de limiter le traitement de vos données dans certaines circonstances.\n- Portabilité : vous pouvez demander à recevoir vos données dans un format structuré, couramment utilisé, et lisible par machine.\n- Opposition : vous avez le droit de vous opposer à l’utilisation de vos données personnelles, notamment à des fins de marketing direct."
+      },
+      "dataRetention": {
+        "title": "6. Conservation des Données",
+        "content": "Nous conservons vos données aussi longtemps que nécessaire pour vous fournir nos services et pour des raisons légales ou commerciales. Vos données seront supprimées ou anonymisées une fois leur utilisation justifiée par les finalités initiales terminée."
+      },
+      "dataSecurity": {
+        "title": "7. Sécurité des Données",
+        "content": "Nous prenons la sécurité de vos données très au sérieux. Nous avons mis en place des mesures de sécurité techniques et organisationnelles pour protéger vos informations contre la perte, l'accès non autorisé, l'altération ou la divulgation."
+      },
+      "dataTransfer": {
+        "title": "8. Transfert International des Données",
+        "content": "Vos informations peuvent être transférées vers des pays en dehors de l’Union européenne, où les lois sur la protection des données peuvent différer de celles en vigueur dans votre pays. Dans ces cas, nous nous assurons que vos données bénéficient d’un niveau de protection équivalent, notamment par le biais de clauses contractuelles types approuvées par la Commission européenne."
+      },
+      "policyChanges": {
+        "title": "9. Modifications de la Politique de Confidentialité",
+        "content": "Nous pouvons mettre à jour cette politique de confidentialité à tout moment. Les modifications prendront effet dès leur publication sur cette page. Nous vous encourageons à consulter cette page régulièrement pour rester informé de la manière dont nous protégeons vos données."
+      },
+      "contact": {
+        "title": "10. Contact",
+        "content": "Si vous avez des questions concernant cette politique de confidentialité ou si vous souhaitez exercer vos droits en matière de protection des données, veuillez nous contacter à l’adresse suivante : support@campseeker.com."
+      }
+    },
+    "termsOfService": {
+      "title": "Conditions Générales d'Utilisation",
+      "sections": {
+        "introduction": "1. Introduction",
+        "modifications": "2. Modification des Conditions",
+        "acceptableUse": "3. Utilisation Acceptable de l'Application",
+        "intellectualProperty": "4. Propriété Intellectuelle",
+        "dataCollection": "5. Collecte et Utilisation des Données",
+        "liability": "6. Limitation de Responsabilité",
+        "termination": "7. Résiliation",
+        "jurisdiction": "8. Juridiction et Droit Applicable",
+        "contact": "9. Contact"
+      },
+      "content": {
+        "introduction": "Bienvenue sur l'application CampSeeker. En accédant ou en utilisant notre application, vous acceptez de vous conformer aux présentes conditions d'utilisation. Si vous n'acceptez pas ces conditions, nous vous invitons à ne pas utiliser l'application.",
+        "modifications": "CampSeeker se réserve le droit de modifier ces conditions d'utilisation à tout moment. Les modifications entreront en vigueur dès leur publication sur cette page. Nous vous recommandons de consulter régulièrement cette page pour être informé des changements.",
+        "acceptableUse": "Vous acceptez d'utiliser l'application CampSeeker dans le respect des lois et règlements en vigueur. Vous ne devez pas utiliser l'application pour :\n- Diffuser du contenu illégal, diffamatoire, ou haineux.\n- Perturber les opérations de l'application ou compromettre sa sécurité.",
+        "intellectualProperty": "Tous les contenus présents sur l'application CampSeeker, y compris les textes, images, logos, et éléments graphiques, sont protégés par les lois sur la propriété intellectuelle. Toute reproduction ou utilisation non autorisée de ces contenus est strictement interdite.",
+        "dataCollection": "En utilisant l'application, vous acceptez que nous collections et utilisions vos données personnelles conformément à notre politique de confidentialité. Nous nous engageons à protéger vos informations et à ne les divulguer qu'avec votre consentement ou lorsque la loi l'exige.",
+        "liability": "CampSeeker décline toute responsabilité quant aux dommages pouvant résulter de l'utilisation de l'application, y compris les pertes de données, les interruptions de service, ou tout autre préjudice indirect.",
+        "termination": "Nous nous réservons le droit de suspendre ou de résilier votre accès à l'application à tout moment et sans préavis, notamment en cas de violation des présentes conditions d'utilisation.",
+        "jurisdiction": "Les présentes conditions sont régies par les lois du pays où CampSeeker est basé. En cas de litige, les tribunaux de ce pays auront compétence exclusive pour statuer.",
+        "contact": "Pour toute question relative à ces conditions d'utilisation, veuillez nous contacter à l'adresse suivante : support@campseeker.com."
+      }
+    },
+      "profil": {
+        "title": "Mon Compte",
+        "greeting": "Salut {{firstName}} {{lastName}} !",
+        "memberSince": "Membre depuis {{date}}",
+        "labels": {
+          "name": "Nom",
+          "firstName": "Prénom",
+          "email": "Email",
+          "phoneNumber": "Numéro de téléphone"
+        },
+        "placeholders": {
+          "name": "Entrez votre nom",
+          "firstName": "Entrez votre prénom",
+          "email": "Entrez votre email",
+          "phoneNumber": "Entrez votre numéro de téléphone"
+        },
+        "buttons": {
+          "saveProfile": "Modifier le profil"
+        },
+        "messages": {
+          "loading": "Chargement des données utilisateur...",
+          "error": "Erreur : {{error}}",
+          "phoneNumberRequired": "Veuillez entrer un numéro de téléphone.",
+          "updateSuccess": "Profil modifié avec succès.",
+          "updateError": "Une erreur est survenue lors de la mise à jour du profil : {{error}}"
+        }
+      }
+      },
+      "locations": {
+        "title": "Mes",
+        "subtitle": "Lieux",
+        "noLocations": "Vous n'avez pas encore ajouté de lieux. Postez votre premier lieu dès aujourd'hui !",
+        "loading": "Chargement...",
+        "error": "Erreur : {{errorMessage}}",
+        "address": "{{adresse}} | {{ville}}"
+      },
+      "notification": {
+    "title": "Mes",
+    "subtitle": "Notifications",
+    "noNotifications": "Vous n'avez pas de notifications pour le moment.",
+    "loginRequired": "Veuillez vous connecter.",
+    "error": "Erreur : {{errorMessage}}",
+    "modal": {
+      "cancel": "Annuler",
+      "markAsRead": "Marquer comme lu"
+    },
+    "loading": "Chargement des notifications..."
+  },
+  
+    "user": {
+      "title": "Mon Compte",
+      "greeting": "Salut",
+      "memberSince": "Membre depuis {{date}}",
+      "labels": {
+        "lastName": "Nom",
+        "firstName": "Prénom",
+        "email": "Email",
+        "phone": "Numéro de téléphone"
+      },
+      "placeholders": {
+        "lastName": "Entrez votre nom",
+        "firstName": "Entrez votre prénom",
+        "email": "Entrez votre email",
+        "phone": "Entrez votre numéro de téléphone"
+      },
+      "messages": {
+        "loading": "Chargement des données utilisateur...",
+        "error": "Erreur : {{error}}",
+        "phoneRequired": "Veuillez entrer un numéro de téléphone.",
+        "profileUpdated": "Profil modifié avec succès.",
+        "updateError": "Une erreur est survenue lors de la mise à jour du profil : {{error}}"
+      },
+      "buttons": {
+        "updateProfile": "Modifier le profil"
+      }
+    }
+
+  
+}
+      
+    
+    
+  
   
