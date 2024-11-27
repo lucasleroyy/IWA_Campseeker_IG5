@@ -9,12 +9,14 @@ import Recherche from '../components/Recherche';
 import Champ_selection from '../components/Champ_selection';
 import Icon from "react-native-vector-icons/MaterialIcons";
 
+
 const Page_recherche = ({ navigation }) => {
   const [selectedEquipmentIds, setSelectedEquipmentIds] = useState([]);
   const [searchCity, setSearchCity] = useState('');
   const dispatch = useDispatch();
   const { equipments, loading, error } = useSelector(state => state.equipments);
   const { locations, loading: locationsLoading, error: locationsError } = useSelector(state => state.locations);
+  console.log(locations);
 
   useEffect(() => {
       dispatch(fetchEquipments());
@@ -39,11 +41,19 @@ const Page_recherche = ({ navigation }) => {
     setSearchCity(cityName);
 
     if (cityName !== '') {
-        dispatch(searchLocationsByVille(cityName)); // Recherche avec uniquement le nom de la ville
+        dispatch(searchLocationsByVille(cityName)); 
     } else {
-        dispatch(fetchAllLocations()); // Récupère tous les lieux si aucun texte n'est saisi
+        dispatch(fetchAllLocations());
     }
 };
+
+const filteredLocations = locations.filter((location) => {
+    const matchesCity = searchCity === '' || location.ville.toLowerCase() === searchCity.toLowerCase();
+    const matchesEquipments =
+      selectedEquipmentIds.length === 0 ||
+      selectedEquipmentIds.every((id) => location.equipments.includes(id));
+    return matchesCity && matchesEquipments;
+  });
 
 
     return(
@@ -70,25 +80,39 @@ const Page_recherche = ({ navigation }) => {
               ))}
           </View>
           )}
-          <Carte ville={searchCity} locations={locations} style={styles.map} />
+          <Carte 
+            ville={searchCity} 
+            locations={locations.filter((location) => {
+                const matchesCity =
+                searchCity === '' || location.ville.toLowerCase() === searchCity.toLowerCase();
+                const matchesEquipments =
+                selectedEquipmentIds.length === 0 ||
+                selectedEquipmentIds.every((id) => location.equipments.includes(id));
+                return matchesCity && matchesEquipments;
+            })} 
+            style={styles.map} 
+            />
+
           <View>
             {locationsLoading ? (
                 <Text>Chargement des lieux...</Text>
             ) : locationsError ? (
                 <Text>Erreur : {locationsError}</Text>
             ) : (
-                locations
-                    .filter((location) => location.ville.toLowerCase() === searchCity.toLowerCase()) // Filtrer par ville
-                    .map((location, index) => (
-                        <View key={`${location.id || index}`} style={styles.locationContainer}>
-                            <View style={styles.locationHeader}>
-                                <Text style={styles.locationName}>{location.name}</Text>
-                                <Icon name="place" size={20} color="#666" />
-                            </View>
-                            <Text style={styles.locationInfo}>{location.ville}</Text>
-                            <Text style={styles.locationInfo}>{location.adresse}</Text>
-                        </View>
-                    ))
+                filteredLocations.map((location, index) => (
+                    <TouchableOpacity
+                      key={location.locationId || index}
+                      style={styles.locationContainer}
+                      onPress={() => navigation.navigate('PageInfoLieu', { id: location.locationId })}
+                    >
+                      <View style={styles.locationHeader}>
+                        <Text style={styles.locationName}>{location.name}</Text>
+                        <Icon name="chevron-right" size={24} color="#555" />
+                      </View>
+                      <Text style={styles.locationInfo}>{location.ville}</Text>
+                      <Text style={styles.locationInfo}>{location.adresse}</Text>
+                    </TouchableOpacity>
+                  ))
                 )}
             </View>
           </ScrollView>
@@ -131,7 +155,7 @@ const styles = StyleSheet.create({
       shadowOpacity: 0.22,
       shadowRadius: 2.22,
       elevation: 3,
-      width: '94%',
+      width: '90%',
       marginBottom: 10,
     },
     locationHeader: {

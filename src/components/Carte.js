@@ -1,20 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, ActivityIndicator } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
-import * as Location from 'expo-location';
+import React, { useEffect, useState } from "react";
+import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
+import MapView, { Marker } from "react-native-maps";
+import * as Location from "expo-location";
 
-const Carte = ({ initialRegion, ville, style }) => {
-  const [region, setRegion] = useState(initialRegion);
+const Carte = ({ locations = [], ville, style }) => {
+  const [region, setRegion] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Fonction pour obtenir les coordonnées d'une ville
     const fetchCoordinates = async (cityName) => {
       try {
-        const apiKey = '6cef030b1b574a94a598ea0ddc855327';
-        const response = await fetch(`https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(cityName)}&key=${apiKey}`);
+        const apiKey = "6cef030b1b574a94a598ea0ddc855327";
+        const response = await fetch(
+          `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(
+            cityName
+          )}&key=${apiKey}`
+        );
         const data = await response.json();
-        
+
         if (data.results && data.results.length > 0) {
           const { lat, lng } = data.results[0].geometry;
           setRegion({
@@ -33,11 +36,10 @@ const Carte = ({ initialRegion, ville, style }) => {
       }
     };
 
-    // Fonction pour obtenir la position actuelle de l'utilisateur
     const fetchLocation = async () => {
       try {
         let { status } = await Location.requestForegroundPermissionsAsync();
-        if (status !== 'granted') {
+        if (status !== "granted") {
           console.log("Permission de localisation refusée");
           setIsLoading(false);
           return;
@@ -56,18 +58,35 @@ const Carte = ({ initialRegion, ville, style }) => {
       }
     };
 
-    // Logique pour déterminer quelle action entreprendre
-    if (ville) {
+    if (locations.length === 1) {
+      // S'il y a une seule localisation, on centre sur celle-ci
+      const location = locations[0];
+      setRegion({
+        latitude: location.latitude,
+        longitude: location.longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      });
+      setIsLoading(false);
+    } else if (ville) {
+      // Sinon, si une ville est fournie, géocodage
       fetchCoordinates(ville);
-    } else if (initialRegion) {
-      setRegion(initialRegion);
+    } else if (locations.length > 1) {
+      // Si plusieurs localisations sont fournies, prendre la première comme centre
+      const location = locations[0];
+      setRegion({
+        latitude: location.latitude,
+        longitude: location.longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      });
       setIsLoading(false);
     } else {
+      // Sinon, localisation actuelle
       fetchLocation();
     }
-  }, [ville, initialRegion]);
+  }, [locations, ville]);
 
-  // Affiche un message de chargement pendant que les données sont récupérées
   if (isLoading) {
     return (
       <View style={[styles.loadingContainer, style]}>
@@ -77,21 +96,30 @@ const Carte = ({ initialRegion, ville, style }) => {
     );
   }
 
-  // Si la région est définie, affiche la carte
   return (
     <View style={[styles.container, style]}>
-      <MapView
-        style={styles.map}
-        region={region}
-      >
-        <Marker
-          coordinate={{
-            latitude: region.latitude,
-            longitude: region.longitude,
-          }}
-          title={ville || "Ma Position"}
-          description="Description de l'emplacement"
-        />
+      <MapView style={styles.map} region={region}>
+        {locations.map((location, index) => (
+          <Marker
+            key={index}
+            coordinate={{
+              latitude: location.latitude,
+              longitude: location.longitude,
+            }}
+            title={location.name}
+            description={location.adresse}
+          />
+        ))}
+        {locations.length === 0 && region && (
+          <Marker
+            coordinate={{
+              latitude: region.latitude,
+              longitude: region.longitude,
+            }}
+            title={ville || "Ma Position"}
+            description="Localisation unique"
+          />
+        )}
       </MapView>
     </View>
   );
@@ -103,20 +131,20 @@ const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
     borderRadius: 20,
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'lightgrey',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "lightgrey",
   },
   loadingText: {
     marginBottom: 10,
     fontSize: 18,
-    color: '#555',
+    color: "#555",
   },
 });
 
