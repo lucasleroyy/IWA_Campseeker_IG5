@@ -42,14 +42,43 @@ const ListeLieux = ({ locations, navigation, apiUrl }) => (
     })}
   </ScrollView>
 );
+
+
 const LieuxSignales = ({ navigation, apiUrl }) => {
   const dispatch = useDispatch();
   const { flaggedLocations, loading, error } = useSelector((state) => state.flags);
+  const { locations } = useSelector((state) => state.locations); // Récupère tous les lieux
+  const [enhancedFlaggedLocations, setEnhancedFlaggedLocations] = useState([]);
 
   useEffect(() => {
     dispatch(fetchFlaggedLocations());
-    console.log("Lieux signalés :", flaggedLocations);
   }, [dispatch]);
+
+  useEffect(() => {
+    if (flaggedLocations.length > 0) {
+      const enhancedLocations = flaggedLocations.map((flaggedLocation) => {
+        const matchedLocation = locations.find(
+          (loc) => loc.locationId === flaggedLocation.locationId
+        );
+
+        if (matchedLocation) {
+          return {
+            ...flaggedLocation,
+            name: matchedLocation.name || "Lieu inconnu",
+            photo: matchedLocation.photo || null,
+          };
+        }
+
+        return {
+          ...flaggedLocation,
+          name: "Lieu inconnu",
+          photo: null,
+        };
+      });
+
+      setEnhancedFlaggedLocations(enhancedLocations);
+    }
+  }, [flaggedLocations, locations]);
 
   if (loading) {
     return (
@@ -61,21 +90,20 @@ const LieuxSignales = ({ navigation, apiUrl }) => {
 
   if (error) {
     const errorMessage =
-      typeof error === 'string'
+      typeof error === "string"
         ? error
-        : error.message || JSON.stringify(error); // Convertir en chaîne de caractères lisible
-  
+        : error.message || JSON.stringify(error);
+
     return (
       <View style={styles.container}>
         <Text style={styles.errorText}>Erreur : {errorMessage}</Text>
       </View>
     );
   }
-  
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
-      {flaggedLocations.map((location) => {
+      {enhancedFlaggedLocations.map((location) => {
         const imageUrl = location.photo?.photoId
           ? `${apiUrl}/photos/get/${location.photo.photoId}`
           : null;
@@ -84,9 +112,11 @@ const LieuxSignales = ({ navigation, apiUrl }) => {
           <TouchableOpacity
             key={location.locationId}
             style={styles.locationContainer}
-            onPress={() =>{
-              navigation.navigate("LieuFlaggedAdmin", { id: location.locationId, flagId: location.flagId });
-            }
+            onPress={() =>
+              navigation.navigate("LieuFlaggedAdmin", {
+                id: location.locationId,
+                flagId: location.flagId,
+              })
             }
           >
             <View style={styles.bandeau}>
@@ -95,9 +125,12 @@ const LieuxSignales = ({ navigation, apiUrl }) => {
               )}
               <View style={styles.row}>
                 <View>
+                  <Text style={styles.nomLieu}>{location.name}</Text>
                   {location.reason && (
-                    <Text style={styles.reason}>Raison : {location.reason}</Text>
-                    )}
+                    <Text style={styles.reason}>
+                      Raison : {location.reason}
+                    </Text>
+                  )}
                 </View>
                 <Icon name="chevron-right" size={24} color="#555" />
               </View>
@@ -108,6 +141,8 @@ const LieuxSignales = ({ navigation, apiUrl }) => {
     </ScrollView>
   );
 };
+
+
 const ListeLieuxAdminInfo = ({ navigation }) => {
   const dispatch = useDispatch();
   const { locations, loading: locationsLoading, error: locationsError } = useSelector((state) => state.locations);
@@ -213,7 +248,7 @@ const styles = StyleSheet.create({
     color: "#555",
   },
   reason: {
-    fontSize: 14,
+    fontSize: 16,
     color: "red", // Couleur rouge pour mettre en évidence la raison du signalement
     marginTop: 5,
   },

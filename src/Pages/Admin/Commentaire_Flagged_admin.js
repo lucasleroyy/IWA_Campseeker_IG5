@@ -128,7 +128,6 @@ const CommentaireFlaggedAdmin = ({ route, navigation }) => {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Text style={styles.titre}>Commentaire ID : {currentComment.commentId}</Text>
         {imageUrl && (
           <TouchableOpacity
             style={styles.photoContainer}

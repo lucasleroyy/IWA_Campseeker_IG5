@@ -1,11 +1,18 @@
 import React, { useEffect } from "react";
-import { View, ScrollView, StyleSheet, Dimensions, Text, TouchableOpacity } from "react-native";
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  Dimensions,
+  Text,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchLocationById } from "../../redux/actions/locationsActions";
+import { fetchLocationById, deleteLocation } from "../../redux/actions/locationsActions";
 import { fetchCommentsByLocationId } from "../../redux/actions/commentsActions";
-import { deleteLocation } from "../../redux/actions/locationsActions";
+import { fetchUserById } from "../../redux/actions/userActions";
 import BoiteVerte from "../../components/Boite_verte";
-import Champ from "../../components/Champ";
 import Photo from "../../components/Photo";
 import Champ_selection from "../../components/Champ_selection";
 import Carte from "../../components/Carte";
@@ -16,7 +23,7 @@ const LieuAdmin = ({ route, navigation }) => {
   const { width } = Dimensions.get("window");
   const { id } = route.params; // ID du lieu pour charger les détails
   const dispatch = useDispatch();
-  
+
   const { locationDetails, loading, error } = useSelector((state) => state.locations);
   const apiUrl = useSelector((state) => state.config.apiUrl);
   const { comments, loading: commentsLoading } = useSelector((state) => state.comments);
@@ -29,16 +36,40 @@ const LieuAdmin = ({ route, navigation }) => {
     }
   }, [id, dispatch]);
 
-  const handleDeleteLocation = () => {
-    dispatch(deleteLocation(id))
-      .then(() => {
-        Alert.alert("Succès", "Lieu supprimé avec succès.");
-        navigation.goBack();
-      })
-      .catch((error) => {
-        console.error("Erreur lors de la suppression :", error);
-        Alert.alert("Erreur", "Impossible de supprimer le lieu.");
+  // Fetch user details for all comments
+  useEffect(() => {
+    if (comments.length > 0) {
+      comments.forEach((comment) => {
+        if (!users[comment.userId]) {
+          dispatch(fetchUserById(comment.userId));
+        }
       });
+    }
+  }, [comments, dispatch, users]);
+
+  const handleDeleteLocation = () => {
+    Alert.alert(
+      "Confirmation",
+      "Voulez-vous vraiment supprimer ce lieu ?",
+      [
+        { text: "Annuler", style: "cancel" },
+        {
+          text: "Supprimer",
+          onPress: () => {
+            dispatch(deleteLocation(id))
+              .unwrap()
+              .then(() => {
+                Alert.alert("Succès", "Lieu supprimé avec succès.");
+                navigation.goBack();
+              })
+              .catch((error) => {
+                console.error("Erreur lors de la suppression :", error);
+                Alert.alert("Erreur", "Impossible de supprimer le lieu.");
+              });
+          },
+        },
+      ]
+    );
   };
 
   if (loading) {
@@ -65,7 +96,8 @@ const LieuAdmin = ({ route, navigation }) => {
     );
   }
 
-  const { name, adresse, photo, equipments } = locationDetails;
+  const { name, adresse, latitude, longitude, photo, equipments = [], ville, codePostal } =
+    locationDetails || {};
   const imageUrl = photo?.photoId ? `${apiUrl}/photos/get/${photo.photoId}` : null;
 
   return (
@@ -76,37 +108,61 @@ const LieuAdmin = ({ route, navigation }) => {
           <View style={styles.photoContainer}>
             {imageUrl && <Photo imageUrl={imageUrl} width="100%" height={200} />}
           </View>
-          <Champ placeholder={`${adresse}, ${locationDetails.ville}, ${locationDetails.codePostal}`} editable={false} multiline />
-          <Carte ville={`${adresse}, ${locationDetails.ville}`} style={styles.map} />
+
+          {adresse && ville && codePostal && (
+            <Text style={styles.ownerText}>
+              Adresse : {`${adresse}, ${ville}, ${codePostal}`}
+            </Text>
+          )}
+          {latitude && longitude && (
+            <Text style={styles.ownerText}>
+              Coordonnées : Latitude {latitude}, Longitude {longitude}
+            </Text>
+          )}
+          <Carte ville={`${adresse}, ${ville}`} style={styles.map} />
           <Text style={styles.sectionTitle}>ÉQUIPEMENTS :</Text>
-          <View style={styles.Equipementcontainer}>
-            {equipments.map((equipment) => (
-              <Champ_selection key={equipment.equipmentId} label={equipment.name} isSelected={true} />
-            ))}
+          <View style={styles.equipmentsContainer}>
+            {equipments.length > 0 ? (
+              equipments.map((equipment) => (
+                <Champ_selection
+                  key={equipment.equipmentId}
+                  label={equipment.name}
+                  isSelected={true}
+                />
+              ))
+            ) : (
+              <Text style={styles.noEquipmentsText}>Aucun équipement</Text>
+            )}
           </View>
           <Text style={styles.sectionTitle}>COMMENTAIRES :</Text>
           {commentsLoading ? (
             <Text>Chargement des commentaires...</Text>
+          ) : comments.length === 0 ? (
+            <Text style={styles.noCommentsText}>
+              Il n'y a pas encore de commentaires pour ce lieu.
+            </Text>
           ) : (
             <Scroll_horizontal
               items={comments.map((comment) => {
-                const user = users?.[comment.userId];
-                const userName = user ? `${user.firstName} ${user.lastName}` : "Utilisateur inconnu";
+                const user = users[comment.userId];
+                const userName = user
+                  ? `${user.firstName || ""} ${user.lastName || ""}`.trim()
+                  : "Utilisateur inconnu";
+
                 return (
                   <Commentaire
                     key={comment.commentId}
-                    pseudo={userName || "Utilisateur inconnu"}
+                    commentId={comment.commentId}
+                    pseudo={userName}
                     note={comment.rating || 0}
                     texte={comment.commentText || "Pas de texte"}
                   />
                 );
               })}
+              parentWidth={width * 0.9}
             />
           )}
         </BoiteVerte>
-        <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteLocation}>
-          <Text style={styles.deleteButtonText}>Supprimer le lieu</Text>
-        </TouchableOpacity>
       </ScrollView>
     </View>
   );
@@ -134,7 +190,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     alignSelf: "center",
   },
-  Equipementcontainer: {
+  equipmentsContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 10,
@@ -154,21 +210,22 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     color: "#000",
   },
-  deleteButton: {
-    backgroundColor: "#FF6D00",
-    borderRadius: 10,
-    marginHorizontal: 20,
-    padding: 20,
-    marginTop: 20,
-    alignItems: "center",
-    alignSelf: "center",
-    width: "90%",
+  ownerText: {
+    fontSize: 18,
+    marginHorizontal: "5%",
+    marginTop: 10,
   },
-  deleteButtonText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 16,
+  noEquipmentsText: {
+    fontSize: 18,
+    color: "#000",
+    marginVertical: 10,
   },
+  noCommentsText: {
+    fontSize: 18,
+    color: "#000",
+    textAlign: "center",
+    marginVertical: 10,
+  }
 });
 
 export default LieuAdmin;
